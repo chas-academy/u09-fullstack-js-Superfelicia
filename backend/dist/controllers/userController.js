@@ -5,8 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.getUsers = exports.createUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
+const validRoles = ["user", "admin", "superadmin"];
 const createUser = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, roles } = req.body;
+    if (roles && !validRoles.includes(roles)) {
+        return res.status(400).json({ message: "Invalid role" });
+    }
     try {
         const existingUser = await userModel_1.default.findOne({ email });
         if (existingUser) {
@@ -18,11 +22,13 @@ const createUser = async (req, res) => {
             name,
             email,
             password,
+            roles,
         });
         res.status(201).json({
             id: newUser.id,
             name: newUser.name,
             email: newUser.email,
+            roles: newUser.roles,
         });
     }
     catch (error) {
@@ -43,6 +49,9 @@ exports.getUsers = getUsers;
 const updateUser = async (req, res) => {
     const { id, name, email, roles } = req.body;
     console.log(req.body);
+    if (roles && !validRoles.includes(roles)) {
+        return res.status(400).json({ message: "Invalid role" });
+    }
     try {
         // Hitta och uppdatera användaren baserat på _id
         const updateUser = await userModel_1.default.findOneAndUpdate(
@@ -59,7 +68,7 @@ const updateUser = async (req, res) => {
             id: updateUser.id,
             name: updateUser.name,
             email: updateUser.email,
-            role: updateUser.userRoles,
+            roles: updateUser.roles,
         });
     }
     catch (error) {

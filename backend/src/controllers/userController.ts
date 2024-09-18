@@ -1,9 +1,20 @@
+// userController ansvarar för att hantera HTTP-förfrågningar
+// och skicka svar tillbaka till klienten.
+
 import { Request, Response } from "express";
-import User from "../models/userModel";
+import {
+  createUser,
+  deleteUser,
+  findUserByEmail,
+  getAllUsers,
+  updateUser,
+  updateUserPassword,
+} from "../services/userServices";
 
 const validRoles = ["user", "admin", "superadmin"];
 
-export const createUser = async (req: Request, res: Response) => {
+// create
+export const createUserController = async (req: Request, res: Response) => {
   const { name, email, password, roles } = req.body;
 
   if (roles && !validRoles.includes(roles)) {
@@ -11,19 +22,14 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await findUserByEmail(email);
     if (existingUser) {
       return res
         .status(400)
         .json({ message: "User with this email does already exist." });
     }
 
-    const newUser = await User.create({
-      name,
-      email,
-      password,
-      roles,
-    });
+    const newUser = await createUser(name, email, password, roles);
 
     res.status(201).json({
       id: newUser.id,
@@ -36,16 +42,18 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUsers = async (req: Request, res: Response) => {
+// get all
+export const getUsersController = async (req: Request, res: Response) => {
   try {
-    const users = await User.find().select("-password");
+    const users = await getAllUsers();
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Error fetching users", error });
   }
 };
 
-export const updateUser = async (req: Request, res: Response) => {
+// update
+export const updateUserController = async (req: Request, res: Response) => {
   const { id, name, email, roles } = req.body;
   console.log(req.body);
 
@@ -55,39 +63,68 @@ export const updateUser = async (req: Request, res: Response) => {
 
   try {
     // Hitta och uppdatera användaren baserat på _id
-    const updateUser = await User.findOneAndUpdate(
-      // objektet vi letar efter
-      { _id: id },
-      // fälten som ska uppdateras
-      { name, email, roles },
-      // returnera det uppdaterade json dokumentet
-      { new: true }
-    );
+    const updatedUser = await updateUser(id, name, email, roles);
 
-    if (!updateUser) {
+    if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // vi får tillbaka det uppdaterade json-objektet
     res.status(200).json({
-      id: updateUser.id,
-      name: updateUser.name,
-      email: updateUser.email,
-      roles: updateUser.roles,
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      roles: updatedUser.roles,
     });
   } catch (error) {
     res.status(500).json({ message: "Error updating user", error });
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+// kontroll för att uppdatera lösenord
+export const updateUserPasswordController = async (req: Request, res: Response) => {
+    const { id, newPassword } = req.body;
+
+    if (!newPassword || newPassword.length < 6) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters long'});
+    }
+
+    try {
+        const updatedUser = await updateUserPassword(id, newPassword);
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            message: 'Password updated successfully',
+            user: {
+                id: updatedUser.id,
+                name: updatedUser.name,
+                email: updatedUser.email,
+                roles: updatedUser.roles,
+            }
+        });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+// delete
+export const deleteUserController = async (req: Request, res: Response) => {
   const { id } = req.body;
   console.log(id);
 
   try {
-    const userToDelete = await User.findByIdAndDelete(id);
+    const deletedUser = await deleteUser(id);
 
-    console.log("User deleted successfully", userToDelete);
-    res.status(200).json(id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found " });
+    }
+
+    console.log("User deleted successfully", deletedUser);
+
+    res.status(200).json({ message: "User deleted successfully: ", id });
   } catch (error) {
     res.status(500).json({ message: "Error deleting user", error });
   }
