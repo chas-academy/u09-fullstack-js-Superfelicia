@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IUser extends Document {
   name: string;
@@ -7,7 +7,7 @@ interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
-  roles: boolean;
+  roles: "user" | "admin" | "superadmin";
 }
 
 //döp till isAdmin istället?
@@ -19,7 +19,11 @@ const UserSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },
-  roles: { type: Boolean, default: false },
+  roles: {
+    type: String,
+    enum: ["user", "admin", "superadmin"],
+    default: "user"
+  },
 });
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.model<IUser>("User", UserSchema);
