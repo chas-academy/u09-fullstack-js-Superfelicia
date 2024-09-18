@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
 import User from "../models/userModel";
 
+const validRoles = ["user", "admin", "superadmin"];
+
 export const createUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, roles } = req.body;
+
+  if (roles && !validRoles.includes(roles)) {
+    return res.status(400).json({ message: "Invalid role" });
+  }
 
   try {
     const existingUser = await User.findOne({ email });
@@ -16,12 +22,14 @@ export const createUser = async (req: Request, res: Response) => {
       name,
       email,
       password,
+      roles,
     });
 
     res.status(201).json({
       id: newUser.id,
       name: newUser.name,
       email: newUser.email,
+      roles: newUser.roles,
     });
   } catch (error) {
     res.status(500).json({ message: "Error creating user", error });
@@ -40,6 +48,11 @@ export const getUsers = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   const { id, name, email, roles } = req.body;
   console.log(req.body);
+
+  if (roles && !validRoles.includes(roles)) {
+    return res.status(400).json({ message: "Invalid role" });
+  }
+
   try {
     // Hitta och uppdatera användaren baserat på _id
     const updateUser = await User.findOneAndUpdate(
@@ -68,7 +81,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.body;
-    console.log(id);
+  console.log(id);
 
   try {
     const userToDelete = await User.findByIdAndDelete(id);
