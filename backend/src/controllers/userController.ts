@@ -18,6 +18,10 @@ const validRoles = ["user", "admin", "superadmin"];
 export const createUserController = async (req: Request, res: Response) => {
   const { name, email, password, roles } = req.body;
 
+  if (!password || password.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+  }
+
   if (roles && !validRoles.includes(roles)) {
     return res.status(400).json({ message: "Invalid role" });
   }

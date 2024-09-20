@@ -64,7 +64,7 @@ export const updateUserPassword = async (id: string, currentPassword: string, ne
     );
 
     if (!updatedUser) {
-      throw new Error('User not updated');
+      throw new Error('User password not updated');
     }
 
     console.log('Password updated successfully');
