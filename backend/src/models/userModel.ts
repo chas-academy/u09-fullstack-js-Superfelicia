@@ -7,7 +7,7 @@ interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
-  roles: "user" | "admin" | "superadmin";
+  roles?: "user" | "admin" | "superadmin";
 }
 
 //döp till isAdmin istället?
