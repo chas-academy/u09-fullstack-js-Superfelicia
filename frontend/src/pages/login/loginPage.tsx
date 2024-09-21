@@ -17,7 +17,7 @@ const LoginPage = () => {
     ]
 
     return (
-        <div>
+        <div className='flex flex-col items-start space-y-2 mb-10'>
             <h2>Login</h2>
             <FormComponent
                 fields={loginFields}
