@@ -3,10 +3,10 @@ import FormComponent from '../../components/formComponent'
 const LoginPage = () => {
     const loginFields = [
         {
-            label: 'Username',
-            type: 'text',
-            placeholder: 'Enter username',
-            name: 'username',
+            label: 'Email',
+            type: 'email',
+            placeholder: 'Enter email',
+            name: 'email',
         },
         {
             label: 'Password',
