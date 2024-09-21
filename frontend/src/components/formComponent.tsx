@@ -32,19 +32,20 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields, buttonText, onSub
 
     return (
         <>
-            <form className="flex flex-col items-start" onSubmit={handleSubmit}>
+            <form className="flex flex-col items-start space-y-3" onSubmit={handleSubmit}>
                 {fields.map((field, index) => (
-                    <label key={index}>
+                    <label key={index} className='flex flex-col items-start'>
                         {field.label}
                         <input
                             type={field.type}
                             placeholder={field.placeholder}
                             name={field.name}
                             onChange={handleChange}
+                            className='border-2 rounded-md p-2'
                         />
                     </label>
                 ))}
-                <button type="submit" className="border rounded">
+                <button type="submit" className="w-2/4 border rounded p-2">
                     {buttonText}
                 </button>
             </form>
