@@ -38,7 +38,11 @@ export const updateUser = async (
 };
 
 // uppdatera bara lösenord för user
-export const updateUserPassword = async (id: string, currentPassword: string, newPassword: string) => {
+export const updateUserPassword = async (
+  id: string,
+  currentPassword: string,
+  newPassword: string
+) => {
   try {
     // console.log(`Finding user with ID: ${id}`);
     const user = await User.findById(id);
@@ -49,7 +53,7 @@ export const updateUserPassword = async (id: string, currentPassword: string, ne
     // kolla att nuvarande lösenord är korrekt
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      throw new Error('Current password is incorrect');
+      throw new Error("Current password is incorrect");
     }
 
     // hasha det nya lösenordet
@@ -64,10 +68,10 @@ export const updateUserPassword = async (id: string, currentPassword: string, ne
     );
 
     if (!updatedUser) {
-      throw new Error('User password not updated');
+      throw new Error("User password not updated");
     }
 
-    console.log('Password updated successfully');
+    console.log("Password updated successfully");
     return updatedUser;
   } catch (error: any) {
     throw new Error(`Error updating password: ${error.message}`);
@@ -94,10 +98,10 @@ export const resetUserPassword = async (id: string, newPassword: string) => {
     );
 
     if (!updatedUser) {
-      throw new Error('Users new password not updated');
+      throw new Error("Users new password not updated");
     }
 
-    console.log('New password updated successfully');
+    console.log("New password updated successfully");
     return updatedUser;
   } catch (error: any) {
     throw new Error(`Error resetting password: ${error.message}`);
