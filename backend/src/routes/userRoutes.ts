@@ -1,18 +1,17 @@
 import { Router } from "express";
 import {
-  createUserController,
   deleteUserController,
   getUsersController,
   resetUserPasswordController,
   updateUserController,
   updateUserPasswordController,
-} from "../controllers/userController";
-import { requestPasswordResetController, resetPasswordController } from "../controllers/passwordController";
+} from "../controllers/UserController";
+import { requestPasswordResetController, resetPasswordController } from "../controllers/PasswordController";
 
 const router = Router();
 
 // POST & GET /api/users
-router.post("/user", createUserController);
+// router.post("/user", createUserController);
 router.get("/users", getUsersController);
 router.put("/user/:id", updateUserController);
 router.delete("/user/:id", deleteUserController);
