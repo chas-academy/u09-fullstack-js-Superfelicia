@@ -18,7 +18,10 @@ export const loginUser = async (email: string, password: string) => {
     }
   );
 
-  return { token, user };
+  return {
+    token,
+    user: { name: user.name, email: user.email, roles: user.roles },
+  };
 };
 
 // vi kan lägga till andra auth operations, som logout eller change of password etc.

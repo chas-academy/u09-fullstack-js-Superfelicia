@@ -21,7 +21,6 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields, buttonText, onSub
             ...formData,
             [e.target.name]: e.target.value,
         })
-        console.log('Updated formData:', formData)
     }
 
     const handleSubmit = (e: React.FormEvent) => {
