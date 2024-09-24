@@ -7,7 +7,7 @@ interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
-  roles?: "user" | "admin" | "superadmin";
+  roles?: "user" | "admin" | "superadmin"[];
 }
 
 //döp till isAdmin istället?
@@ -20,9 +20,9 @@ const UserSchema: Schema = new Schema({
   updatedAt: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },
   roles: {
-    type: String,
+    type: [String],
     enum: ["user", "admin", "superadmin"],
-    default: "user"
+    default: ["user"]
   },
 });
 
