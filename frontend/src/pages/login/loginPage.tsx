@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import FormComponent from '../../components/formComponent'
+import FormComponent from '../../components/FormComponent'
 import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '../../store/useUserStore'
+import { useState } from 'react'
 
 const LoginPage = () => {
+    const [error, setError] = useState<string | null>(null)
+    const setUser = useUserStore((state) => state.setUser)
     const navigate = useNavigate()
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [user, setUser] = useState<{ name: string; email: string; roles: string[] } | null>(null)
 
     const loginFields = [
         {
@@ -23,8 +24,8 @@ const LoginPage = () => {
     ]
 
     const handleLogin = async (formData: { [key: string]: string }) => {
-        const email = formData.email
-        const password = formData.password
+        const { email, password } = formData
+
         try {
             const response = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
@@ -40,45 +41,25 @@ const LoginPage = () => {
             if (response.ok) {
                 // Spara tokenen lokalt (t.ex. i localStorage)
                 localStorage.setItem('token', data.token)
-                
-                navigate('/dashboard', { state: {user: data.user }})
-
                 setUser(data.user)
-                // setUser(data)
-                setIsLoggedIn(true)
-                // Om du vill visa användarinformation eller navigera till annan sida:
+                navigate('/dashboard')
+
                 console.log('Logged in successfully:', data.user)
                 // Redirect eller uppdatera state för inloggning
             } else {
-                console.error('Login failed:', data.message)
+                setError(data.message || 'Login failed')
+                console.error('Login failed:', data.message, error)
             }
         } catch (error) {
+            setError('Error logging in')
             console.error('Error logging in:', error)
         }
-    }
-
-    const handleLogout = () => {
-        localStorage.removeItem('token')
-        setUser(null)
-        setIsLoggedIn(false)
-        console.log('Logged out')
     }
 
     return (
         <div className="flex flex-col items-start space-y-2 mb-10">
             <h2>Login</h2>
-
-            {isLoggedIn ? (
-                <div>
-                    <h3>Welcome, {user?.name}!</h3>
-                    {/* <p>
-                        Roles: {user?.roles?.length ? user.roles.join(', ') : 'No roles assigned'}
-                    </p> */}
-                    <button onClick={handleLogout}>Logout</button>
-                </div>
-            ) : (
-                <FormComponent fields={loginFields} buttonText="Login" onSubmit={handleLogin} />
-            )}
+            <FormComponent fields={loginFields} buttonText="Login" onSubmit={handleLogin} />
         </div>
     )
 }

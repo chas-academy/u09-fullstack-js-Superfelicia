@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import FormComponent from '../../components/formComponent'
+import FormComponent from '../../components/FormComponent'
 
 const RegisterPage = () => {
     const [error, setError] = useState<string | null>(null)
@@ -33,11 +33,11 @@ const RegisterPage = () => {
     ]
 
     const handleRegister = async (formData: { [key: string]: string }) => {
-        const { name, email, password, confirmPassword } = formData;
+        const { name, email, password, confirmPassword } = formData
 
         if (password !== confirmPassword) {
             setError('Passwords do not match')
-            return;
+            return
         }
 
         try {
@@ -46,7 +46,7 @@ const RegisterPage = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, password, roles: 'user' })
+                body: JSON.stringify({ name, email, password, roles: 'user' }),
             })
 
             const data = await response.json()
@@ -56,7 +56,7 @@ const RegisterPage = () => {
                 setSuccess('User registered successfully!')
                 setError(null)
             } else {
-                setError(data.message || 'Error registering user');
+                setError(data.message || 'Error registering user')
             }
         } catch (error) {
             setError('Error registering user')
@@ -64,11 +64,11 @@ const RegisterPage = () => {
     }
 
     return (
-        <div className='flex flex-col items-start space-y-2'>
+        <div className="flex flex-col items-start space-y-2">
             <h2>Register</h2>
 
-            {error && <p className='text-red-500'>{error}</p>}
-            {success && <p className='text-green-500'>{success}</p>}
+            {error && <p className="text-red-500">{error}</p>}
+            {success && <p className="text-green-500">{success}</p>}
 
             <FormComponent
                 fields={registerFields}
