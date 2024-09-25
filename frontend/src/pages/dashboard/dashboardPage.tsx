@@ -1,19 +1,17 @@
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '../../store/useUserStore'
 
 const DashboardPage = () => {
-    const location = useLocation()
     const navigate = useNavigate()
-    const user = location.state?.user
+    const user = useUserStore((state) => state.user)
+    const clearUser = useUserStore((state) => state.clearUser)
 
-    useEffect(() => {
-        // kolla om token finns i localStorage
-        const token = localStorage.getItem('token')
-
-        if (!token || !user) {
-            navigate('/login')
-        }
-    }, [navigate, user])
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        clearUser()
+        navigate('/login')
+        console.log('Logged out')
+    }
 
     if (!user) return null
 
@@ -23,6 +21,8 @@ const DashboardPage = () => {
             <p>Welcome to your dashboard, {user.name}!</p>
             <p>Your email: {user.email}</p>
             <p>Your roles: {user.roles.join(', ')}</p>
+
+            <button onClick={handleLogout}>Logout</button>
         </div>
     )
 }
