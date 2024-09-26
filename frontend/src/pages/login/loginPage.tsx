@@ -1,4 +1,4 @@
-import FormComponent from '../../components/FormComponent'
+import FormComponent from '../../components/formComponent'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/useUserStore'
 import { useState } from 'react'
@@ -42,7 +42,12 @@ const LoginPage = () => {
                 // Spara tokenen lokalt (t.ex. i localStorage)
                 localStorage.setItem('token', data.token)
                 setUser(data.user)
-                navigate('/dashboard')
+
+                if (data.user.roles.includes('admin')) {
+                    navigate('/admin')
+                } else {
+                    navigate('/dashboard')
+                }
 
                 console.log('Logged in successfully:', data.user)
                 // Redirect eller uppdatera state för inloggning

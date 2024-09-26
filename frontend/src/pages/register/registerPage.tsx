@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import FormComponent from '../../components/FormComponent'
+import FormComponent from '../../components/formComponent.tsx'
 
 const RegisterPage = () => {
     const [error, setError] = useState<string | null>(null)
