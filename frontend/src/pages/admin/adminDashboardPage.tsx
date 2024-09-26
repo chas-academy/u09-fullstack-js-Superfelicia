@@ -13,6 +13,10 @@ const AdminDashboardPage = () => {
         console.log('Logged out')
     }
 
+    const handleCreateUser = () => {
+        navigate('/admin/create-user')
+    }
+
     if (!user) return null
 
     return (
@@ -21,10 +25,9 @@ const AdminDashboardPage = () => {
             <p>Welcome, {user.name}</p>
             <p>Your role: {user.roles.join(', ')}</p>
 
-
             <div className="flex flex-col">
                 <h3>Manage users</h3>
-                <button>Create user</button>
+                <button onClick={handleCreateUser}>Create user</button>
                 <button>Update user</button>
                 <button>Delete user</button>
             </div>
