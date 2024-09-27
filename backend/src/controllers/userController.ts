@@ -168,7 +168,7 @@ export const resetUserPasswordController = async (
 
 // delete
 export const deleteUserController = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
   console.log(id);
 
   try {
