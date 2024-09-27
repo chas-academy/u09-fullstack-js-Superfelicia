@@ -28,10 +28,10 @@ export const updateUser = async (
   id: string,
   name: string,
   email: string,
-  roles: string
+  roles: string[]
 ) => {
-  return await User.findOneAndUpdate(
-    { _id: id },
+  return await User.findByIdAndUpdate(
+    id,
     { name, email, roles },
     { new: true }
   );
