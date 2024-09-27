@@ -20,7 +20,7 @@ const DashboardPage = () => {
             <h2>User dashboard</h2>
             <p>Welcome to your dashboard, {user.name}!</p>
             <p>Your email: {user.email}</p>
-            <p>Your roles: {user.roles.join(', ')}</p>
+            <p>Your role: {user.roles.join(', ')}</p>
 
             <button onClick={handleLogout}>Logout</button>
         </div>

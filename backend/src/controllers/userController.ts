@@ -58,10 +58,16 @@ export const getUsersController = async (req: Request, res: Response) => {
 
 // update
 export const updateUserController = async (req: Request, res: Response) => {
-  const { id, name, email, roles } = req.body;
+  const { name, email, roles } = req.body;
+  const { id } = req.params;
   console.log(req.body);
 
-  if (roles && !validRoles.includes(roles)) {
+  const rolesArray = Array.isArray(roles) ? roles : [roles];
+
+  if (
+    rolesArray &&
+    !rolesArray.every((role: string) => validRoles.includes(role))
+  ) {
     return res.status(400).json({ message: "Invalid role" });
   }
 
@@ -75,7 +81,7 @@ export const updateUserController = async (req: Request, res: Response) => {
 
     // vi får tillbaka det uppdaterade json-objektet
     res.status(200).json({
-      id: updatedUser.id,
+      id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
       roles: updatedUser.roles,
@@ -86,69 +92,83 @@ export const updateUserController = async (req: Request, res: Response) => {
 };
 
 // kontroll för att uppdatera lösenord
-export const updateUserPasswordController = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { currentPassword, newPassword } = req.body;
+export const updateUserPasswordController = async (
+  req: Request,
+  res: Response
+) => {
+  const { id } = req.params;
+  const { currentPassword, newPassword } = req.body;
 
-    if (!newPassword || newPassword.length < 6) {
-        return res.status(400).json({ message: 'Password must be at least 6 characters long'});
+  if (!newPassword || newPassword.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters long" });
+  }
+
+  try {
+    const updatedUser = await updateUserPassword(
+      id,
+      currentPassword,
+      newPassword
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    try {
-        const updatedUser = await updateUserPassword(id, currentPassword, newPassword);
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        res.status(200).json({
-            message: 'Password updated successfully',
-            user: {
-                id: updatedUser.id,
-                name: updatedUser.name,
-                email: updatedUser.email,
-                roles: updatedUser.roles,
-            }
-        });
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-}
+    res.status(200).json({
+      message: "Password updated successfully",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        roles: updatedUser.roles,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // reset user lösenord
-export const resetUserPasswordController = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { newPassword } = req.body;
+export const resetUserPasswordController = async (
+  req: Request,
+  res: Response
+) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
 
-    if (!newPassword || newPassword.length < 6) {
-        return res.status(400).json({ message: 'Password must be at least 6 characters long'});
+  if (!newPassword || newPassword.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters long" });
+  }
+
+  try {
+    // byt namn på const updatedUser till något med reset imorgon
+    const updatedUser = await resetUserPassword(id, newPassword);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    try {
-        // byt namn på const updatedUser till något med reset imorgon
-        const updatedUser = await resetUserPassword(id, newPassword);
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        res.status(200).json({
-            message: 'Password reset successfully',
-            user: {
-                id: updatedUser.id,
-                name: updatedUser.name,
-                email: updatedUser.email,
-                roles: updatedUser.roles,
-            }
-        });
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-}
+    res.status(200).json({
+      message: "Password reset successfully",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        roles: updatedUser.roles,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // delete
 export const deleteUserController = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
   console.log(id);
 
   try {

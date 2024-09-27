@@ -17,9 +17,10 @@ interface DecodedToken {
 
 interface ProtectedRouteProps {
     children: React.ReactNode
+    requiredRole?: string
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
     const setUser = useUserStore((state) => state.setUser)
     const user = useUserStore((state) => state.user)
     console.log('I ProtectedRoute', user)
@@ -54,6 +55,12 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
                     roles: decodedToken.roles,
                 })
             }
+
+            if (requiredRole && !decodedToken.roles.includes(requiredRole)) {
+                console.log('User does not have a required role')
+                return <Navigate to='/login' />
+            }
+            
         } catch (error) {
             console.error('Invalid token:', error)
             localStorage.removeItem('token')
