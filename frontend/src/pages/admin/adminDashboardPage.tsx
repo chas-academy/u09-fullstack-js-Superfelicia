@@ -15,8 +15,6 @@ export interface User {
 const AdminDashboardPage = () => {
     const [users, setUsers] = useState<User[]>([])
     const [filteredUsers, setFilteredUsers] = useState<User[]>([])
-    const [editingUserId, setEditingUserId] = useState<string | null>(null)
-    const [updatedUserData, setUpdatedUserData] = useState<Partial<User>>({})
     const navigate = useNavigate()
     const user = useUserStore((state) => state.user)
     const clearUser = useUserStore((state) => state.clearUser)
@@ -72,68 +70,33 @@ const AdminDashboardPage = () => {
         console.log(filteredUsers)
     }
 
-    const handleEditUser = (user: User) => {
-        if (!user._id) {
-            console.error('No userId found for user:', user)
-            return
+    const handleEditUser = async (updatedUser: User) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/user/${updatedUser._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(updatedUser),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                setUsers((prevUsers) =>
+                    prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user))
+                )
+                setFilteredUsers((prevUsers) =>
+                    prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user))
+                )
+            } else {
+                console.error('Error updating user:', data.message)
+            }
+        } catch (error) {
+            console.error('Error updating user:', error)
         }
-        setEditingUserId(user._id)
-        setUpdatedUserData({ name: user.name, email: user.email, roles: user.roles })
-        // kunna ändra password
     }
-
-    // const handleInputChange = (
-    //     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    //     field: string
-    // ) => {
-    //     if (field === 'roles') {
-    //         setUpdatedUserData({ ...updatedUserData, roles: [e.target.value] })
-    //     } else {
-    //         setUpdatedUserData({ ...updatedUserData, [field]: e.target.value })
-    //     }
-    // }
-
-    // const handleSaveUser = async () => {
-    //     if (!editingUserId) {
-    //         console.error('No userId provided for update', editingUserId)
-    //         return
-    //     }
-
-    //     console.log('Saving user with ID:', editingUserId)
-    //     console.log('Updated user data:', updatedUserData)
-
-    //     try {
-    //         const response = await fetch(`http://localhost:3000/api/user/${editingUserId}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${localStorage.getItem('token')}`,
-    //             },
-    //             body: JSON.stringify(updatedUserData),
-    //         })
-
-    //         const data = await response.json()
-
-    //         if (response.ok) {
-    //             setUsers((prevUsers) =>
-    //                 prevUsers.map((user) =>
-    //                     user._id === editingUserId ? { ...user, ...updatedUserData } : user
-    //                 )
-    //             )
-    //             setEditingUserId(null)
-    //             setUpdatedUserData({})
-    //         } else {
-    //             console.error('Error updating user:', data.message)
-    //         }
-    //     } catch (error) {
-    //         console.error('Error updating user:', error)
-    //     }
-    // }
-
-    // const handleCancelEdit = () => {
-    //     setEditingUserId(null)
-    //     setUpdatedUserData({})
-    // }
 
     const handleDeleteUser = async (userId: string) => {
         try {
@@ -149,6 +112,7 @@ const AdminDashboardPage = () => {
 
             if (response.ok) {
                 setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId))
+                setFilteredUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId))
                 console.log('User deleted:', data)
             } else {
                 console.error('Error deleting user:', data.message)
@@ -178,44 +142,11 @@ const AdminDashboardPage = () => {
 
             <div>
                 <h3>All users</h3>
-                <TableComponent data={filteredUsers} onEdit={handleEditUser} onDelete={handleDeleteUser} />
-                {/* <ul>
-                    {filteredUsers.map((user, key) => (
-                        <li key={key}>
-                            {editingUserId === user._id ? (
-                                <div>
-                                    <input
-                                        type="text"
-                                        value={updatedUserData.name || ''}
-                                        onChange={(e) => handleInputChange(e, 'name')}
-                                    />
-                                    <input
-                                        type="email"
-                                        value={updatedUserData.email || ''}
-                                        onChange={(e) => handleInputChange(e, 'email')}
-                                    />
-                                    <select
-                                        value={updatedUserData.roles?.[0]}
-                                        onChange={(e) => handleInputChange(e, 'roles')}
-                                    >
-                                        <option value="user">User</option>
-                                        <option value="admin">Admin</option>
-                                    </select>
-                                    <button onClick={handleSaveUser}>Save</button>
-                                    <button onClick={handleCancelEdit}>Cancel</button>
-                                </div>
-                            ) : (
-                                <div>
-                                    {user.name} ({user.email}) - Roles: {user.roles.join(', ')}
-                                    <button onClick={() => handleEditUser(user)}>Update</button>
-                                    <button onClick={() => handleDeleteUser(user._id)}>
-                                        Delete
-                                    </button>
-                                </div>
-                            )}
-                        </li>
-                    ))}
-                </ul> */}
+                <TableComponent
+                    data={filteredUsers}
+                    onEdit={handleEditUser}
+                    onDelete={handleDeleteUser}
+                />
             </div>
 
             <button onClick={handleLogout}>Logout</button>
