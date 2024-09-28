@@ -8,11 +8,16 @@ import DashboardPage from './pages/dashboard/dashboardPage.tsx'
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import AdminDashboardPage from './pages/admin/adminDashboardPage.tsx'
 import CreateNewUser from './pages/admin/createNewUser.tsx'
+import { ThemeProvider } from './components/ThemeProvider.tsx'
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: (
+            <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+                <App />
+            </ThemeProvider>
+        ),
         children: [
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage /> },
@@ -27,7 +32,7 @@ const router = createBrowserRouter([
             {
                 path: 'admin',
                 element: (
-                    <ProtectedRoute requiredRole='admin'>
+                    <ProtectedRoute requiredRole="admin">
                         <AdminDashboardPage />
                     </ProtectedRoute>
                 ),
@@ -35,7 +40,7 @@ const router = createBrowserRouter([
             {
                 path: 'admin/create-user',
                 element: (
-                    <ProtectedRoute requiredRole='admin'>
+                    <ProtectedRoute requiredRole="admin">
                         <CreateNewUser />
                     </ProtectedRoute>
                 ),
