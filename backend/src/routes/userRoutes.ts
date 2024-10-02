@@ -3,7 +3,7 @@ import {
   deleteUserController,
   getUsersController,
   updateUserController,
-} from "../controllers/userController";
+} from "../controllers/UserController";
 import {
   requestPasswordResetController,
   resetPasswordController,
