@@ -14,6 +14,7 @@ benchmarks/graphs
 
 # Enviroment variables
 .env
+.env.test
 
 # ignore additional files using core.excludesFile
 # http://git-scm.com/docs/gitignore

@@ -12,13 +12,17 @@ app.use(express.json());
 
 connectDB();
 
+// logga inkommande requests för felsökning/testning
+app.use((req, res, next) => {
+  console.log(`Request received at ${req.path}`);
+  next();
+});
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
 app.use("/api", userRoutes);
-
 app.use("/api/auth", authRoutes);
 
 export default app;
