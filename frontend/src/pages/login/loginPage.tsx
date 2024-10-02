@@ -44,7 +44,7 @@ const LoginPage = () => {
                 setUser(data.user)
 
                 if (data.user.roles.includes('admin')) {
-                    navigate('/admin')
+                    navigate('/admin-dashboard')
                 } else {
                     navigate('/dashboard')
                 }

@@ -22,7 +22,7 @@ const router = createBrowserRouter([
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage /> },
             {
-                path: 'dashboard',
+                path: '/dashboard',
                 element: (
                     <ProtectedRoute>
                         <DashboardPage />
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: 'admin',
+                path: '/admin-dashboard',
                 element: (
                     <ProtectedRoute requiredRole="admin">
                         <AdminDashboardPage />
