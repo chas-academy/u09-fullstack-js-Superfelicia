@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { sendPasswordResetEmail } from "../services/emailService";
-import { resetPassword } from "../services/passwordService";
-import { resetUserPassword, updateUserPassword } from "../services/userService";
+import { sendPasswordResetEmail } from "../services/EmailService";
+import { resetPassword } from "../services/PasswordService";
+import { resetUserPassword, updateUserPassword } from "../services/UserService";
 
 // begäran om lösenordsåterställning
 export const requestPasswordResetController = async (

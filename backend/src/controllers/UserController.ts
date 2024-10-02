@@ -6,7 +6,7 @@ import {
   deleteUser,
   getAllUsers,
   updateUser,
-} from "../services/userService";
+} from "../services/UserService";
 
 const validRoles = ["user", "admin", "superadmin"];
 
