@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../src/app";
 import mongoose from "mongoose";
-import User from "../../src/models/userModel";
+import User from "../../src/models/UserModel";
 import bcrypt from 'bcrypt';
 
 beforeAll(async () => {
