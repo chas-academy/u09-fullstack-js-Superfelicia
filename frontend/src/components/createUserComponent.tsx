@@ -3,13 +3,12 @@ import FormComponent from './formComponent.tsx'
 import { useUserStore } from '../store/useUserStore.ts'
 
 interface CreateUserProps {
-    onSuccess?: () => void
     buttonText: string
+    onSubmit: (formData: { [key: string]: string }) => void
+    closeDialog: () => void
 }
 
-const CreateUserComponent = ({ onSuccess, buttonText }: CreateUserProps) => {
-    const [error, setError] = useState<string | null>(null)
-    const [success, setSuccess] = useState<string | null>(null)
+const CreateUserComponent = ({ buttonText, onSubmit, closeDialog }: CreateUserProps) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const user = useUserStore((state) => state.user)
 
@@ -40,62 +39,26 @@ const CreateUserComponent = ({ onSuccess, buttonText }: CreateUserProps) => {
         },
     ]
 
-    const handleCreate = async (formData: { [key: string]: string }) => {
-        const { name, email, password, confirmPassword } = formData
-
-        if (password !== confirmPassword) {
-            setError('Passwords do not match')
-            return
-        }
-
-        try {
-            const response = await fetch('http://localhost:3000/api/auth/user', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password, roles: isAdmin ? 'admin' : 'user' }),
-            })
-
-            const data = await response.json()
-            console.log(data)
-
-            if (response.ok) {
-                setSuccess('User registered successfully!')
-                setError(null)
-                if (onSuccess) onSuccess()
-            } else {
-                setError(data.message || 'Error registering user')
-            }
-        } catch (error) {
-            setError('Error registering user')
-        }
+    const handleSubmit = (formData: { [key: string]: string }) => {
+        onSubmit({ ...formData, roles: isAdmin ? 'admin' : 'user' })
+        closeDialog()
     }
 
     return (
         <div className="flex flex-col items-start space-y-2">
-            {error && <p className="text-red-500">{error}</p>}
-            {success && <p className="text-green-500">{success}</p>}
-
-            <FormComponent
-                fields={registerFields}
-                buttonText={buttonText}
-                onSubmit={handleCreate}
-            />
-
-            {user?.roles.includes('admin') && (
-                <div>
-                    <label>
+            <FormComponent fields={registerFields} buttonText={buttonText} onSubmit={handleSubmit}>
+                {' '}
+                {user?.roles.includes('admin') && (
+                    <div className="space-x-4">
                         <input
-                        type="checkbox"
-                        checked={isAdmin}
-                        onChange={() => {console.log('pressed'); setIsAdmin(!isAdmin)}}
+                            type="checkbox"
+                            checked={isAdmin}
+                            onChange={() => setIsAdmin(!isAdmin)}
                         />
-                        Admin or not admin
-                    </label>
-                </div>
-            )}
-
+                        <label>Admin</label>
+                    </div>
+                )}
+            </FormComponent>
         </div>
     )
 }

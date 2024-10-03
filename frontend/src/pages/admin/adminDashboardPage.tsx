@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/useUserStore'
 import { useEffect, useState } from 'react'
 import SearchComponent from '../../components/searchComponent'
 import TableComponent from '@/components/table/TableComponent'
+import DialogComponent from '@/components/DialogComponent'
+import CreateUserComponent from '@/components/createUserComponent'
+import { Plus } from 'lucide-react'
 
 export interface User {
     _id: string
@@ -15,20 +17,7 @@ export interface User {
 const AdminDashboardPage = () => {
     const [users, setUsers] = useState<User[]>([])
     const [filteredUsers, setFilteredUsers] = useState<User[]>([])
-    const navigate = useNavigate()
     const user = useUserStore((state) => state.user)
-    const clearUser = useUserStore((state) => state.clearUser)
-
-    const handleLogout = () => {
-        localStorage.removeItem('token')
-        clearUser()
-        navigate('/login')
-        console.log('Logged out')
-    }
-
-    const handleCreateUser = () => {
-        navigate('/admin/create-user')
-    }
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -55,6 +44,32 @@ const AdminDashboardPage = () => {
 
         fetchUsers()
     }, [])
+
+    const handleCreateUser = async (formData: { [key: string]: string }) => {
+        const { name, email, password, roles } = formData
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password, roles }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                setUsers((prevUsers) => [...prevUsers, data])
+                setFilteredUsers((prevUsers) => [...prevUsers, data])
+                console.log('User created:', data)
+            } else {
+                console.error(data.message || 'Error registering user')
+            }
+        } catch (error) {
+            console.error('Error registering user')
+        }
+    }
 
     const handleSearch = (searchTerm: string) => {
         if (searchTerm === '') {
@@ -126,30 +141,27 @@ const AdminDashboardPage = () => {
     if (!user) return null
 
     return (
-        <div>
+        <div className='flex flex-col items-center justify-center space-y-5'>
             <h2>Admin Dashboard</h2>
-            <p>Welcome, {user.name}</p>
-            <p>Your role: {user.roles.join(', ')}</p>
 
-            <div className="flex flex-col">
-                <h3>Manage users</h3>
-                <button onClick={handleCreateUser}>Create user</button>
-                <button>Update user</button>
-                <button>Delete user</button>
+            <div className='w-full px-10 flex justify-between items-center'>
+                <SearchComponent onSearch={handleSearch} placeholder="Search users..." />
+                <DialogComponent title="Create new user" triggerText={<Plus size={16}/>} onConfirm={() => {}}>
+                    <CreateUserComponent
+                        buttonText="Create user"
+                        onSubmit={handleCreateUser}
+                        closeDialog={() => console.log('closing dialog')}
+                    />
+                </DialogComponent>
             </div>
 
-            <SearchComponent onSearch={handleSearch} placeholder="Search users..." />
-
-            <div>
-                <h3>All users</h3>
+            <div className="w-full px-10">
                 <TableComponent
                     data={filteredUsers}
                     onEdit={handleEditUser}
                     onDelete={handleDeleteUser}
                 />
             </div>
-
-            <button onClick={handleLogout}>Logout</button>
         </div>
     )
 }

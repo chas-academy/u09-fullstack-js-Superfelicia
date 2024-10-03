@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Button } from './ui/button'
+import { Search, Undo2 } from 'lucide-react'
 
 interface SearchComponentProps {
     onSearch: (searchTerm: string) => void
@@ -26,21 +28,21 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
     }
 
     return (
-        <>
+        <div className='w-[530px] flex items-center space-x-2'>
             <input
                 type="text"
                 value={searchTerm}
                 onChange={handleInputChange}
                 placeholder={placeholder}
-                className="border p-2 rounded"
+                className="w-96 border p-2 rounded"
             />
-            <button onClick={handleSearchClick} className="rounded p-2">
-                Search
-            </button>
-            <button onClick={handleClearSearch} className="rounded p-2">
-                Clear
-            </button>
-        </>
+            <Button onClick={handleSearchClick} className="rounded p-2">
+                <Search size={18} />
+            </Button>
+            <Button onClick={handleClearSearch} className="rounded p-2">
+                <Undo2 size={18}/>
+            </Button>
+        </div>
     )
 }
 

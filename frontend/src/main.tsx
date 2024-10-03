@@ -7,7 +7,6 @@ import RegisterPage from './pages/register/registerPage.tsx'
 import DashboardPage from './pages/dashboard/dashboardPage.tsx'
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import AdminDashboardPage from './pages/admin/adminDashboardPage.tsx'
-import CreateNewUser from './pages/admin/createNewUser.tsx'
 import { ThemeProvider } from './components/ThemeProvider.tsx'
 
 const router = createBrowserRouter([
@@ -34,14 +33,6 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute requiredRole="admin">
                         <AdminDashboardPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: 'admin/create-user',
-                element: (
-                    <ProtectedRoute requiredRole="admin">
-                        <CreateNewUser />
                     </ProtectedRoute>
                 ),
             },
