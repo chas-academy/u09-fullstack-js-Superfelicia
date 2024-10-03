@@ -5,7 +5,7 @@ import User from "../../src/models/tempUserModel";
 import bcrypt from 'bcrypt';
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/testdb");
+  await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27018/testdb");
 });
 
 // clean up before each test
