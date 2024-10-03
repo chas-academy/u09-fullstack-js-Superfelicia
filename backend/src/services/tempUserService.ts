@@ -1,7 +1,7 @@
 // userService ansvarar för affärslogik och databasoperationer
 // relaterade till användarhantering.
 
-import User from "../models/UserModel";
+import User from "../models/tempUserModel";
 import bcrypt from "bcrypt";
 
 // export const createUser = async (

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { loginUser, registerUser } from '../services/AuthService';
-import { findUserByEmail } from "../services/UserService";
+import { loginUser, registerUser } from '../services/tempAuthService';
+import { findUserByEmail } from "../services/tempUserService";
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
