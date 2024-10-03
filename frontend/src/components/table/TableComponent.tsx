@@ -12,7 +12,8 @@ interface TableComponentProps {
 
 const TableComponent: React.FC<TableComponentProps> = ({ data, onEdit, onDelete }) => {
     return (
-        <Table>
+        <div className='overflow-x-auto'>
+        <Table className='bg-white border border-gray-300 shadow-md'>
             <TableHeaderComponent columns={columns} />
             <TableBody>
                 {data.map((rowData, index) => (
@@ -26,6 +27,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ data, onEdit, onDelete 
                 ))}
             </TableBody>
         </Table>
+        </div>
     )
 }
 

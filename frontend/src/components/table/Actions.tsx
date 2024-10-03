@@ -1,6 +1,7 @@
 import { User } from '@/pages/admin/adminDashboardPage'
 import DialogComponent from '../DialogComponent'
 import { useState } from 'react'
+import { Pencil, Trash2 } from 'lucide-react'
 
 interface ActionsProps {
     rowData: User
@@ -28,11 +29,11 @@ const Actions: React.FC<ActionsProps> = ({ rowData, onEdit, onDelete }) => {
     }
 
     return (
-        <div>
+        <div className="flex space-x-2 justify-center">
             <DialogComponent
                 title="Edit user"
                 description="Update user details"
-                triggerText="Edit"
+                triggerText={<Pencil size={14} />}
                 onConfirm={handleSave}
                 isDeleteConfirmation={false}
             >
@@ -60,7 +61,7 @@ const Actions: React.FC<ActionsProps> = ({ rowData, onEdit, onDelete }) => {
             <DialogComponent
                 title="Delete user"
                 description={`Are your sure you want to delete ${rowData.name}?`}
-                triggerText="Delete"
+                triggerText={<Trash2 size={14}/>}
                 onConfirm={handleDelete}
                 isDeleteConfirmation={true}
             />

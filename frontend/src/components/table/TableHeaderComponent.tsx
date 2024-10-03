@@ -13,6 +13,7 @@ const TableHeaderComponent: React.FC<TableHeaderProps> = ({ columns }) => {
                 {columns.map((column, index) => (
                     <TableCell key={index}>{column}</TableCell>
                 ))}
+                <TableCell className="align-middle">actions</TableCell>
             </TableRow>
         </TableHeader>
     )
