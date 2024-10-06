@@ -46,12 +46,12 @@ const FormComponent: React.FC<FormComponentProps> = ({
                         placeholder={field.placeholder}
                         name={field.name}
                         onChange={handleChange}
-                        className="border-2 rounded-md p-2 w-96 flex flex-1"
+                        className="border-2 rounded-md p-3 w-72 md:w-96 flex flex-1"
                     />
                 </label>
             ))}
             <div>{children}</div>
-            <Button type="submit" className="w-2/4 self-end border rounded p-2">
+            <Button type="submit" className="w-full border rounded-md p-6">
                 {buttonText}
             </Button>
         </form>

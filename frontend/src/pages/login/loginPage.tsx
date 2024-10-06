@@ -62,7 +62,7 @@ const LoginPage = () => {
     }
 
     return (
-        <div className="flex flex-col items-start space-y-2 mb-10">
+        <div className="w-full flex flex-col items-center justify-center space-y-2">
             <h2>Login</h2>
             <FormComponent fields={loginFields} buttonText="Login" onSubmit={handleLogin} />
         </div>

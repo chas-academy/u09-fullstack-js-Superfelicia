@@ -2,12 +2,13 @@ import CreateUserComponent from '../../components/createUserComponent'
 
 const RegisterPage = () => {
     return (
-        <div className="flex flex-col items-start space-y-2">
+        <div className="w-full flex flex-col items-center justify-center space-y-2">
             <h2>Register</h2>
 
             <CreateUserComponent
-                onSuccess={() => console.log('User created successfully!')}
                 buttonText="Register"
+                onSubmit={() => {}}
+                closeDialog={() => {}}
             />
         </div>
     )
