@@ -1,5 +1,6 @@
 import { useUserStore } from '@/store/useUserStore'
 import { Link, useNavigate } from 'react-router-dom'
+import { ModeToggle } from './ModeToggle'
 
 const Navbar = () => {
     const user = useUserStore((state) => state.user)
@@ -22,25 +23,33 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="w-full">
-            <ul className="w-full flex justify-evenly">
-                <li>
-                    <button onClick={handleDashboardClick}>Dashboard</button>
-                </li>
+        <nav className="w-full flex items-center justify-end">
+            <ul className="flex justify-evenly items-center space-x-4">
                 {user ? (
-                    <li className="flex space-x-4">
-                        <div>
-                            <p>{user.name}</p>
-                        </div>
-                        <div>
-                            <button onClick={handleLogout}>Logout</button>
-                        </div>
-                    </li>
+                    <>
+                        <li>
+                            <button onClick={handleDashboardClick}>Dashboard</button>
+                        </li>
+                        <li className="flex space-x-4">
+                            <div>
+                                <p>{user.name}</p>
+                            </div>
+                            <div>
+                                <button onClick={handleLogout}>Logout</button>
+                            </div>
+                        </li>
+                    </>
                 ) : (
-                    <li>
-                        <Link to="/login">Login</Link>
-                    </li>
+                    <>
+                        <li>
+                            <Link to="/login">Login</Link>
+                        </li>
+                        <li>
+                            <Link to="/register">Register</Link>
+                        </li>
+                    </>
                 )}
+                <ModeToggle />
             </ul>
         </nav>
     )
