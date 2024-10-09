@@ -6,7 +6,7 @@ export const createFlashcardCollection = async (name: string, category: string, 
   const newCollection = new FlashcardCollection({
     name,
     category,
-    flashcards,
+    flashcards: flashcards.length ? flashcards : [],
   });
 
   try {

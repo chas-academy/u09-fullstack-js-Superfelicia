@@ -6,7 +6,6 @@ function App() {
     return (
         <main className='overflow-hidden'>
             <Header />
-            HEJ APP
             <Outlet />
         </main>
     )
