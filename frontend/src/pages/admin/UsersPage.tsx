@@ -4,7 +4,6 @@ import TableComponent from '@/components/table/TableComponent';
 import DialogComponent from '@/components/DialogComponent';
 import CreateUserComponent from '@/components/createUserComponent';
 import { Plus } from 'lucide-react';
-import { useUserStore } from '@/store/useUserStore';
 
 export interface User {
     _id: string;
@@ -17,7 +16,6 @@ export interface User {
 const UsersPage = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-    const user = useUserStore((state) => state.user);
 
     useEffect(() => {
         const fetchUsers = async () => {

@@ -3,16 +3,16 @@ import { Collection } from '@/interfaces/Collection'
 
 interface CollectionListProps {
     collections: Collection[]
-    onEdit: (collection: Collection) => void
+    onSelectCollection: (collection: Collection) => void
 }
 
-const CollectionList: React.FC<CollectionListProps> = ({ collections, onEdit }) => {
+const CollectionList: React.FC<CollectionListProps> = ({ collections, onSelectCollection }) => {
     if (!collections.length) {
         return <p>No collections available.</p>
     }
 
     return (
-        <div className="flex justify-start">
+        <div className="flex flex-col justify-start">
             <ul>
                 {collections.map((collection) => (
                     <div key={collection._id} className="flex justify-start items-center space-x-4">
@@ -20,7 +20,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ collections, onEdit }) 
                             <h3>{collection.title}</h3>
                             <p>{collection.category}</p>
                         </li>
-                        <Button onClick={() => onEdit(collection)}>Edit</Button>
+                        <Button onClick={() => onSelectCollection(collection)}>View collection</Button>
                     </div>
                 ))}
             </ul>

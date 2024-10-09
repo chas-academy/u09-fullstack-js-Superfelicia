@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
-import CollectionForm from './CollectionForm'
 import CollectionList from './CollectionList'
 import { Collection } from '@/interfaces/Collection'
+import FlashcardForm from '../flashcards/FlashcardForm'
+import { Button } from '@/components/ui/button'
+import { CircleArrowLeft } from 'lucide-react'
 
 const CollectionPage = () => {
     const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null)
     const [collections, setCollections] = useState<Collection[]>([])
 
-    // Hämta samlingar från backend när sidan laddas
     useEffect(() => {
         fetchCollections()
     }, [])
@@ -28,14 +29,30 @@ const CollectionPage = () => {
     }
 
     const handleFormSubmit = () => {
-        fetchCollections() // Uppdatera listan med samlingar när en ny skapas eller redigeras
-        setSelectedCollection(null) // Återställ formuläret efter inlämning
+        fetchCollections()
+        setSelectedCollection(null)
     }
 
     return (
         <div className="flex flex-col space-y-10 items-start">
-            <CollectionList collections={collections} onEdit={handleEditCollection} />
-            <CollectionForm collection={selectedCollection} onSubmit={handleFormSubmit} />
+            {!selectedCollection ? (
+                <CollectionList
+                    collections={collections}
+                    onSelectCollection={handleEditCollection}
+                />
+            ) : (
+                <>
+                    <FlashcardForm collection={selectedCollection} onSubmit={handleFormSubmit} />
+                    <Button
+                        type="button"
+                        onClick={() => setSelectedCollection(null)}
+                        className="gap-2"
+                    >
+                        <CircleArrowLeft size={16} />
+                        Back to collections
+                    </Button>
+                </>
+            )}
         </div>
     )
 }

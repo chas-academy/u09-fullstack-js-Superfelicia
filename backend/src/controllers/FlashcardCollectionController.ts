@@ -8,7 +8,6 @@ import {
   removeFlashcardFromCollection  // Lägg till denna för att radera ett flashcard
 } from '../services/flashcardCollectionService';
 
-// Skapa en ny flashcard-samling
 export const createNewFlashcardCollection = async (req: Request, res: Response) => {
   const { name, category, flashcards } = req.body;
   try {
@@ -19,17 +18,16 @@ export const createNewFlashcardCollection = async (req: Request, res: Response) 
   }
 };
 
-// Hämta alla flashcard-samlingar
+
 export const getAllFlashcardCollections = async (req: Request, res: Response) => {
   try {
-    const collections = await getAllCollections();  // Service-funktion för att hämta alla samlingar
+    const collections = await getAllCollections();
     res.json(collections);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Hämta en specifik samling
 export const getFlashcardCollection = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -40,7 +38,6 @@ export const getFlashcardCollection = async (req: Request, res: Response) => {
   }
 };
 
-// Lägg till ett flashcard i en specifik samling
 export const addFlashcard = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { question, answer } = req.body;
@@ -52,7 +49,6 @@ export const addFlashcard = async (req: Request, res: Response) => {
   }
 };
 
-// Uppdatera status på ett flashcard
 export const updateFlashcardStatus = async (req: Request, res: Response) => {
   const { collectionId, flashcardId } = req.params;
   const { mastered } = req.body;
@@ -64,7 +60,6 @@ export const updateFlashcardStatus = async (req: Request, res: Response) => {
   }
 };
 
-// Radera ett flashcard från en specifik samling
 export const deleteFlashcard = async (req: Request, res: Response) => {
   const { collectionId, flashcardId } = req.params;
   try {
