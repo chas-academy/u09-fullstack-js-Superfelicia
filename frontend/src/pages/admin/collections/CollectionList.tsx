@@ -1,29 +1,40 @@
+import CardComponent from '@/components/CardComponent'
 import { Button } from '@/components/ui/button'
 import { Collection } from '@/interfaces/Collection'
 
 interface CollectionListProps {
     collections: Collection[]
     onSelectCollection: (collection: Collection) => void
+    onDeleteCollection: (collectionId: string) => void
 }
 
-const CollectionList: React.FC<CollectionListProps> = ({ collections, onSelectCollection }) => {
+const CollectionList: React.FC<CollectionListProps> = ({
+    collections,
+    onSelectCollection,
+    onDeleteCollection,
+}) => {
     if (!collections.length) {
         return <p>No collections available.</p>
     }
 
     return (
         <div className="flex flex-col justify-start">
-            <ul>
-                {collections.map((collection) => (
-                    <div key={collection._id} className="flex justify-start items-center space-x-4">
-                        <li>
-                            <h3>{collection.title}</h3>
-                            <p>{collection.category}</p>
-                        </li>
-                        <Button onClick={() => onSelectCollection(collection)}>View collection</Button>
+            {collections.map((collection) => (
+                <CardComponent
+                    key={collection._id}
+                    title={collection.title}
+                    subtitle={collection.category}
+                >
+                    <div>
+                        <Button onClick={() => onSelectCollection(collection)}>
+                            View collection
+                        </Button>
+                        <Button onClick={() => onDeleteCollection(collection._id)}>
+                            Delete collection
+                        </Button>
                     </div>
-                ))}
-            </ul>
+                </CardComponent>
+            ))}
         </div>
     )
 }

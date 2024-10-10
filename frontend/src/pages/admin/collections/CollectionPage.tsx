@@ -24,7 +24,8 @@ const CollectionPage = () => {
     }
 
     const handleEditCollection = (collection: Collection) => {
-        console.log(collection._id)
+        console.log('Selected collection ID:', collection._id)
+        console.log('Flashcards:', collection.flashcards)
         setSelectedCollection(collection)
     }
 
@@ -39,10 +40,13 @@ const CollectionPage = () => {
                 <CollectionList
                     collections={collections}
                     onSelectCollection={handleEditCollection}
+                    onDeleteCollection={(collectionId) => {
+                      setCollections(collections.filter((col) => col._id !== collectionId))
+                    }}
                 />
             ) : (
                 <>
-                    <FlashcardForm collection={selectedCollection} onSubmit={handleFormSubmit} />
+                    <FlashcardForm collection={selectedCollection} onSubmit={handleFormSubmit}/>
                     <Button
                         type="button"
                         onClick={() => setSelectedCollection(null)}

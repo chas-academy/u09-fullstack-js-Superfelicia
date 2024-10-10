@@ -30,13 +30,13 @@ const UsersPage = () => {
 
                 const data = await response.json();
                 if (response.ok) {
-                    setUsers(data);
-                    setFilteredUsers(data);
+                    setUsers(data)
+                    setFilteredUsers(data)
                 } else {
-                    console.error('Error fetching users:', data.message);
+                    console.error('Error fetching users:', data.message)
                 }
             } catch (error) {
-                console.error('Error fetching users:', error);
+                console.error('Error fetching users:', error)
             }
         };
 

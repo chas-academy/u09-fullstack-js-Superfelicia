@@ -1,7 +1,8 @@
+import { Flashcard } from './Flashcard'
+
 export interface Collection {
-    _id: string;
-    title: string;
-    category: string;
-    additionalInfo?: string; // Denna egenskap är valfri
-  }
-  
+    _id: string
+    name: string
+    category: string
+    flashcards: Flashcard[]
+}

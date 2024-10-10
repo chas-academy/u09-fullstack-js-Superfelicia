@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { NewFlashcard } from '@/interfaces/Flashcard'
 import { useState, useEffect } from 'react'
 
 interface CollectionFormProps {
@@ -10,7 +9,6 @@ interface CollectionFormProps {
 const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
     const [name, setName] = useState('')
     const [category, setCategory] = useState('')
-    const [flashcards, setFlashcards] = useState<NewFlashcard[]>([{ question: '', answer: '' }])
     const [collectionId, setCollectionId] = useState<string | null>(null)
 
     useEffect(() => {
@@ -19,33 +17,18 @@ const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
             setCategory(collection.category)
             setCollectionId(collection._id)
             console.log(collectionId)
-
-            setFlashcards(
-                collection.flashcards.length > 0
-                    ? collection.flashcards
-                    : [{ question: '', answer: '' }]
-            )
         } else {
             setName('')
             setCategory('')
             setCollectionId(null)
-            setFlashcards([
-                {
-                    question: '',
-                    answer: '',
-                },
-            ])
         }
     }, [collection])
 
     const handleSubmitCollection = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        const validFlashcards = flashcards.filter(
-            (flashcard) => flashcard.question.trim() !== '' && flashcard.answer.trim() !== ''
-        )
-
-        const newCollection = { name, category, flashcards: validFlashcards }
+        const newCollection = { name, category }
+        const updatedCollection = { name, category }
 
         try {
             let response
@@ -53,7 +36,7 @@ const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
                 response = await fetch(`http://localhost:3000/api/collections/${collectionId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newCollection),
+                    body: JSON.stringify(updatedCollection),
                 })
             } else {
                 response = await fetch('http://localhost:3000/api/collections', {
