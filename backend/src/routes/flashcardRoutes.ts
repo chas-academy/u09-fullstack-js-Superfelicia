@@ -1,23 +1,26 @@
 import { Router } from "express";
 import {
-  addFlashcard,
-  updateFlashcardStatus,
-  deleteFlashcard, // Lägg till för att radera ett flashcard
+  addFlashcardController, deleteFlashcardController, updateFlashcardController, updateFlashcardStatusController, // Lägg till för att radera ett flashcard
 } from "../controllers/FlashcardController";
 
 const router = Router();
 
 // flashcard routes
-router.post("/collections/:id/flashcards", addFlashcard);
+router.post("/:collectionId/flashcards", addFlashcardController);
 
 router.put(
-  "/collections/:collectionId/flashcards/:flashcardId",
-  updateFlashcardStatus
+  "/:collectionId/flashcards/:flashcardId",
+  updateFlashcardController
 );
 
+// router.put(
+//   "/:collectionId/flashcards/:id/status",
+//   updateFlashcardStatusController
+// );
+
 router.delete(
-  "/collections/:collectionId/flashcards/:flashcardId",
-  deleteFlashcard
+  "/:collectionId/flashcards/:flashcardId",
+  deleteFlashcardController
 );
 
 export default router;

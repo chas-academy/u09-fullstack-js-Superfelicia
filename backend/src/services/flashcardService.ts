@@ -1,45 +1,7 @@
 import mongoose from "mongoose";
 import { FlashcardCollection } from "../models/FlashcardCollectionModel";
 
-export const createFlashcardCollection = async (
-  name: string,
-  category: string,
-  flashcards: any[]
-) => {
-  const newCollection = new FlashcardCollection({
-    name,
-    category,
-    flashcards: flashcards.length ? flashcards : [],
-  });
-
-  try {
-    return await newCollection.save();
-  } catch (error) {
-    throw new Error("Error creating flashcard collection");
-  }
-};
-
-export const getAllCollections = async () => {
-  try {
-    return await FlashcardCollection.find();
-  } catch (error) {
-    throw new Error("Error fetching all collections");
-  }
-};
-
-export const getFlashcardCollectionById = async (collectionId: string) => {
-  try {
-    const collection = await FlashcardCollection.findById(collectionId);
-    if (!collection) {
-      throw new Error("Collection not found");
-    }
-    return collection;
-  } catch (error) {
-    throw new Error("Error fetching collection");
-  }
-};
-
-export const addFlashcardToCollection = async (
+export const addFlashcard = async (
   collectionId: string,
   question: string,
   answer: string
@@ -58,15 +20,38 @@ export const addFlashcardToCollection = async (
       failedAttempts: 0,
     };
 
-    collection.flashcards.push(newFlashcard as any);
+    collection.flashcards.push(newFlashcard);
 
     return await collection.save();
-  } catch (error) {
-    throw new Error("Error adding flashcard to collection");
+  } catch (error: any) {
+    throw new Error("Error adding flashcard to collection", error.message);
   }
 };
 
-export const updateFlashcardStatusInCollection = async (
+export const updateFlashcard = async (collectionId: string, flashcardId: string, question: string, answer: string, mastered: boolean, failedAttempts: number) => {
+  try {
+    const collection = await FlashcardCollection.findById(collectionId);
+    if (!collection) {
+      throw new Error(`Collection not found with id: ${collectionId}`);
+    }
+
+    const flashcard = collection.flashcards.id(flashcardId);
+    if (!flashcard) {
+      throw new Error(`Flashcard not found with id: ${flashcardId}`);
+    }
+
+    flashcard.question = question;
+    flashcard.answer = answer;
+    flashcard.mastered = mastered;
+    flashcard.failedAttempts = failedAttempts;
+
+    return await collection.save();
+  } catch (error: any) {
+    throw new Error('Error updating flashcard:', error.message);
+  }
+};
+
+export const updateFlashcardStatus = async (
   collectionId: string,
   flashcardId: string,
   mastered: boolean
@@ -93,7 +78,7 @@ export const updateFlashcardStatusInCollection = async (
   }
 };
 
-export const removeFlashcardFromCollection = async (
+export const removeFlashcard = async (
   collectionId: string,
   flashcardId: string
 ) => {

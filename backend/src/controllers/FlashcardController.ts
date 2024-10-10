@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
-import {
-  addFlashcardToCollection,
-  updateFlashcardStatusInCollection,
-  removeFlashcardFromCollection,
-} from "../services/flashcardCollectionService";
+import { addFlashcard, removeFlashcard, updateFlashcard, updateFlashcardStatus } from "../services/flashcardService";
 
-export const addFlashcard = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export const addFlashcardController = async (req: Request, res: Response) => {
+  const { collectionId } = req.params;
   const { question, answer } = req.body;
   try {
-    const updatedCollection = await addFlashcardToCollection(
-      id,
+    const updatedCollection = await addFlashcard(
+      collectionId,
       question,
       answer
     );
@@ -20,11 +16,31 @@ export const addFlashcard = async (req: Request, res: Response) => {
   }
 };
 
-export const updateFlashcardStatus = async (req: Request, res: Response) => {
+export const updateFlashcardController = async (req: Request, res: Response) => {
+    console.log(req.body)
+    const { collectionId, flashcardId } = req.params;
+    const { question, answer, mastered, failedAttempts } = req.body;
+
+    try {
+        const updatedFlashcard = await updateFlashcard(
+            collectionId,
+            flashcardId,
+            question,
+            answer,
+            mastered,
+            failedAttempts
+        );
+        res.status(200).json(updatedFlashcard);
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating flashcard', error});
+    }
+}
+
+export const updateFlashcardStatusController = async (req: Request, res: Response) => {
   const { collectionId, flashcardId } = req.params;
   const { mastered } = req.body;
   try {
-    const updatedCollection = await updateFlashcardStatusInCollection(
+    const updatedCollection = await updateFlashcardStatus(
       collectionId,
       flashcardId,
       mastered
@@ -35,13 +51,13 @@ export const updateFlashcardStatus = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteFlashcard = async (req: Request, res: Response) => {
+export const deleteFlashcardController = async (req: Request, res: Response) => {
   const { collectionId, flashcardId } = req.params;
   try {
-    const updatedCollection = await removeFlashcardFromCollection(
+    const updatedCollection = await removeFlashcard(
       collectionId,
       flashcardId
-    ); // Service-funktion för att radera flashcard
+    );
     res.json(updatedCollection);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

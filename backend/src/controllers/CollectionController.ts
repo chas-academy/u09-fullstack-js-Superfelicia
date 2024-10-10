@@ -1,22 +1,17 @@
 import { Request, Response } from 'express';
-import { 
-  createFlashcardCollection, 
-  getFlashcardCollectionById, 
-  getAllCollections,
-} from '../services/flashcardCollectionService';
-import { deleteCollectionById, updateCollectionDetails } from '../services/collectionService';
+import { createCollection, deleteCollectionById, getAllCollections, getCollectionById, updateCollectionDetails } from '../services/collectionService';
 
-export const createNewFlashcardCollection = async (req: Request, res: Response) => {
+export const createNewCollectionController = async (req: Request, res: Response) => {
   const { name, category, flashcards } = req.body;
   try {
-    const newCollection = await createFlashcardCollection(name, category, flashcards);
+    const newCollection = await createCollection(name, category, flashcards);
     res.status(201).json(newCollection);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const getAllFlashcardCollections = async (req: Request, res: Response) => {
+export const getAllCollectionsController = async (req: Request, res: Response) => {
   try {
     const collections = await getAllCollections();
     res.json(collections);
@@ -25,17 +20,17 @@ export const getAllFlashcardCollections = async (req: Request, res: Response) =>
   }
 };
 
-export const getFlashcardCollection = async (req: Request, res: Response) => {
+export const getCollectionController = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const collection = await getFlashcardCollectionById(id);
+    const collection = await getCollectionById(id);
     res.json(collection);
   } catch (error: any) {
     res.status(404).json({ message: error.message });
   }
 };
 
-export const updateCollection = async (req: Request, res: Response) => {
+export const updateCollectionController = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, category } = req.body;
   try {
@@ -46,7 +41,7 @@ export const updateCollection = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteCollection = async (req: Request, res: Response) => {
+export const deleteCollectionController = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await deleteCollectionById(id);

@@ -26,7 +26,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api", userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api", collectionRoutes);
-app.use("/api", flashcardRoutes);
+app.use("/api/collections", collectionRoutes);
+app.use("/api/flashcards", flashcardRoutes);
 
 export default app;
