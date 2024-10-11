@@ -8,6 +8,8 @@ import DashboardPage from './pages/dashboard/dashboardPage.tsx'
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import AdminDashboardPage from './pages/admin/adminDashboardPage.tsx'
 import { ThemeProvider } from './components/ThemeProvider.tsx'
+import CollectionPage from './pages/admin/collections/CollectionPage.tsx'
+import UsersPage from './pages/admin/UsersPage.tsx'
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,24 @@ const router = createBrowserRouter([
                         <AdminDashboardPage />
                     </ProtectedRoute>
                 ),
+                children: [
+                    {
+                        path: 'collections',
+                        element: (
+                            <ProtectedRoute requiredRole='admin'>
+                                <CollectionPage />
+                            </ProtectedRoute>
+                        )
+                    },
+                    {
+                        path: 'users',
+                        element: (
+                            <ProtectedRoute requiredRole='admin'>
+                                <UsersPage />
+                            </ProtectedRoute>
+                        )
+                    }
+                ]
             },
         ],
     },

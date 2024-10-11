@@ -8,12 +8,12 @@ interface TableHeaderProps {
 const TableHeaderComponent: React.FC<TableHeaderProps> = ({ columns }) => {
 
     return (
-        <TableHeader>
-            <TableRow>
+        <TableHeader className="">
+            <TableRow className="text-muted-foreground uppercase text-xs text-start">
                 {columns.map((column, index) => (
-                    <TableCell key={index}>{column}</TableCell>
+                    <TableCell className={`${index === 0 ? '' : 'hidden sm:table-cell'}`} key={index}>{column}</TableCell>
                 ))}
-                <TableCell className="align-middle">actions</TableCell>
+                <TableCell className="text-end pr-8">actions</TableCell>
             </TableRow>
         </TableHeader>
     )

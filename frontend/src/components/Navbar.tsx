@@ -30,6 +30,16 @@ const Navbar = () => {
                         <li>
                             <button onClick={handleDashboardClick}>Dashboard</button>
                         </li>
+                        {user?.roles.includes('admin') && (
+                            <>
+                            <li>
+                                <Link to="/admin-dashboard/users">Manage users</Link>
+                            </li>
+                            <li>
+                                <Link to="/admin-dashboard/collections">Manage collections</Link>
+                            </li>
+                            </>
+                        )}
                         <li className="flex space-x-4">
                             <div>
                                 <p>{user.name}</p>
