@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { FlashcardCollection } from "../models/FlashcardCollectionModel";
 import User from "../models/tempUserModel";
 
@@ -17,36 +17,6 @@ export const createCollection = async (
     return await newCollection.save();
   } catch (error) {
     throw new Error("Error creating flashcard collection");
-  }
-};
-
-export const addCollectionToUser = async (
-  userId: string,
-  collectionId: string
-) => {
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    const collectionObjectId = new mongoose.Types.ObjectId(collectionId);
-
-    const collection = await FlashcardCollection.findById(collectionObjectId);
-    if (!collection) {
-      throw new Error("Collection not found");
-    }
-
-    if (user.collections?.includes(collectionObjectId)) {
-      throw new Error("Collection already added to this user");
-    }
-
-    user.collections?.push(collectionObjectId);
-    await user.save();
-
-    return user;
-  } catch (error: any) {
-    throw new Error(error.message);
   }
 };
 
@@ -101,5 +71,93 @@ export const deleteCollectionById = async (collectionId: string) => {
     return deletedCollection;
   } catch (error) {
     throw new Error("Error deleting collection");
+  }
+};
+
+// collections and users:
+export const addCollectionToUser = async (
+  userId: string,
+  collectionId: string
+) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const collectionObjectId = new mongoose.Types.ObjectId(collectionId);
+
+    const collection = await FlashcardCollection.findById(collectionObjectId);
+    if (!collection) {
+      throw new Error("Collection not found");
+    }
+
+    if (user.collections?.includes(collectionObjectId)) {
+      throw new Error("Collection already added to this user");
+    }
+
+    user.collections?.push(collectionObjectId);
+    await user.save();
+
+    return user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const getUserCollections = async (userId: string) => {
+  try {
+    const user = await User.findById(userId).populate("collections");
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const allCollections = user.collections as Types.Array<
+      Types.ObjectId | typeof FlashcardCollection
+    >;
+
+    const currentCollections = allCollections.filter((collection: any) =>
+    collection instanceof FlashcardCollection && 
+    collection.flashcards.some(flashcard => !flashcard.mastered) && 
+    collection.flashcards.some(flashcard => flashcard.mastered)
+  );
+
+  const completedCollections = allCollections.filter((collection: any) =>
+    collection instanceof FlashcardCollection && 
+    collection.flashcards.every(flashcard => flashcard.mastered)
+  );
+
+  const upcomingCollections = allCollections.filter((collection: any) =>
+    collection instanceof FlashcardCollection && 
+    collection.flashcards.every(flashcard => !flashcard.mastered)
+  );
+
+    return { currentCollections, completedCollections, upcomingCollections };
+  } catch (error: any) {
+    throw new Error("Error fetching user collections");
+  }
+};
+
+export const getUserCollectionById = async (
+  userId: string,
+  collectionId: string
+) => {
+  try {
+    const user = await User.findById(userId).populate({
+      path: "collections",
+      match: { _id: collectionId },
+    });
+
+    if (!user || !user.collections.length) {
+      throw new Error("Collection not found for this user");
+    }
+
+    const collections = user.collections as Types.Array<
+      typeof FlashcardCollection
+    >;
+
+    return collections[0];
+  } catch (error: any) {
+    throw new Error("Error fetching user collection");
   }
 };
