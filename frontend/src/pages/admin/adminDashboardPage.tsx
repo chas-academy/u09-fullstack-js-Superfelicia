@@ -15,9 +15,9 @@ const AdminDashboardPage = () => {
     if (!user) return null
 
     return (
-        <div className="flex flex-col items-center justify-center space-y-5">
+        <div className="flex flex-col justify-center space-y-5">
             <h2>Admin Dashboard</h2>
-            <div className=''>
+            <div className='w-full md:px-20 flex justify-center'>
                 <Outlet />
             </div>
         </div>

@@ -35,7 +35,7 @@ const CollectionPage = () => {
     }
 
     return (
-        <div className="flex flex-col space-y-10 items-start">
+        <div className="w-full flex flex-col space-y-10 items-center justify-center px-5">
             {!selectedCollection ? (
                 <CollectionList
                     collections={collections}

@@ -135,7 +135,7 @@ const UsersPage = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center space-y-5">
+        <div className="overflow-hidden flex flex-col items-center justify-center space-y-5 p-10">
             <h2>User Management</h2>
             <div className="w-full px-10 flex justify-between items-center">
                 <SearchComponent onSearch={handleSearch} placeholder="Search users..." />
@@ -152,7 +152,7 @@ const UsersPage = () => {
                 </DialogComponent>
             </div>
 
-            <div className="w-full px-10">
+            <div className="w-full sm:px-10 overflow-x-auto">
                 <TableComponent
                     data={filteredUsers}
                     onEdit={handleEditUser}

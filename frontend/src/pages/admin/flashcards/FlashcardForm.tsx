@@ -160,12 +160,49 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
     }
 
     return (
-        <form onSubmit={handleSaveFlashcards}>
+        <form onSubmit={handleSaveFlashcards} className='min-w-full'>
             <h3>Flashcards in {collection.name}</h3>
+            <div className='w-full flex justify-end'>
+            <DialogComponent
+                title="Add new flashcard"
+                triggerText={<Plus size={16}/>}
+                onConfirm={addFlashcardLocally}
+                confirmText="Save"
+                cancelText="Cancel"
+            >
+                <div className="flex flex-col items-start justify-center space-y-4">
+                    <h3>Add new flashcard</h3>
+                    <div>
+                        <label>Question:</label>
+                        <input
+                            type="text"
+                            value={newFlashcard.question}
+                            onChange={(e) => handleNewFlashcardChange('question', e.target.value)}
+                            required={newFlashcard.question !== ''}
+                            className="border"
+                        />
+                    </div>
+                    <div>
+                        <label>Answer:</label>
+                        <input
+                            type="text"
+                            value={newFlashcard.answer}
+                            onChange={(e) => handleNewFlashcardChange('answer', e.target.value)}
+                            required={newFlashcard.answer !== ''}
+                            className="border"
+                        />
+                        <Button type="button" onClick={addFlashcard}>
+                            <Plus size={16} />
+                        </Button>
+                    </div>
+                </div>
+            </DialogComponent>
+            </div>
+
             {flashcards.map((flashcard, index) => (
                 <div
                     key={flashcard._id || index}
-                    className="w-full flex flex-col items-start justify-center space-y-4"
+                    className="w-96 flex flex-col items-start justify-center space-y-4"
                 >
                     {editMode[flashcard._id] ? (
                         <div className="w-full flex justify-center items-end space-x-2">
@@ -202,11 +239,11 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
                         </div>
                     ) : (
                         <div className="w-full flex items-center justify-between border space-x-2">
-                            <div className='flex flex-col justify-center items-start'>
+                            <div className='w-full flex flex-col justify-center items-start'>
                                 <label>Question: </label>
                                 <p>{flashcard.question}</p>
                             </div>
-                            <div className='flex flex-col justify-center items-start'>
+                            <div className='w-full flex flex-col justify-center items-start'>
                                 <label>Answer: </label>
                                 <p>{flashcard.answer}</p>
                             </div>
@@ -228,41 +265,6 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
                     )}
                 </div>
             ))}
-
-            <DialogComponent
-                title="Add new flashcard"
-                triggerText="Add Flashcards"
-                onConfirm={addFlashcardLocally}
-                confirmText="Save"
-                cancelText="Cancel"
-            >
-                <div className="flex flex-col items-start justify-center space-y-4">
-                    <h3>Add new flashcard</h3>
-                    <div>
-                        <label>Question:</label>
-                        <input
-                            type="text"
-                            value={newFlashcard.question}
-                            onChange={(e) => handleNewFlashcardChange('question', e.target.value)}
-                            required={newFlashcard.question !== ''}
-                            className="border"
-                        />
-                    </div>
-                    <div>
-                        <label>Answer:</label>
-                        <input
-                            type="text"
-                            value={newFlashcard.answer}
-                            onChange={(e) => handleNewFlashcardChange('answer', e.target.value)}
-                            required={newFlashcard.answer !== ''}
-                            className="border"
-                        />
-                        <Button type="button" onClick={addFlashcard}>
-                            <Plus size={16} />
-                        </Button>
-                    </div>
-                </div>
-            </DialogComponent>
             <Button type="submit">Save flashcards</Button>
         </form>
     )

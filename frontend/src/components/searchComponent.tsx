@@ -28,18 +28,18 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
     }
 
     return (
-        <div className='w-[530px] flex items-center space-x-2'>
+        <div className='flex items-center space-x-2'>
             <input
                 type="text"
                 value={searchTerm}
                 onChange={handleInputChange}
                 placeholder={placeholder}
-                className="w-96 border p-2 rounded"
+                className="max-w-96 border rounded"
             />
-            <Button onClick={handleSearchClick} className="rounded p-2">
+            <Button onClick={handleSearchClick} className="rounded">
                 <Search size={18} />
             </Button>
-            <Button onClick={handleClearSearch} className="rounded p-2">
+            <Button onClick={handleClearSearch} className="rounded">
                 <Undo2 size={18}/>
             </Button>
         </div>
