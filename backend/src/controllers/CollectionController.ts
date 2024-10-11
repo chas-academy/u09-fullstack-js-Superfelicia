@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createCollection, deleteCollectionById, getAllCollections, getCollectionById, updateCollectionDetails } from '../services/collectionService';
+import { createCollection, deleteCollectionById, getAllCollections, getCollectionById, updateCollectionDetails, addCollectionToUser } from '../services/collectionService';
 
 export const createNewCollectionController = async (req: Request, res: Response) => {
   const { name, category, flashcards } = req.body;
@@ -10,6 +10,17 @@ export const createNewCollectionController = async (req: Request, res: Response)
     res.status(500).json({ message: error.message });
   }
 };
+
+export const addCollectionToUserController = async (req: Request, res: Response) => {
+  const { userId, collectionId } = req.params;
+
+  try {
+    const updatedUser = await addCollectionToUser(userId, collectionId);
+    res.status(200).json(updatedUser);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 export const getAllCollectionsController = async (req: Request, res: Response) => {
   try {

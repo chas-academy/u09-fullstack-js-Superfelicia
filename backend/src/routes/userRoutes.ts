@@ -12,6 +12,7 @@ import {
 } from "../controllers/PasswordController";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { roleMiddleware } from "../middleware/roleMiddleware";
+import { addCollectionToUserController } from "../controllers/CollectionController";
 
 const router = Router();
 
@@ -35,6 +36,9 @@ router.delete(
   roleMiddleware("admin"),
   deleteUserController
 );
+
+router.post('/users/:userId/collections/:collectionId',
+authMiddleware, roleMiddleware('admin'), addCollectionToUserController)
 
 // route för att uppdatera lösenordet
 router.put(

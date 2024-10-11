@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import { FlashcardCollection } from "../models/FlashcardCollectionModel";
+import User from "../models/tempUserModel";
 
 export const createCollection = async (
   name: string,
@@ -18,6 +20,36 @@ export const createCollection = async (
   }
 };
 
+export const addCollectionToUser = async (
+  userId: string,
+  collectionId: string
+) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const collectionObjectId = new mongoose.Types.ObjectId(collectionId);
+
+    const collection = await FlashcardCollection.findById(collectionObjectId);
+    if (!collection) {
+      throw new Error("Collection not found");
+    }
+
+    if (user.collections?.includes(collectionObjectId)) {
+      throw new Error("Collection already added to this user");
+    }
+
+    user.collections?.push(collectionObjectId);
+    await user.save();
+
+    return user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
 export const getAllCollections = async () => {
   try {
     return await FlashcardCollection.find();
@@ -28,7 +60,8 @@ export const getAllCollections = async () => {
 
 export const getCollectionById = async (collectionId: string) => {
   try {
-    const collection = await FlashcardCollection.findById(collectionId).populate('flashcards');
+    const collection =
+      await FlashcardCollection.findById(collectionId).populate("flashcards");
     if (!collection) {
       throw new Error("Collection not found");
     }

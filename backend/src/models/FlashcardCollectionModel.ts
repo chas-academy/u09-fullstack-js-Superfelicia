@@ -17,10 +17,11 @@ const flashcardSchema: Schema = new Schema({
 });
 
 // Flashcard collection interface
+ // Använd Types.DocumentArray för att hantera subdokument
 export interface IFlashcardCollection extends Document {
   name: string;
   category: string;
-  flashcards: Types.DocumentArray<IFlashcard>;  // Använd Types.DocumentArray för att hantera subdokument
+  flashcards: Types.DocumentArray<IFlashcard>;
 }
 
 // Flashcard collection schema
