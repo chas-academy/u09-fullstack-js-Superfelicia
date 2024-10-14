@@ -20,7 +20,7 @@ export const loginUser = async (email: string, password: string) => {
 
   return {
     token,
-    user: { name: user.name, email: user.email, roles: user.roles },
+    user: { id: user.id, name: user.name, email: user.email, roles: user.roles },
   };
 };
 
