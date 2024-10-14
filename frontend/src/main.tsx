@@ -11,6 +11,7 @@ import { ThemeProvider } from './components/ThemeProvider.tsx'
 import CollectionPage from './pages/admin/collections/CollectionPage.tsx'
 import UsersPage from './pages/admin/UsersPage.tsx'
 import CollectionsOverview from './pages/dashboard/collections/CollectionsOverview.tsx'
+import CollectionView from './pages/dashboard/collections/CollectionView.tsx'
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,14 @@ const router = createBrowserRouter([
                         element: (
                             <ProtectedRoute>
                                 <CollectionsOverview />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'collections/:collectionId',
+                        element: (
+                            <ProtectedRoute>
+                                <CollectionView />
                             </ProtectedRoute>
                         ),
                     },
