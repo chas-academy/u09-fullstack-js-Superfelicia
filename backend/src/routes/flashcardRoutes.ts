@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  addFlashcardController, deleteFlashcardController, updateFlashcardController, updateFlashcardStatusController, // Lägg till för att radera ett flashcard
+  addFlashcardController, deleteFlashcardController, updateFlashcardController, updateFlashcardStatusController,
 } from "../controllers/FlashcardController";
 
 const router = Router();

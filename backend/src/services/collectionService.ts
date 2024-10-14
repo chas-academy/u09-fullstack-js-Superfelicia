@@ -14,9 +14,9 @@ export const createCollection = async (
     category,
     flashcards: flashcards.length ? flashcards : [],
     progress: 0,
-    status:  'not started',
+    status: "not started",
     deadline: deadline || null,
-    infoText: infoText || '',
+    infoText: infoText || "",
   });
 
   try {
@@ -47,12 +47,28 @@ export const getCollectionById = async (collectionId: string) => {
   }
 };
 
+export const getFlashcardsByCollection = async (collectionId: string) => {
+  try {
+    const collection =
+      await FlashcardCollection.findById(collectionId).populate("flashcards");
+    if (!collection) {
+      throw new Error("Collection not found");
+    }
+    return collection.flashcards;
+  } catch (error: any) {
+    throw new Error(
+      "Error fetching flashcards from collection: ",
+      error.message
+    );
+  }
+};
+
 export const updateCollectionDetails = async (
   collectionId: string,
   name: string,
   category: string,
   progress?: number,
-  status?: 'not started' | 'in progress' | 'completed',
+  status?: "not started" | "in progress" | "completed",
   deadline?: Date
 ) => {
   try {
@@ -125,20 +141,23 @@ export const getUserCollections = async (userId: string) => {
       Types.ObjectId | typeof FlashcardCollection
     >;
 
-    const currentCollections = allCollections.filter((collection: any) =>
-    collection instanceof FlashcardCollection && 
-    collection.status === 'in progress'
-  );
+    const currentCollections = allCollections.filter(
+      (collection: any) =>
+        collection instanceof FlashcardCollection &&
+        collection.status === "in progress"
+    );
 
-  const completedCollections = allCollections.filter((collection: any) =>
-    collection instanceof FlashcardCollection && 
-    collection.status === 'completed'
-  );
+    const completedCollections = allCollections.filter(
+      (collection: any) =>
+        collection instanceof FlashcardCollection &&
+        collection.status === "completed"
+    );
 
-  const upcomingCollections = allCollections.filter((collection: any) =>
-    collection instanceof FlashcardCollection && 
-    collection.status === 'not started'
-  );
+    const upcomingCollections = allCollections.filter(
+      (collection: any) =>
+        collection instanceof FlashcardCollection &&
+        collection.status === "not started"
+    );
 
     return { currentCollections, completedCollections, upcomingCollections };
   } catch (error: any) {
