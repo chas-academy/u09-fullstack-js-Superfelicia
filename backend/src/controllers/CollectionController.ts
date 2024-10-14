@@ -14,9 +14,9 @@ export const createNewCollectionController = async (
   req: Request,
   res: Response
 ) => {
-  const { name, category, flashcards } = req.body;
+  const { name, category, flashcards, deadline } = req.body;
   try {
-    const newCollection = await createCollection(name, category, flashcards);
+    const newCollection = await createCollection(name, category, flashcards, deadline);
     res.status(201).json(newCollection);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -50,9 +50,9 @@ export const updateCollectionController = async (
   res: Response
 ) => {
   const { id } = req.params;
-  const { name, category } = req.body;
+  const { name, category, progress, status, deadline } = req.body;
   try {
-    const updatedCollection = await updateCollectionDetails(id, name, category);
+    const updatedCollection = await updateCollectionDetails(id, name, category, progress, status, deadline);
     res.json(updatedCollection);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

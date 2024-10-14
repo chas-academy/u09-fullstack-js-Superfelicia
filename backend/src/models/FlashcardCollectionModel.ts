@@ -22,6 +22,9 @@ export interface IFlashcardCollection extends Document {
   name: string;
   category: string;
   flashcards: Types.DocumentArray<IFlashcard>;
+  progress: number;
+  status: 'not started' | 'in progress' | 'completed';
+  deadline: Date;
 }
 
 // Flashcard collection schema
@@ -29,6 +32,13 @@ const flashcardCollectionSchema: Schema = new Schema({
   name: { type: String, required: true },
   category: { type: String, required: true },
   flashcards: [flashcardSchema],
+  progress: { type: Number, default: 0 },
+  status: {
+    type: String,
+    enum: ['not started', 'in progress', 'completed'],
+    default: 'not started',
+  },
+  deadline: { type: Date, required: false },
 });
 
 export const FlashcardCollection = mongoose.model<IFlashcardCollection>('FlashcardCollection', flashcardCollectionSchema);
