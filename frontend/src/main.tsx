@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import LoginPage from './pages/login/loginPage.tsx'
 import RegisterPage from './pages/register/registerPage.tsx'
 import DashboardPage from './pages/dashboard/dashboardPage.tsx'
@@ -10,16 +10,18 @@ import AdminDashboardPage from './pages/admin/adminDashboardPage.tsx'
 import { ThemeProvider } from './components/ThemeProvider.tsx'
 import CollectionPage from './pages/admin/collections/CollectionPage.tsx'
 import UsersPage from './pages/admin/UsersPage.tsx'
+import CollectionsOverview from './pages/dashboard/collections/CollectionsOverview.tsx'
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: (
-            <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
                 <App />
             </ThemeProvider>
         ),
         children: [
+            { path: '/', element: <Navigate to="/login" replace/> },
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage /> },
             {
@@ -29,6 +31,16 @@ const router = createBrowserRouter([
                         <DashboardPage />
                     </ProtectedRoute>
                 ),
+                children: [
+                    {
+                        path: 'collections-overview',
+                        element: (
+                            <ProtectedRoute>
+                                <CollectionsOverview />
+                            </ProtectedRoute>
+                        ),
+                    },
+                ],
             },
             {
                 path: '/admin-dashboard',
@@ -41,20 +53,20 @@ const router = createBrowserRouter([
                     {
                         path: 'collections',
                         element: (
-                            <ProtectedRoute requiredRole='admin'>
+                            <ProtectedRoute requiredRole="admin">
                                 <CollectionPage />
                             </ProtectedRoute>
-                        )
+                        ),
                     },
                     {
                         path: 'users',
                         element: (
-                            <ProtectedRoute requiredRole='admin'>
+                            <ProtectedRoute requiredRole="admin">
                                 <UsersPage />
                             </ProtectedRoute>
-                        )
-                    }
-                ]
+                        ),
+                    },
+                ],
             },
         ],
     },

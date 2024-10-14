@@ -12,7 +12,11 @@ import {
 } from "../controllers/PasswordController";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { roleMiddleware } from "../middleware/roleMiddleware";
-import { addCollectionToUserController } from "../controllers/CollectionController";
+import {
+  addCollectionToUserController,
+  getUserCollectionController,
+  getUserCollectionsController,
+} from "../controllers/CollectionController";
 
 const router = Router();
 
@@ -37,8 +41,27 @@ router.delete(
   deleteUserController
 );
 
-router.post('/users/:userId/collections/:collectionId',
-authMiddleware, roleMiddleware('admin'), addCollectionToUserController)
+router.post(
+  "/users/:userId/collections/:collectionId",
+  authMiddleware,
+  roleMiddleware("admin"),
+  addCollectionToUserController
+);
+
+// Hämta collections
+router.get(
+  "/users/:userId/collections",
+  authMiddleware,
+  roleMiddleware("user"),
+  getUserCollectionsController
+);
+
+router.get(
+  "/users/:userId/collections/:collectionId",
+  authMiddleware,
+  roleMiddleware("user"),
+  getUserCollectionController
+);
 
 // route för att uppdatera lösenordet
 router.put(
