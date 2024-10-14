@@ -14,9 +14,9 @@ export const createNewCollectionController = async (
   req: Request,
   res: Response
 ) => {
-  const { name, category, flashcards, deadline } = req.body;
+  const { name, category, flashcards, deadline, infoText } = req.body;
   try {
-    const newCollection = await createCollection(name, category, flashcards, deadline);
+    const newCollection = await createCollection(name, category, flashcards, deadline, infoText);
     res.status(201).json(newCollection);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

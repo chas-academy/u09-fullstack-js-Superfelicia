@@ -6,7 +6,8 @@ export const createCollection = async (
   name: string,
   category: string,
   flashcards: any[],
-  deadline?: Date
+  deadline?: Date,
+  infoText?: string
 ) => {
   const newCollection = new FlashcardCollection({
     name,
@@ -15,6 +16,7 @@ export const createCollection = async (
     progress: 0,
     status:  'not started',
     deadline: deadline || null,
+    infoText: infoText || '',
   });
 
   try {
