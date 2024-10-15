@@ -5,12 +5,18 @@ import User from "../models/tempUserModel";
 export const createCollection = async (
   name: string,
   category: string,
-  flashcards: any[]
+  flashcards: any[],
+  deadline?: Date,
+  infoText?: string
 ) => {
   const newCollection = new FlashcardCollection({
     name,
     category,
     flashcards: flashcards.length ? flashcards : [],
+    progress: 0,
+    status: "not started",
+    deadline: deadline || null,
+    infoText: infoText || "",
   });
 
   try {
@@ -41,15 +47,34 @@ export const getCollectionById = async (collectionId: string) => {
   }
 };
 
+export const getFlashcardsByCollection = async (collectionId: string) => {
+  try {
+    const collection =
+      await FlashcardCollection.findById(collectionId).populate("flashcards");
+    if (!collection) {
+      throw new Error("Collection not found");
+    }
+    return collection.flashcards;
+  } catch (error: any) {
+    throw new Error(
+      "Error fetching flashcards from collection: ",
+      error.message
+    );
+  }
+};
+
 export const updateCollectionDetails = async (
   collectionId: string,
   name: string,
-  category: string
+  category: string,
+  progress?: number,
+  status?: "not started" | "in progress" | "completed",
+  deadline?: Date
 ) => {
   try {
     const updatedCollection = await FlashcardCollection.findByIdAndUpdate(
       collectionId,
-      { name, category },
+      { name, category, progress, status, deadline },
       { new: true }
     );
     if (!updatedCollection) {
@@ -116,21 +141,23 @@ export const getUserCollections = async (userId: string) => {
       Types.ObjectId | typeof FlashcardCollection
     >;
 
-    const currentCollections = allCollections.filter((collection: any) =>
-    collection instanceof FlashcardCollection && 
-    collection.flashcards.some(flashcard => !flashcard.mastered) && 
-    collection.flashcards.some(flashcard => flashcard.mastered)
-  );
+    const currentCollections = allCollections.filter(
+      (collection: any) =>
+        collection instanceof FlashcardCollection &&
+        collection.status === "in progress"
+    );
 
-  const completedCollections = allCollections.filter((collection: any) =>
-    collection instanceof FlashcardCollection && 
-    collection.flashcards.every(flashcard => flashcard.mastered)
-  );
+    const completedCollections = allCollections.filter(
+      (collection: any) =>
+        collection instanceof FlashcardCollection &&
+        collection.status === "completed"
+    );
 
-  const upcomingCollections = allCollections.filter((collection: any) =>
-    collection instanceof FlashcardCollection && 
-    collection.flashcards.every(flashcard => !flashcard.mastered)
-  );
+    const upcomingCollections = allCollections.filter(
+      (collection: any) =>
+        collection instanceof FlashcardCollection &&
+        collection.status === "not started"
+    );
 
     return { currentCollections, completedCollections, upcomingCollections };
   } catch (error: any) {
@@ -146,6 +173,7 @@ export const getUserCollectionById = async (
     const user = await User.findById(userId).populate({
       path: "collections",
       match: { _id: collectionId },
+      options: { lean: true },
     });
 
     if (!user || !user.collections.length) {
@@ -156,7 +184,9 @@ export const getUserCollectionById = async (
       typeof FlashcardCollection
     >;
 
-    return collections[0];
+    const collection = collections[0];
+
+    return collection;
   } catch (error: any) {
     throw new Error("Error fetching user collection");
   }

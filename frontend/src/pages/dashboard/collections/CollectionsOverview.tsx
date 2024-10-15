@@ -3,12 +3,14 @@ import { Button } from '@/components/ui/button'
 import { Collection } from '@/interfaces/Collection'
 import { useUserStore } from '@/store/useUserStore'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const CollectionsOverview = () => {
     const user = useUserStore((state) => state.user)
     const [currentCollections, setCurrentCollections] = useState<Collection[]>([])
     const [completedCollections, setCompletedCollections] = useState<Collection[]>([])
     const [upcomingCollections, setUpcomingCollections] = useState<Collection[]>([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (user && user.id) {
@@ -38,6 +40,10 @@ const CollectionsOverview = () => {
         }
     }
 
+    const handleViewCollection = (collectionId: string) => {
+        navigate(`/dashboard/collections/${collectionId}`)
+    }
+
     return (
         <div className="space-y-8">
             {/* Current Collections */}
@@ -51,6 +57,7 @@ const CollectionsOverview = () => {
                                     key={collection._id}
                                     title={collection.name}
                                     subtitle={collection.category}
+                                    onClick={() => handleViewCollection(collection._id)}
                                 >
                                     <Button onClick={() => console.log(`View ${collection.name}`)}>
                                         View Collection
@@ -76,6 +83,7 @@ const CollectionsOverview = () => {
                                     key={collection._id}
                                     title={collection.name}
                                     subtitle={collection.category}
+                                    onClick={() => handleViewCollection(collection._id)}
                                 >
                                     <Button
                                         onClick={() => console.log(`Review ${collection.name}`)}
@@ -103,10 +111,11 @@ const CollectionsOverview = () => {
                                     key={collection._id}
                                     title={collection.name}
                                     subtitle={collection.category}
+                                    onClick={() => handleViewCollection(collection._id)}
                                 >
-                                    <Button onClick={() => console.log(`Start ${collection.name}`)}>
+                                    {/* <Button onClick={() => console.log(`Start ${collection.name}`)}>
                                         Start Collection
-                                    </Button>
+                                    </Button> */}
                                 </CardComponent>
                             </>
                         ))
