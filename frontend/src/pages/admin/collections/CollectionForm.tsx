@@ -1,86 +1,90 @@
-import { Button } from '@/components/ui/button'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import FormComponent from '../../../components/formComponent'
 
 interface CollectionFormProps {
     collection?: any
-    onSubmit: () => void
+    onSubmit: (collection: any) => void
 }
 
 const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
-    const [name, setName] = useState('')
-    const [category, setCategory] = useState('')
     const [collectionId, setCollectionId] = useState<string | null>(null)
 
     useEffect(() => {
         if (collection) {
-            setName(collection.name)
-            setCategory(collection.category)
             setCollectionId(collection._id)
-            console.log(collectionId)
         } else {
-            setName('')
-            setCategory('')
             setCollectionId(null)
         }
     }, [collection])
 
-    const handleSubmitCollection = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const fields = [
+        {
+            label: 'Name',
+            type: 'text',
+            placeholder: 'Enter collection name',
+            name: 'name',
+            value: collection?.name || '', // Default value from collection
+        },
+        {
+            label: 'Category',
+            type: 'text',
+            placeholder: 'Enter collection category',
+            name: 'category',
+            value: collection?.category || '',
+        },
+        {
+            label: 'Info Text',
+            type: 'text',
+            placeholder: 'Enter info text',
+            name: 'infoText',
+            value: collection?.infoText || '',
+        },
+        {
+            label: 'Deadline',
+            type: 'date',
+            placeholder: '',
+            name: 'deadline',
+            value: collection?.deadline
+                ? new Date(collection.deadline).toISOString().substring(0, 10)
+                : '',
+        },
+    ]
 
-        const newCollection = { name, category }
-        const updatedCollection = { name, category }
+    const handleSubmitCollection = async (formData: { [key: string]: string }) => {
+        const newCollection = { ...formData }
+        let response
+        let savedCollection
 
         try {
-            let response
             if (collectionId) {
                 response = await fetch(`http://localhost:3000/api/collections/${collectionId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedCollection),
+                    body: JSON.stringify(newCollection),
                 })
+                savedCollection = await response.json()
             } else {
                 response = await fetch('http://localhost:3000/api/collections', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newCollection),
                 })
-                const createdCollection = await response.json()
-                setCollectionId(createdCollection._id)
+                savedCollection = await response.json()
+                setCollectionId(savedCollection._id)
             }
 
-            onSubmit()
+            onSubmit(savedCollection)
         } catch (error) {
             console.error('Error saving collection:', error)
         }
     }
 
     return (
-        <form
-            className="flex flex-col items-start justify-center"
+        <FormComponent
+            fields={fields}
+            buttonText={collection ? 'Update collection' : 'Create collection'}
             onSubmit={handleSubmitCollection}
-        >
-            <div>
-                <label>Name:</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="border"
-                />
-            </div>
-            <div>
-                <label>Category:</label>
-                <input
-                    type="text"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    required
-                    className="border"
-                />
-            </div>
-            <Button type="submit">{collection ? 'Update collection' : 'Create collection'}</Button>
-        </form>
+        />
     )
 }
 
