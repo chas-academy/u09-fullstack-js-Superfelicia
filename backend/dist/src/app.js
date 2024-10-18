@@ -13,8 +13,7 @@ const db_1 = __importDefault(require("./config/db"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     origin: "https://flashlearn09.netlify.app",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
+    methods: "GET,POST,PUT,DELETE",
 }));
 app.use(express_1.default.json());
 (0, db_1.default)();
