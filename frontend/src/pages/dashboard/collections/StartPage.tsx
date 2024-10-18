@@ -1,5 +1,6 @@
 import FlashcardCard from '@/components/FlashcardCards'
 import { Button } from '@/components/ui/button'
+import { API_URL } from '@/config'
 import { Flashcard } from '@/interfaces/Flashcard'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -20,7 +21,7 @@ const StartPage = () => {
         const fetchFlashcards = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:3000/api/collections/${collectionId}/flashcards`
+                    `${API_URL}/collections/${collectionId}/flashcards`
                 )
                 if (!response.ok) {
                     throw new Error('Failed to fetch flashcards')

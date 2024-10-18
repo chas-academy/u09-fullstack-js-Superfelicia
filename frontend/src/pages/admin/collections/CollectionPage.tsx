@@ -4,6 +4,7 @@ import { Collection } from '@/interfaces/Collection'
 import FlashcardForm from '../flashcards/FlashcardForm'
 import { Button } from '@/components/ui/button'
 import { CircleArrowLeft } from 'lucide-react'
+import { API_URL } from '@/config'
 
 const CollectionPage = () => {
     const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null)
@@ -15,7 +16,7 @@ const CollectionPage = () => {
 
     const fetchCollections = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/collections')
+            const response = await fetch(`${API_URL}/collections`)
             const data = await response.json()
             setCollections(data)
         } catch (error) {
