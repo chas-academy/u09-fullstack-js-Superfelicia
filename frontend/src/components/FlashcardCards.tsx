@@ -36,6 +36,8 @@ const FlashcardCard = ({
                 className={`relative w-96 h-64 cursor-pointer transition-transform duration-500 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}
                 onClick={handleFlip}
             >
+            {/* <div className="absolute w-96 h-64 border-2 border-gray-300 bg-blue-600 rounded-lg transform rotate-[-3deg]"></div>
+            <div className="absolute w-96 h-64 border-2 border-gray-200 bg-blue-700 rounded-lg transform rotate-[3deg]"></div> */}
                 {/* Front side */}
                 <div
                     className={`absolute inset-0 w-full h-full bg-blue-500 text-white flex items-center justify-center rounded-lg shadow-lg p-6 backface-hidden transform-style-3d`}

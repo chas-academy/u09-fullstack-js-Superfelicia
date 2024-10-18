@@ -12,6 +12,9 @@ const StartPage = () => {
     const [transitioning, setTransitioning] = useState(false)
     const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
     const [hasFlipped, setHasFlipped] = useState(false)
+    const [completedCards, setCompletedCards] = useState<Flashcard[]>([])
+    const [notCompletedCards, setNotCompletedCards] = useState<Flashcard[]>([])
+    const [isRoundComplete, setIsRoundComplete] = useState(false)
 
     useEffect(() => {
         const fetchFlashcards = async () => {
@@ -44,13 +47,22 @@ const StartPage = () => {
                 setHasFlipped(false)
                 setSwipeDirection(null)
             }, 300)
+        } else if (currentIndex === flashcards.length - 1) {
+            // setCurrentIndex((prevIndex) => prevIndex + 1)
+            setIsRoundComplete(true)
         }
     }
 
-    const handleSwipe = (direction: 'left' | 'right') => {
+    const handleSwipe = (direction: 'left' | 'right', choice: 'gotIt' | 'studyAgain') => {
+        const currentCard = flashcards[currentIndex]
         if (hasFlipped) {
+            if (choice === 'gotIt') {
+                setCompletedCards((prev) => [...prev, currentCard])
+            } else if (choice === 'studyAgain') {
+                setNotCompletedCards((prev) => [...prev, currentCard])
+            }
             setSwipeDirection(direction)
-                handleNextFlashcard()
+            handleNextFlashcard()
         }
     }
 
@@ -61,6 +73,17 @@ const StartPage = () => {
                 setHasFlipped(true)
             }, 300)
         }
+    }
+
+    if (isRoundComplete) {
+        return (
+            <div>
+                <h2>Round Complete!</h2>
+                <p>You completed {completedCards.length} out of {flashcards.length} cards.</p>
+                <p>Failed cards: {notCompletedCards.length}</p>
+                <p>Succeeded cards: {completedCards.length}</p>
+            </div>
+        )
     }
 
     if (flashcards.length === 0) return <p>Loading flashcards...</p>
@@ -81,15 +104,15 @@ const StartPage = () => {
                     />
                 ))}
             </div>
-                <div>
-                    <Button onClick={() => handleSwipe('left')} disabled={transitioning}>
-                        Study again
-                    </Button>
+            <div>
+                <Button onClick={() => handleSwipe('left', 'studyAgain')} disabled={transitioning}>
+                    Study again
+                </Button>
 
-                    <Button onClick={() => handleSwipe('right')} disabled={transitioning}>
-                        Got it
-                    </Button>
-                </div>
+                <Button onClick={() => handleSwipe('right', 'gotIt')} disabled={transitioning}>
+                    Got it
+                </Button>
+            </div>
         </div>
     )
 }
