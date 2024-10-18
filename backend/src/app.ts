@@ -12,6 +12,7 @@ app.use(
   cors({
     origin: "https://flashlearn09.netlify.app",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
