@@ -1,5 +1,6 @@
 import DialogComponent from '@/components/DialogComponent'
 import { Button } from '@/components/ui/button'
+import { API_URL } from '@/config'
 import { Collection } from '@/interfaces/Collection'
 import { Flashcard, NewFlashcard } from '@/interfaces/Flashcard'
 import { Edit2, Plus, Trash2 } from 'lucide-react'
@@ -70,7 +71,7 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
     const removeFlashcard = async (flashcardId: string) => {
         try {
             const response = await fetch(
-                `http://localhost:3000/api/flashcards/${collection._id}/flashcards/${flashcardId}`,
+                `${API_URL}/flashcards/${collection._id}/flashcards/${flashcardId}`,
                 {
                     method: 'DELETE',
                 }
@@ -92,7 +93,7 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
 
     const handleCreateFlashcard = async (flashcard: NewFlashcard) => {
         try {
-            const url = `http://localhost:3000/api/flashcards/${collection._id}/flashcards`
+            const url = `${API_URL}/flashcards/${collection._id}/flashcards`
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -111,7 +112,7 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
 
     const handleUpdateFlashcard = async (flashcard: Flashcard) => {
         try {
-            const url = `http://localhost:3000/api/flashcards/${collection._id}/flashcards/${flashcard._id}`
+            const url = `${API_URL}/flashcards/${collection._id}/flashcards/${flashcard._id}`
             const response = await fetch(url, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },

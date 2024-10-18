@@ -1,3 +1,4 @@
+import { API_URL } from '@/config';
 import { useState, useEffect } from 'react';
 
 interface Flashcard {
@@ -24,7 +25,7 @@ const CreateFlashcardForm = () => {
     // Hämta samlingar från backend
     const fetchCollections = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/collections/flashcards');
+        const response = await fetch(`${API_URL}/collections/flashcards`);
         const data = await response.json();
         setCollections(data);
       } catch (error) {
@@ -57,7 +58,7 @@ const CreateFlashcardForm = () => {
 
     // Skicka flashcards till backend under specifik collection
     try {
-      const response = await fetch(`http://localhost:3000/api/collections/${selectedCollection}`, {
+      const response = await fetch(`${API_URL}/collections/${selectedCollection}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(flashcards),

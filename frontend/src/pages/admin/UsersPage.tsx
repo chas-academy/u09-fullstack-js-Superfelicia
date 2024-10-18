@@ -4,6 +4,7 @@ import TableComponent from '@/components/table/TableComponent';
 import DialogComponent from '@/components/DialogComponent';
 import CreateUserComponent from '@/components/createUserComponent';
 import { Plus } from 'lucide-react';
+import { API_URL } from '@/config';
 
 export interface User {
     _id: string;
@@ -20,7 +21,7 @@ const UsersPage = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/users', {
+                const response = await fetch(`${API_URL}/users`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,7 +48,7 @@ const UsersPage = () => {
         const { name, email, password, roles } = formData;
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/user', {
+            const response = await fetch(`${API_URL}}/auth/user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ const UsersPage = () => {
 
     const handleEditUser = async (updatedUser: User) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/user/${updatedUser._id}`, {
+            const response = await fetch(`${API_URL}/user/${updatedUser._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ const UsersPage = () => {
 
     const handleDeleteUser = async (userId: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
+            const response = await fetch(`${API_URL}/user/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

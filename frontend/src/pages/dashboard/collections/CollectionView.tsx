@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { API_URL } from '@/config'
 import { Collection } from '@/interfaces/Collection'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -10,7 +11,7 @@ const CollectionView = () => {
 
     useEffect(() => {
         const fetchCollection = async () => {
-            const response = await fetch(`http://localhost:3000/api/collections/${collectionId}`)
+            const response = await fetch(`${API_URL}/collections/${collectionId}`)
             const data: Collection = await response.json()
             if (!data.flashcards || data.flashcards.length === 0) {
                 console.error('No flashcards found')

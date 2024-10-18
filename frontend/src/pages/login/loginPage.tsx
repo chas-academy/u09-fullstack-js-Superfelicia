@@ -2,6 +2,7 @@ import FormComponent from '../../components/formComponent'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/useUserStore'
 import { useState } from 'react'
+import { API_URL } from '@/config'
 
 const LoginPage = () => {
     const [error, setError] = useState<string | null>(null)
@@ -27,7 +28,7 @@ const LoginPage = () => {
         const { email, password } = formData
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/login', {
+            const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

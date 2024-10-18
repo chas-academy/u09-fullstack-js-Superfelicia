@@ -1,5 +1,6 @@
 import CardComponent from '@/components/CardComponent'
 import { Button } from '@/components/ui/button'
+import { API_URL } from '@/config'
 import { Collection } from '@/interfaces/Collection'
 import { useUserStore } from '@/store/useUserStore'
 import { useEffect, useState } from 'react'
@@ -20,7 +21,7 @@ const CollectionsOverview = () => {
 
     const fetchUserCollections = async (userId: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/users/${userId}/collections`, {
+            const response = await fetch(`${API_URL}/users/${userId}/collections`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import FormComponent from '../../../components/formComponent'
+import { API_URL } from '@/config'
 
 interface CollectionFormProps {
     collection?: any
@@ -57,14 +58,14 @@ const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
 
         try {
             if (collectionId) {
-                response = await fetch(`http://localhost:3000/api/collections/${collectionId}`, {
+                response = await fetch(`${API_URL}/collections/${collectionId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newCollection),
                 })
                 savedCollection = await response.json()
             } else {
-                response = await fetch('http://localhost:3000/api/collections', {
+                response = await fetch(`${API_URL}/collections`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newCollection),
