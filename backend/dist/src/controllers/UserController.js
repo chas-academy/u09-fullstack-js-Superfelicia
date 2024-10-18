@@ -3,12 +3,12 @@
 // och skicka svar tillbaka till klienten.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserController = exports.updateUserController = exports.getUsersController = void 0;
-const UserService_1 = require("../services/UserService");
+const tempUserService_1 = require("../services/tempUserService");
 const validRoles = ["user", "admin", "superadmin"];
 // get all
 const getUsersController = async (req, res) => {
     try {
-        const users = await (0, UserService_1.getAllUsers)();
+        const users = await (0, tempUserService_1.getAllUsers)();
         res.status(200).json(users);
     }
     catch (error) {
@@ -28,7 +28,7 @@ const updateUserController = async (req, res) => {
     }
     try {
         // Hitta och uppdatera användaren baserat på _id
-        const updatedUser = await (0, UserService_1.updateUser)(id, name, email, roles);
+        const updatedUser = await (0, tempUserService_1.updateUser)(id, name, email, roles);
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -50,7 +50,7 @@ const deleteUserController = async (req, res) => {
     const { id } = req.params;
     console.log(id);
     try {
-        const deletedUser = await (0, UserService_1.deleteUser)(id);
+        const deletedUser = await (0, tempUserService_1.deleteUser)(id);
         if (!deletedUser) {
             return res.status(404).json({ message: "User not found " });
         }

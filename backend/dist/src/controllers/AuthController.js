@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerUserController = exports.login = void 0;
-const AuthService_1 = require("../services/AuthService");
-const UserService_1 = require("../services/UserService");
+const tempAuthService_1 = require("../services/tempAuthService");
+const tempUserService_1 = require("../services/tempUserService");
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const data = await (0, AuthService_1.loginUser)(email, password);
+        const data = await (0, tempAuthService_1.loginUser)(email, password);
         res.json(data);
     }
     catch (error) {
@@ -19,7 +19,7 @@ const validRoles = ["user", "admin", "superadmin"];
 const registerUserController = async (req, res) => {
     let { name, email, password, roles } = req.body;
     console.log("Request received:", { name, email, password, roles });
-    const existingUser = await (0, UserService_1.findUserByEmail)(email);
+    const existingUser = await (0, tempUserService_1.findUserByEmail)(email);
     if (existingUser) {
         console.log("User already exists:", existingUser);
         return res
@@ -36,7 +36,7 @@ const registerUserController = async (req, res) => {
         return res.status(400).json({ message: 'Password must be at least 6 characters long' });
     }
     try {
-        const newUser = await (0, AuthService_1.registerUser)(name, email, password, roles);
+        const newUser = await (0, tempAuthService_1.registerUser)(name, email, password, roles);
         console.log("User successfully created:", newUser);
         res.status(201).json({
             id: newUser.id,
