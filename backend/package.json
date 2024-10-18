@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-    "test": "jest src/*",
+    "test": "NODE_ENV=test jest __tests__/*",
     "build": "npx tsc",
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts"

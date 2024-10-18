@@ -1,22 +1,22 @@
 // userService ansvarar för affärslogik och databasoperationer
 // relaterade till användarhantering.
 
-import User from "../models/userModel";
+import User from "../models/tempUserModel";
 import bcrypt from "bcrypt";
 
-export const createUser = async (
-  name: string,
-  email: string,
-  password: string,
-  roles: string
-) => {
-  // hasha lösenord
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+// export const createUser = async (
+//   name: string,
+//   email: string,
+//   password: string,
+//   roles: string
+// ) => {
+//   // hasha lösenord
+//   const salt = await bcrypt.genSalt(10);
+//   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = new User({ name, email, password: hashedPassword, roles });
-  return await newUser.save();
-};
+//   const newUser = new User({ name, email, password: hashedPassword, roles });
+//   return await newUser.save();
+// };
 
 // hämta alla users
 export const getAllUsers = async () => {
@@ -28,10 +28,10 @@ export const updateUser = async (
   id: string,
   name: string,
   email: string,
-  roles: string
+  roles: string[]
 ) => {
-  return await User.findOneAndUpdate(
-    { _id: id },
+  return await User.findByIdAndUpdate(
+    id,
     { name, email, roles },
     { new: true }
   );

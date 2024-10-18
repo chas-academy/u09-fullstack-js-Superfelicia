@@ -1,29 +1,83 @@
 import { Router } from "express";
 import {
-  createUserController,
   deleteUserController,
   getUsersController,
-  resetUserPasswordController,
   updateUserController,
+} from "../controllers/UserController";
+import {
+  requestPasswordResetController,
+  resetPasswordController,
+  resetUserPasswordController,
   updateUserPasswordController,
-} from "../controllers/userController";
-import { requestPasswordResetController, resetPasswordController } from "../controllers/passwordController";
+} from "../controllers/PasswordController";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { roleMiddleware } from "../middleware/roleMiddleware";
+import {
+  addCollectionToUserController,
+  getUserCollectionController,
+  getUserCollectionsController,
+} from "../controllers/CollectionController";
 
 const router = Router();
 
 // POST & GET /api/users
-router.post("/user", createUserController);
-router.get("/users", getUsersController);
-router.put("/user/:id", updateUserController);
-router.delete("/user/:id", deleteUserController);
+// Admin permission
+router.get(
+  "/users",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getUsersController
+);
+router.put(
+  "/user/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  updateUserController
+);
+router.delete(
+  "/user/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  deleteUserController
+);
+
+router.post(
+  "/users/:userId/collections/:collectionId",
+  authMiddleware,
+  roleMiddleware("admin"),
+  addCollectionToUserController
+);
+
+// Hämta collections
+router.get(
+  "/users/:userId/collections",
+  authMiddleware,
+  roleMiddleware("user"),
+  getUserCollectionsController
+);
+
+router.get(
+  "/users/:userId/collections/:collectionId",
+  authMiddleware,
+  roleMiddleware("user"),
+  getUserCollectionController
+);
 
 // route för att uppdatera lösenordet
-router.put('/user/:id/update-password', updateUserPasswordController);
+router.put(
+  "/user/:id/update-password",
+  authMiddleware,
+  updateUserPasswordController
+);
 // route för att reset lösenordet, måste ha token och email-länk..... etc.
-router.put('/user/:id/reset-password', resetUserPasswordController);
+router.put(
+  "/user/:id/reset-password",
+  authMiddleware,
+  resetUserPasswordController
+);
 
 // route för begära länk för lösenordsåterställning
-router.post('/user/request-reset-password', requestPasswordResetController);
-router.put('/user/reset-password/:token', resetPasswordController);
+router.post("/user/request-reset-password", requestPasswordResetController);
+router.put("/user/reset-password/:token", resetPasswordController);
 
 export default router;

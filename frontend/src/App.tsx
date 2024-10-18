@@ -1,13 +1,13 @@
+import { Outlet } from 'react-router-dom'
 import './App.css'
-import LoginPage from './pages/login/loginPage'
-import RegisterPage from './pages/register/registerPage'
+import Header from './components/Header'
 
 function App() {
     return (
-        <>
-            <LoginPage />
-            <RegisterPage />
-        </>
+        <main className='overflow-hidden'>
+            <Header />
+            <Outlet />
+        </main>
     )
 }
 

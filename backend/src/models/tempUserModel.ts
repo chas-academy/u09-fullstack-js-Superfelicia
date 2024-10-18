@@ -1,4 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
+import { FlashcardCollection } from './FlashcardCollectionModel';
 
 interface IUser extends Document {
   name: string;
@@ -8,6 +9,7 @@ interface IUser extends Document {
   updatedAt: Date;
   isActive: boolean;
   roles?: "user" | "admin" | "superadmin"[];
+  collections: Types.Array<Types.ObjectId | typeof FlashcardCollection>;
 }
 
 //döp till isAdmin istället?
@@ -22,8 +24,15 @@ const UserSchema: Schema = new Schema({
   roles: {
     type: [String],
     enum: ["user", "admin", "superadmin"],
-    default: ["user"]
+    default: ["user"],
   },
+  collections: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "FlashcardCollection",
+      default: [],
+    },
+  ],
 });
 
 export default mongoose.model<IUser>("User", UserSchema);

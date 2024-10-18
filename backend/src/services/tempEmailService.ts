@@ -1,4 +1,4 @@
-import User from "../models/userModel";
+import User from "../models/tempUserModel";
 // import dotenv from 'dotenv';
 // dotenv.config();
 import nodemailer from "nodemailer";

@@ -1,40 +1,14 @@
-import FormComponent from '../../components/formComponent'
+import CreateUserComponent from '../../components/createUserComponent'
 
 const RegisterPage = () => {
-    const registerFields = [
-        {
-            label: 'Name',
-            type: 'text',
-            placeholder: 'Enter name',
-            name: 'name',
-        },
-        {
-            label: 'Email',
-            type: 'email',
-            placeholder: 'Enter email',
-            name: 'email',
-        },
-        {
-            label: 'Password',
-            type: 'password',
-            placeholder: 'Enter password',
-            name: 'password',
-        },
-        {
-            label: 'Confirm password',
-            type: 'password',
-            placeholder: 'Confirm password',
-            name: 'confirmPassword',
-        },
-    ]
-
     return (
-        <div className='flex flex-col items-start space-y-2'>
+        <div className="w-full flex flex-col items-center justify-center space-y-2">
             <h2>Register</h2>
-            <FormComponent
-                fields={registerFields}
+
+            <CreateUserComponent
                 buttonText="Register"
-                onSubmit={(data) => console.log('Login form data:', data)}
+                onSubmit={() => {}}
+                closeDialog={() => {}}
             />
         </div>
     )
