@@ -153,7 +153,7 @@ const UsersPage = () => {
                 </DialogComponent>
             </div>
 
-            <div className="w-full sm:px-10 overflow-x-auto">
+            <div className="w-full sm:px-10">
                 <TableComponent
                     data={filteredUsers}
                     onEdit={handleEditUser}
