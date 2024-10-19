@@ -8,6 +8,8 @@ const connectDB = async () => {
   ? ".env.test" : ".env.development";
   dotenv.config({ path: envFile });
 
+  console.log("Attempting to connect to MongoDB with URI:", process.env.MONGO_URI);
+
   try {
     const dbUri = process.env.MONGO_URI;
     if (!dbUri) {

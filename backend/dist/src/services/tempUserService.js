@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findUserByName = exports.findUserByEmail = exports.deleteUser = exports.resetUserPassword = exports.updateUserPassword = exports.updateUser = exports.getAllUsers = void 0;
-const UserModel_1 = __importDefault(require("../models/UserModel"));
+const tempUserModel_1 = __importDefault(require("../models/tempUserModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 // export const createUser = async (
 //   name: string,
@@ -22,19 +22,19 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 // };
 // hämta alla users
 const getAllUsers = async () => {
-    return await UserModel_1.default.find().select("-password");
+    return await tempUserModel_1.default.find().select("-password");
 };
 exports.getAllUsers = getAllUsers;
 // uppdatera user
 const updateUser = async (id, name, email, roles) => {
-    return await UserModel_1.default.findByIdAndUpdate(id, { name, email, roles }, { new: true });
+    return await tempUserModel_1.default.findByIdAndUpdate(id, { name, email, roles }, { new: true });
 };
 exports.updateUser = updateUser;
 // uppdatera bara lösenord för user
 const updateUserPassword = async (id, currentPassword, newPassword) => {
     try {
         // console.log(`Finding user with ID: ${id}`);
-        const user = await UserModel_1.default.findById(id);
+        const user = await tempUserModel_1.default.findById(id);
         if (!user) {
             throw new Error("User not found");
         }
@@ -47,7 +47,7 @@ const updateUserPassword = async (id, currentPassword, newPassword) => {
         const salt = await bcrypt_1.default.genSalt(10);
         const hashedPassword = await bcrypt_1.default.hash(newPassword, salt);
         //uppdatera lösen i databasen
-        const updatedUser = await UserModel_1.default.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
+        const updatedUser = await tempUserModel_1.default.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
         if (!updatedUser) {
             throw new Error("User password not updated");
         }
@@ -62,7 +62,7 @@ exports.updateUserPassword = updateUserPassword;
 // reset lösenord för user om glömt lösen
 const resetUserPassword = async (id, newPassword) => {
     try {
-        const user = await UserModel_1.default.findById(id);
+        const user = await tempUserModel_1.default.findById(id);
         if (!user) {
             throw new Error("User not found");
         }
@@ -70,7 +70,7 @@ const resetUserPassword = async (id, newPassword) => {
         const salt = await bcrypt_1.default.genSalt(10);
         const hashedPassword = await bcrypt_1.default.hash(newPassword, salt);
         //uppdatera lösen i databasen
-        const updatedUser = await UserModel_1.default.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
+        const updatedUser = await tempUserModel_1.default.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
         if (!updatedUser) {
             throw new Error("Users new password not updated");
         }
@@ -84,16 +84,16 @@ const resetUserPassword = async (id, newPassword) => {
 exports.resetUserPassword = resetUserPassword;
 // delete user
 const deleteUser = async (id) => {
-    return await UserModel_1.default.findByIdAndDelete(id);
+    return await tempUserModel_1.default.findByIdAndDelete(id);
 };
 exports.deleteUser = deleteUser;
 // hitta user mha email
 const findUserByEmail = async (email) => {
-    return await UserModel_1.default.findOne({ email });
+    return await tempUserModel_1.default.findOne({ email });
 };
 exports.findUserByEmail = findUserByEmail;
 // hitta user mha name
 const findUserByName = async (name) => {
-    return await UserModel_1.default.findOne({ name });
+    return await tempUserModel_1.default.findOne({ name });
 };
 exports.findUserByName = findUserByName;

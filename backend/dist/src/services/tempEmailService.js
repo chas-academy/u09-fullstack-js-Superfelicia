@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendPasswordResetEmail = void 0;
-const UserModel_1 = __importDefault(require("../models/UserModel"));
+const tempUserModel_1 = __importDefault(require("../models/tempUserModel"));
 // import dotenv from 'dotenv';
 // dotenv.config();
 const nodemailer_1 = __importDefault(require("nodemailer"));
@@ -26,7 +26,7 @@ const transporter = nodemailer_1.default.createTransport({
 const sendPasswordResetEmail = async (email) => {
     try {
         console.log(`Begäran om lösenordsåterställning för e-post: ${email}`);
-        const user = await UserModel_1.default.findOne({ email });
+        const user = await tempUserModel_1.default.findOne({ email });
         if (!user) {
             throw new Error("User not found");
         }

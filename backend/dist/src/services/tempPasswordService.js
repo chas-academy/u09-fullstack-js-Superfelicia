@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = void 0;
-const userModel_1 = __importDefault(require("../models/userModel"));
+const tempUserModel_1 = __importDefault(require("../models/tempUserModel"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const resetPassword = async (token, newPassword) => {
@@ -14,7 +14,7 @@ const resetPassword = async (token, newPassword) => {
             throw new Error("JWT_SECRET is not defined in the environment variables");
         }
         const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
-        const user = await userModel_1.default.findById(decoded.id);
+        const user = await tempUserModel_1.default.findById(decoded.id);
         if (!user) {
             throw new Error("User not found");
         }

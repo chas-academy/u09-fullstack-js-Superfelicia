@@ -33,9 +33,16 @@ const UserSchema = new mongoose_1.Schema({
     updatedAt: { type: Date, default: Date.now },
     isActive: { type: Boolean, default: true },
     roles: {
-        type: String,
+        type: [String],
         enum: ["user", "admin", "superadmin"],
-        default: "user"
+        default: ["user"],
     },
+    collections: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "FlashcardCollection",
+            default: [],
+        },
+    ],
 });
 exports.default = mongoose_1.default.model("User", UserSchema);

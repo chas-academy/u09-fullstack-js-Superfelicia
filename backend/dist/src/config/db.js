@@ -5,15 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const connectDB = async () => {
+    const envFile = process.env.NODE_ENV === "test" ? ".env.test" : ".env";
+    dotenv_1.default.config({ path: envFile });
+    console.log("Attempting to connect to MongoDB with URI:", process.env.MONGO_URI);
     try {
-        await mongoose_1.default.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/flash_learn');
-        console.log('MongoDB connected');
+        const dbUri = process.env.MONGO_URI;
+        await mongoose_1.default.connect(dbUri);
+        console.log("MongoDB connected");
     }
     catch (error) {
-        console.error('MongoDB connection error:', error);
-        process.exit(1);
+        console.error("MongoDB connection error:", error.message);
+        if (process.env.NODE_ENV !== "test") {
+            process.exit(1);
+        }
+        else {
+            throw new Error("MongoDB connection failed in test environment");
+        }
     }
 };
 exports.default = connectDB;

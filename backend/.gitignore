@@ -17,8 +17,5 @@ benchmarks/graphs
 .env.production
 .env.test
 
-#dist
-dist
-
 # ignore additional files using core.excludesFile
 # http://git-scm.com/docs/gitignore

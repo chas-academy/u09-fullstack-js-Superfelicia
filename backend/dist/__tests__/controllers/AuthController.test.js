@@ -6,18 +6,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../src/app"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const UserModel_1 = __importDefault(require("../../src/models/UserModel"));
+const tempUserModel_1 = __importDefault(require("../../src/models/tempUserModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 beforeAll(async () => {
-    await mongoose_1.default.connect(process.env.MONGO_URI || "mongodb://localhost:27017/testdb");
+    await mongoose_1.default.connect(process.env.MONGO_URI || "mongodb://localhost:27018/testdb");
 });
 // clean up before each test
 beforeEach(async () => {
-    await UserModel_1.default.deleteMany({});
+    await tempUserModel_1.default.deleteMany({});
 });
 // Clean up after each test
 afterEach(async () => {
-    await UserModel_1.default.deleteMany({});
+    await tempUserModel_1.default.deleteMany({});
 });
 // Close the database connection after all tests
 afterAll(async () => {
@@ -28,7 +28,7 @@ describe("AuthController", () => {
         it("should login successfully with valid credentials", async () => {
             const uniqueEmail = `emii${Date.now()}@em.se`;
             // Create a user directly in the test database
-            const user = new UserModel_1.default({
+            const user = new tempUserModel_1.default({
                 name: "emii",
                 email: uniqueEmail,
                 password: await bcrypt_1.default.hash("123456", 10),
@@ -67,13 +67,13 @@ describe("AuthController", () => {
             expect(response.body).toHaveProperty("id");
             expect(response.body.email).toBe("newuser@example.se");
             // Check if the user is saved in the database
-            const savedUser = await UserModel_1.default.findOne({ email: "newuser@example.se" });
+            const savedUser = await tempUserModel_1.default.findOne({ email: "newuser@example.se" });
             expect(savedUser).not.toBeNull();
             expect(savedUser?.roles).toEqual(["user"]);
         });
         it("should return 400 if user already exists", async () => {
             // Create a user directly in the test database
-            const existingUser = new UserModel_1.default({
+            const existingUser = new tempUserModel_1.default({
                 name: "Existing user",
                 email: "existinguser@example.se",
                 password: await bcrypt_1.default.hash("existingpassword123", 10),

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetUserPasswordController = exports.updateUserPasswordController = exports.resetPasswordController = exports.requestPasswordResetController = void 0;
-const EmailService_1 = require("../services/EmailService");
-const PasswordService_1 = require("../services/PasswordService");
-const UserService_1 = require("../services/UserService");
+const tempEmailService_1 = require("../services/tempEmailService");
+const tempPasswordService_1 = require("../services/tempPasswordService");
+const tempUserService_1 = require("../services/tempUserService");
 // begäran om lösenordsåterställning
 const requestPasswordResetController = async (req, res) => {
     const { email } = req.body;
@@ -11,7 +11,7 @@ const requestPasswordResetController = async (req, res) => {
         return res.status(400).json({ message: "Invalid email address." });
     }
     try {
-        await (0, EmailService_1.sendPasswordResetEmail)(email);
+        await (0, tempEmailService_1.sendPasswordResetEmail)(email);
         console.log(`Password reset link sent to: ${email}`);
         res
             .status(200)
@@ -33,7 +33,7 @@ const resetPasswordController = async (req, res) => {
             .json({ message: "Password must be at least 6 characters long" });
     }
     try {
-        const result = await (0, PasswordService_1.resetPassword)(token, newPassword);
+        const result = await (0, tempPasswordService_1.resetPassword)(token, newPassword);
         res.status(200).json(result);
     }
     catch (error) {
@@ -52,7 +52,7 @@ const updateUserPasswordController = async (req, res) => {
             .json({ message: "Password must be at least 6 characters long" });
     }
     try {
-        const updatedUser = await (0, UserService_1.updateUserPassword)(id, currentPassword, newPassword);
+        const updatedUser = await (0, tempUserService_1.updateUserPassword)(id, currentPassword, newPassword);
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -82,7 +82,7 @@ const resetUserPasswordController = async (req, res) => {
     }
     try {
         // byt namn på const updatedUser till något med reset imorgon
-        const updatedUser = await (0, UserService_1.resetUserPassword)(id, newPassword);
+        const updatedUser = await (0, tempUserService_1.resetUserPassword)(id, newPassword);
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
         }

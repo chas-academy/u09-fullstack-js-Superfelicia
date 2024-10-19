@@ -4,20 +4,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendPasswordResetEmail = void 0;
-const userModel_1 = __importDefault(require("../models/userModel"));
+const tempUserModel_1 = __importDefault(require("../models/tempUserModel"));
+// import dotenv from 'dotenv';
+// dotenv.config();
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const transporter = nodemailer_1.default.createTransport({
     service: "Gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
+    },
+    // var försiktig med tls i produktion
+    tls: {
+        rejectUnauthorized: false,
     },
 });
 const sendPasswordResetEmail = async (email) => {
     try {
         console.log(`Begäran om lösenordsåterställning för e-post: ${email}`);
-        const user = await userModel_1.default.findOne({ email });
+        const user = await tempUserModel_1.default.findOne({ email });
         if (!user) {
             throw new Error("User not found");
         }
@@ -29,7 +38,7 @@ const sendPasswordResetEmail = async (email) => {
         const token = jsonwebtoken_1.default.sign({ id: user._id }, jwtSecret, {
             expiresIn: "1h",
         });
-        const resetLink = `http://localhost:3000/reset-password/${token}`;
+        const resetLink = `http://localhost:3000/api/user/reset-password/${token}`;
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: user.email,
