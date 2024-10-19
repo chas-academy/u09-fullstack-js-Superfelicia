@@ -8,11 +8,7 @@ import connectDB from "./config/db";
 
 const app: Express = express();
 
-app.use(
-  cors({
-    origin: "https://flashlearn09.netlify.app",
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 

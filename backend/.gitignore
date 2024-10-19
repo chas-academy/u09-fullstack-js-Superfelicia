@@ -13,7 +13,8 @@ coverage
 benchmarks/graphs
 
 # Enviroment variables
-.env
+.env.development
+.env.production
 .env.test
 
 #dist
