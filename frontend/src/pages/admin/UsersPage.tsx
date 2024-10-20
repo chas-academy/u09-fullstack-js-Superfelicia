@@ -44,30 +44,9 @@ const UsersPage = () => {
         fetchUsers();
     }, []);
 
-    const handleCreateUser = async (formData: { [key: string]: string }) => {
-        const { name, email, password, roles } = formData;
-
-        try {
-            const response = await fetch(`${API_URL}}/auth/user`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password, roles }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setUsers((prevUsers) => [...prevUsers, data]);
-                setFilteredUsers((prevUsers) => [...prevUsers, data]);
-                console.log('User created:', data);
-            } else {
-                console.error(data.message || 'Error registering user');
-            }
-        } catch (error) {
-            console.error('Error registering user');
-        }
+    const handleUserAdded = (newUser: User) => {
+        setUsers((prevUsers) => [...prevUsers, newUser]);
+        setFilteredUsers((prevUsers) => [...prevUsers, newUser]);
     };
 
     const handleSearch = (searchTerm: string) => {
@@ -138,19 +117,23 @@ const UsersPage = () => {
     return (
         <div className="overflow-hidden flex flex-col items-center justify-center space-y-5 p-10">
             <h2>User Management</h2>
-            <div className="w-full px-10 flex justify-between items-center">
+            <div className="w-full sm:px-10 flex justify-between items-center">
                 <SearchComponent onSearch={handleSearch} placeholder="Search users..." />
+                <div className='pl-2'>
                 <DialogComponent
                     title="Create new user"
                     triggerText={<Plus size={16} />}
                     onConfirm={() => {}}
+                    showActions={false}
                 >
                     <CreateUserComponent
                         buttonText="Create user"
-                        onSubmit={handleCreateUser}
+                        apiEndpoint={`${API_URL}/auth/user`}
+                        onSubmit={(newUser) => handleUserAdded(newUser)}
                         closeDialog={() => console.log('closing dialog')}
                     />
                 </DialogComponent>
+                </div>
             </div>
 
             <div className="w-full sm:px-10">
