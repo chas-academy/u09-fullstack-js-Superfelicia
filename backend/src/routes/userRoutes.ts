@@ -31,13 +31,13 @@ router.get(
 router.put(
   "/user/:id",
   authMiddleware,
-  roleMiddleware("admin"),
+  // roleMiddleware("admin"),
   updateUserController
 );
 router.delete(
   "/user/:id",
   authMiddleware,
-  roleMiddleware("admin"),
+  // roleMiddleware("admin", ),
   deleteUserController
 );
 
