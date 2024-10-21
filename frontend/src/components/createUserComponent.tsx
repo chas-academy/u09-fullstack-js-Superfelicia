@@ -1,14 +1,22 @@
 import { useState } from 'react'
 import FormComponent from './formComponent.tsx'
 import { useUserStore } from '../store/useUserStore.ts'
+import { Input } from './ui/input.tsx'
+import { Label } from './ui/label.tsx'
 
 interface CreateUserProps {
     buttonText: string
-    onSubmit: (formData: { [key: string]: string }) => void
-    closeDialog: () => void
+    onSubmit?: (newUser: any) => void
+    apiEndpoint: string
+    closeDialog?: () => void
 }
 
-const CreateUserComponent = ({ buttonText, onSubmit, closeDialog }: CreateUserProps) => {
+const CreateUserComponent = ({
+    buttonText,
+    onSubmit,
+    apiEndpoint,
+    closeDialog,
+}: CreateUserProps) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const user = useUserStore((state) => state.user)
 
@@ -39,24 +47,51 @@ const CreateUserComponent = ({ buttonText, onSubmit, closeDialog }: CreateUserPr
         },
     ]
 
-    const handleSubmit = (formData: { [key: string]: string }) => {
-        onSubmit({ ...formData, roles: isAdmin ? 'admin' : 'user' })
-        closeDialog()
+    const handleSubmit = async (formData: { [key: string]: string }) => {
+        const { name, email, password, confirmPassword } = formData
+
+        if (password !== confirmPassword) {
+            console.log('Passwords do not match')
+            return
+        }
+
+        try {
+            const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password, roles: isAdmin ? 'admin' : 'user' }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                if (onSubmit) onSubmit(data)
+                if (closeDialog) closeDialog()
+            } else {
+                console.log(data.message || 'Error registering user')
+            }
+        } catch (error) {
+            console.error('Error registering user', error)
+        }
     }
 
     return (
         <div className="flex flex-col items-start space-y-2">
             <FormComponent fields={registerFields} buttonText={buttonText} onSubmit={handleSubmit}>
-                {' '}
                 {user?.roles.includes('admin') && (
-                    <div className="space-x-4">
-                        <input
-                            type="checkbox"
-                            checked={isAdmin}
-                            onChange={() => setIsAdmin(!isAdmin)}
-                        />
-                        <label>Admin</label>
-                    </div>
+                    <>
+                        <Label className='flex items-center'>
+                            Admin
+                            <Input
+                                type="checkbox"
+                                checked={isAdmin}
+                                onChange={() => setIsAdmin(!isAdmin)}
+                                className='ml-2'
+                            />
+                        </Label>
+                    </>
                 )}
             </FormComponent>
         </div>
