@@ -16,6 +16,7 @@ interface DialogComponentProps {
     confirmText?: string
     cancelText?: string
     isDeleteConfirmation?: boolean
+    showActions?: boolean
 }
 
 const DialogComponent: React.FC<DialogComponentProps> = ({
@@ -27,6 +28,7 @@ const DialogComponent: React.FC<DialogComponentProps> = ({
     confirmText = 'Confirm',
     cancelText = 'Cancel',
     isDeleteConfirmation = false,
+    showActions = true,
 }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -36,37 +38,36 @@ const DialogComponent: React.FC<DialogComponentProps> = ({
     }
 
     return (
-        <>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                    <Button onClick={() => setIsDialogOpen(true)}>{triggerText}</Button>
-                </DialogTrigger>
-                <DialogContent className="flex flex-col items-center">
-                    <DialogTitle className='p-2'>{title}</DialogTitle>
-                    <DialogDescription className='p-6'>{description}</DialogDescription>
-                    {/*closeDialog skickas med till children*/}
-                    {React.Children.map(children, (child) => 
-                        React.isValidElement(child) ? React.cloneElement(child, { closeDialog: () => setIsDialogOpen(false) })
-                        : child)}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+                <Button onClick={() => setIsDialogOpen(true)}>{triggerText}</Button>
+            </DialogTrigger>
+            <DialogContent className="flex flex-col items-center">
+                <DialogTitle className="p-2">{title}</DialogTitle>
+                <DialogDescription className="p-6">{description}</DialogDescription>
+                {/*closeDialog skickas med till children*/}
+                {React.Children.map(children, (child) =>
+                    React.isValidElement(child)
+                        ? React.cloneElement(child, {
+                              closeDialog: () => setIsDialogOpen(false),
+                          })
+                        : child
+                )}
+                {showActions && (
                     <div>
-                        {!isDeleteConfirmation && (
-                            <div className='flex space-x-4 mt-2'>
-                                <Button onClick={handleConfirm}>{confirmText}</Button>
-                                <Button onClick={() => setIsDialogOpen(false)}>{cancelText}</Button>
-                            </div>
-                        )}
-                        {isDeleteConfirmation && (
-                            <div className='flex space-x-4 mt-2'>
-                                <Button variant="destructive" onClick={handleConfirm}>
-                                    {confirmText}
-                                </Button>
-                                <Button onClick={() => setIsDialogOpen(false)}>{cancelText}</Button>
-                            </div>
-                        )}
+                        <div className="flex space-x-4 mt-2">
+                            <Button
+                                variant={isDeleteConfirmation ? 'destructive' : 'default'}
+                                onClick={handleConfirm}
+                            >
+                                {confirmText}
+                            </Button>
+                            <Button onClick={() => setIsDialogOpen(false)}>{cancelText}</Button>
+                        </div>
                     </div>
-                </DialogContent>
-            </Dialog>
-        </>
+                )}
+            </DialogContent>
+        </Dialog>
     )
 }
 
