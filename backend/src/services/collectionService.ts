@@ -5,14 +5,14 @@ import User from "../models/tempUserModel";
 export const createCollection = async (
   name: string,
   category: string,
-  flashcards: any[],
+  flashcards: any[] = [],
   deadline?: Date,
   infoText?: string
 ) => {
   const newCollection = new FlashcardCollection({
     name,
     category,
-    flashcards: flashcards.length ? flashcards : [],
+    flashcards: Array.isArray(flashcards) ? flashcards : [],
     progress: 0,
     status: "not started",
     deadline: deadline || null,
@@ -51,10 +51,20 @@ export const getFlashcardsByCollection = async (collectionId: string) => {
   try {
     const collection =
       await FlashcardCollection.findById(collectionId).populate("flashcards");
+
     if (!collection) {
-      throw new Error("Collection not found");
+      return undefined
     }
-    return collection.flashcards;
+
+    const flashcards = Array.isArray(collection.flashcards)
+      ? collection.flashcards
+      : [];
+
+    if (!flashcards.length) {
+      return { message: "No flashcards found for this collection" };
+    }
+
+    return flashcards;
   } catch (error: any) {
     throw new Error(
       "Error fetching flashcards from collection: ",

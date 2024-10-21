@@ -32,7 +32,10 @@ export interface IFlashcardCollection extends Document {
 const flashcardCollectionSchema: Schema = new Schema({
   name: { type: String, required: true },
   category: { type: String, required: true },
-  flashcards: [flashcardSchema],
+  flashcards: {
+    type: [flashcardSchema],
+    default: [],
+  },
   progress: { type: Number, default: 0 },
   status: {
     type: String,

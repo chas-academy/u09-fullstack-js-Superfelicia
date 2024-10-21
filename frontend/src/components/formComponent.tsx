@@ -43,6 +43,16 @@ const FormComponent: React.FC<FormComponentProps> = ({
         setFormData(initialData)
     }, [fields])
 
+    const handleCancel = () => {
+        if (onCancel) {
+            onCancel()
+        } else {
+            setFormData(
+                fields.reduce((acc, field) => ({ ...acc, [field.name]: field.value || '' }), {})
+            )
+        }
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -69,7 +79,7 @@ const FormComponent: React.FC<FormComponentProps> = ({
                             !isEditing && field.type === 'password' ? '********' : field.placeholder
                         }
                         name={field.name}
-                        value={formData[field.name]}
+                        value={formData[field.name] ?? ''}
                         onChange={field.onChange || handleChange}
                         readOnly={!isEditing}
                         className={`${isEditing ? 'border-1' : 'border-hidden'} p-3 w-72 md:w-96 flex flex-1`}
@@ -88,7 +98,7 @@ const FormComponent: React.FC<FormComponentProps> = ({
                     </Button>
                     <Button
                         type="button"
-                        onClick={onCancel}
+                        onClick={handleCancel}
                         className="w-full border rounded-md p-6"
                     >
                         Cancel

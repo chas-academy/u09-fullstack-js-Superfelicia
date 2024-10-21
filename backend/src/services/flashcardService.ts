@@ -21,14 +21,24 @@ export const addFlashcard = async (
     };
 
     collection.flashcards.push(newFlashcard);
+    await collection.save();
 
-    return await collection.save();
+    const addedFlashcard =
+      collection.flashcards[collection.flashcards.length - 1];
+    return addedFlashcard;
   } catch (error: any) {
     throw new Error("Error adding flashcard to collection", error.message);
   }
 };
 
-export const updateFlashcard = async (collectionId: string, flashcardId: string, question: string, answer: string, mastered: boolean, failedAttempts: number) => {
+export const updateFlashcard = async (
+  collectionId: string,
+  flashcardId: string,
+  question: string,
+  answer: string,
+  mastered: boolean,
+  failedAttempts: number
+) => {
   try {
     const collection = await FlashcardCollection.findById(collectionId);
     if (!collection) {
@@ -45,9 +55,11 @@ export const updateFlashcard = async (collectionId: string, flashcardId: string,
     flashcard.mastered = mastered;
     flashcard.failedAttempts = failedAttempts;
 
-    return await collection.save();
+    await collection.save();
+
+    return flashcard;
   } catch (error: any) {
-    throw new Error('Error updating flashcard:', error.message);
+    throw new Error("Error updating flashcard:", error.message);
   }
 };
 
@@ -72,7 +84,9 @@ export const updateFlashcardStatus = async (
       flashcard.failedAttempts += 1;
     }
 
-    return await collection.save();
+    await collection.save();
+
+    return flashcard;
   } catch (error) {
     throw new Error("Error updating flashcard status");
   }
@@ -90,7 +104,9 @@ export const removeFlashcard = async (
 
     collection.flashcards.pull({ _id: flashcardId });
 
-    return await collection.save();
+    await collection.save();
+
+    return flashcardId;
   } catch (error) {
     throw new Error("Error removing flashcard from collection");
   }

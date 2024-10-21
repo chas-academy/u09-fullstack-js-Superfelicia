@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import FormComponent from '../../../components/formComponent'
-import { API_URL } from '@/config'
 
 interface CollectionFormProps {
     collection?: any
@@ -8,7 +7,6 @@ interface CollectionFormProps {
 }
 
 const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
-    const [collectionId, setCollectionId] = useState<string | null>(null)
     const [formData, setFormData] = useState({
         name: '',
         category: '',
@@ -79,49 +77,20 @@ const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
         },
     ]
 
-    const handleSubmitCollection = async () => {
+    const handleSubmit = () => {
         if (!formData.name || !formData.category) {
-            alert('Name and categort are required fields.')
-            return
+            alert('Name and category are required fields.')
+            return 
         }
 
-        const newCollection = {
-            ...formData,
-            infoText: formData.infoText || '',
-            deadline: formData.deadline || '',
-        }
-        try {
-            let response
-            if (collectionId) {
-                response = await fetch(`${API_URL}/collections/${collectionId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData),
-                })
-            } else {
-                response = await fetch(`${API_URL}/collections`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newCollection),
-                })
-            }
-            const savedCollection = await response.json()
-
-            if (!response.ok) {
-                throw new Error(savedCollection.message || 'Failed to save collection')
-            }
-
-            onSubmit(savedCollection)
-        } catch (error) {
-            console.error('Error saving collection:', error)
-        }
+        onSubmit(formData)
     }
 
     return (
         <FormComponent
             fields={fields}
             buttonText={collection ? 'Update collection' : 'Create collection'}
-            onSubmit={handleSubmitCollection}
+            onSubmit={handleSubmit}
         />
     )
 }
