@@ -44,6 +44,7 @@ const CollectionPage = () => {
                     onDeleteCollection={(collectionId) => {
                       setCollections(collections.filter((col) => col._id !== collectionId))
                     }}
+                    onEditCollection={handleEditCollection}
                 />
             ) : (
                 <>
