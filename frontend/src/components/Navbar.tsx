@@ -1,6 +1,7 @@
 import { useUserStore } from '@/store/useUserStore'
 import { Link, useNavigate } from 'react-router-dom'
 import { ModeToggle } from './ModeToggle'
+import { User2 } from 'lucide-react'
 
 const Navbar = () => {
     const user = useUserStore((state) => state.user)
@@ -40,12 +41,24 @@ const Navbar = () => {
                                         Manage collections
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link to="/admin-dashboard/profile">
+                                        <User2 />
+                                    </Link>
+                                </li>
                             </>
                         )}
                         {user?.roles.includes('user') && (
-                            <li>
-                                <Link to="/dashboard/collections-overview">Collections</Link>
-                            </li>
+                            <>
+                                <li>
+                                    <Link to="/dashboard/collections-overview">Collections</Link>
+                                </li>
+                                <li>
+                                    <Link to="/dashboard/profile">
+                                        <User2 />
+                                    </Link>
+                                </li>
+                            </>
                         )}
                         {user ? (
                             <li className="flex space-x-4">
