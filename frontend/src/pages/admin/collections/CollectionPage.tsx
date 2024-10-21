@@ -30,9 +30,11 @@ const CollectionPage = () => {
         setSelectedCollection(collection)
     }
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (stayOnCollection = false) => {
         fetchCollections()
-        setSelectedCollection(null)
+        if (!stayOnCollection) {
+            setSelectedCollection(null)
+        }
     }
 
     return (
@@ -42,13 +44,13 @@ const CollectionPage = () => {
                     collections={collections}
                     onSelectCollection={handleEditCollection}
                     onDeleteCollection={(collectionId) => {
-                      setCollections(collections.filter((col) => col._id !== collectionId))
+                        setCollections(collections.filter((col) => col._id !== collectionId))
                     }}
                     onEditCollection={handleEditCollection}
                 />
             ) : (
                 <>
-                    <FlashcardForm collection={selectedCollection} onSubmit={handleFormSubmit}/>
+                    <FlashcardForm collection={selectedCollection} onSubmit={handleFormSubmit} />
                     <Button
                         type="button"
                         onClick={() => setSelectedCollection(null)}

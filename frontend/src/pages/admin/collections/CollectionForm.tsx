@@ -9,14 +9,40 @@ interface CollectionFormProps {
 
 const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
     const [collectionId, setCollectionId] = useState<string | null>(null)
+    const [formData, setFormData] = useState({
+        name: '',
+        category: '',
+        infoText: '',
+        deadline: '',
+    })
 
     useEffect(() => {
         if (collection) {
-            setCollectionId(collection._id)
+            setFormData({
+                name: collection.name || '',
+                category: collection.category || '',
+                infoText: collection.infoText || '',
+                deadline: collection.deadline
+                    ? new Date(collection.deadline).toISOString().substring(0, 10)
+                    : '',
+            })
         } else {
-            setCollectionId(null)
+            setFormData({
+                name: '',
+                category: '',
+                infoText: '',
+                deadline: '',
+            })
         }
     }, [collection])
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }))
+    }
 
     const fields = [
         {
@@ -24,54 +50,65 @@ const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
             type: 'text',
             placeholder: 'Enter collection name',
             name: 'name',
-            value: collection?.name || '', // Default value from collection
+            value: formData.name,
+            onChange: handleInputChange,
         },
         {
             label: 'Category',
             type: 'text',
             placeholder: 'Enter collection category',
             name: 'category',
-            value: collection?.category || '',
+            value: formData.category,
+            onChange: handleInputChange,
         },
         {
             label: 'Info Text',
             type: 'text',
             placeholder: 'Enter info text',
             name: 'infoText',
-            value: collection?.infoText || '',
+            value: formData.infoText,
+            onChange: handleInputChange,
         },
         {
             label: 'Deadline',
             type: 'date',
             placeholder: '',
             name: 'deadline',
-            value: collection?.deadline
-                ? new Date(collection.deadline).toISOString().substring(0, 10)
-                : '',
+            value: formData.deadline,
+            onChange: handleInputChange,
         },
     ]
 
-    const handleSubmitCollection = async (formData: { [key: string]: string }) => {
-        const newCollection = { ...formData }
-        let response
-        let savedCollection
+    const handleSubmitCollection = async () => {
+        if (!formData.name || !formData.category) {
+            alert('Name and categort are required fields.')
+            return
+        }
 
+        const newCollection = {
+            ...formData,
+            infoText: formData.infoText || '',
+            deadline: formData.deadline || '',
+        }
         try {
+            let response
             if (collectionId) {
                 response = await fetch(`${API_URL}/collections/${collectionId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newCollection),
+                    body: JSON.stringify(formData),
                 })
-                savedCollection = await response.json()
             } else {
                 response = await fetch(`${API_URL}/collections`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newCollection),
                 })
-                savedCollection = await response.json()
-                setCollectionId(savedCollection._id)
+            }
+            const savedCollection = await response.json()
+
+            if (!response.ok) {
+                throw new Error(savedCollection.message || 'Failed to save collection')
             }
 
             onSubmit(savedCollection)

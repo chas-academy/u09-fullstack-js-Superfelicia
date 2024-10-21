@@ -39,6 +39,7 @@ const CollectionList: React.FC<CollectionListProps> = ({
                         subtitle={collection.category}
                         onClick={() => onSelectCollection(collection)}
                     >
+                        <div className='flex justify-center space-x-2'>
                         <DialogComponent
                             title="Delete collection"
                             description={`Are your sure you want to delete ${collection.name}?`}
@@ -55,6 +56,7 @@ const CollectionList: React.FC<CollectionListProps> = ({
                         >
                             <CollectionForm collection={collection} onSubmit={() => onEditCollection(collection)}/>
                         </DialogComponent>
+                        </div>
                     </CardComponent>
                 ))}
             </div>

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { API_URL } from '@/config'
 import { Collection } from '@/interfaces/Collection'
+import { CircleArrowLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -37,6 +38,14 @@ const CollectionView = () => {
             <p>Deadline: {new Date(collection.deadline).toLocaleDateString()}</p>
 
             <Button onClick={handleStartCollection}>Start collection</Button>
+            <Button
+                type="button"
+                onClick={() => navigate('/dashboard/collections-overview')}
+                className="gap-2"
+            >
+                <CircleArrowLeft size={16} />
+                Back to collections
+            </Button>
         </div>
     )
 }
