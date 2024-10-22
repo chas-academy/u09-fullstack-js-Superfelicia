@@ -16,6 +16,11 @@ export const createNewCollectionController = async (
   res: Response
 ) => {
   const { name, category, flashcards, deadline, infoText } = req.body;
+
+  if (!name || !category) {
+    return res.status(400).json({ message: "Name and category are required" });
+  }
+
   try {
     const newCollection = await createCollection(
       name,
@@ -61,7 +66,13 @@ export const getFlashcardsByCollectionController = async (
   try {
     const flashcards = await getFlashcardsByCollection(collectionId);
 
-    if (!flashcards || flashcards.length === 0) {
+    if (!flashcards) {
+      return res
+        .status(404)
+        .json({ message: "Flashcards not found for this collection" });
+    }
+
+    if (!Array.isArray(flashcards) || flashcards.length === 0) {
       return res
         .status(404)
         .json({ message: "No flashcards found for this collection" });

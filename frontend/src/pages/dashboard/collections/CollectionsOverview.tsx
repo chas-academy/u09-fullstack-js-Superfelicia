@@ -8,9 +8,11 @@ import { useNavigate } from 'react-router-dom'
 
 const CollectionsOverview = () => {
     const user = useUserStore((state) => state.user)
-    const [currentCollections, setCurrentCollections] = useState<Collection[]>([])
-    const [completedCollections, setCompletedCollections] = useState<Collection[]>([])
-    const [upcomingCollections, setUpcomingCollections] = useState<Collection[]>([])
+    const [collectionsData, setCollectionsData] = useState({
+        currentCollections: [] as Collection[],
+        completedCollections: [] as Collection[],
+        upcomingCollections: [] as Collection[],
+    })
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -30,9 +32,11 @@ const CollectionsOverview = () => {
             const data = await response.json()
 
             if (response.ok) {
-                setCurrentCollections(data.currentCollections)
-                setCompletedCollections(data.completedCollections)
-                setUpcomingCollections(data.upcomingCollections)
+                setCollectionsData({
+                    currentCollections: data.currentCollections,
+                    completedCollections: data.completedCollections,
+                    upcomingCollections: data.upcomingCollections,
+                })
             } else {
                 console.error('Error fetching collections', data.message)
             }
@@ -45,86 +49,59 @@ const CollectionsOverview = () => {
         navigate(`/dashboard/collections/${collectionId}`)
     }
 
+    const collectionSections = {
+        currentCollections: {
+            title: 'Current Collections',
+            buttonText: 'View Collection',
+            action: (collection: Collection) => handleViewCollection(collection._id),
+        },
+        completedCollections: {
+            title: 'Completed Collections',
+            buttonText: 'Review Collection',
+            action: (collection: Collection) => console.log(`Review ${collection.name}`),
+        },
+        upcomingCollections: {
+            title: 'Upcoming Collections',
+            buttonText: 'Start Collection',
+            action: (collection: Collection) => console.log(`Start ${collection.name}`),
+        },
+    }
+
     return (
-        <div className="space-y-8">
-            {/* Current Collections */}
-            <section>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {currentCollections.length > 0 ? (
-                        currentCollections.map((collection) => (
-                            <>
-                                <h2>Current Collections</h2>
-                                <CardComponent
-                                    key={collection._id}
-                                    title={collection.name}
-                                    subtitle={collection.category}
-                                    onClick={() => handleViewCollection(collection._id)}
-                                >
-                                    <Button onClick={() => console.log(`View ${collection.name}`)}>
-                                        View Collection
-                                    </Button>
-                                </CardComponent>
-                            </>
-                        ))
-                    ) : (
-                        <p>No current collections</p>
-                    )}
-                </div>
-            </section>
-
-            {/* Completed Collections */}
-            <section>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {completedCollections.length > 0 ? (
-                        completedCollections.map((collection) => (
-                            <>
-                                <h2>Completed Collections</h2>
-
-                                <CardComponent
-                                    key={collection._id}
-                                    title={collection.name}
-                                    subtitle={collection.category}
-                                    onClick={() => handleViewCollection(collection._id)}
-                                >
-                                    <Button
-                                        onClick={() => console.log(`Review ${collection.name}`)}
-                                    >
-                                        Review Collection
-                                    </Button>
-                                </CardComponent>
-                            </>
-                        ))
-                    ) : (
-                        <p>No completed collections</p>
-                    )}
-                </div>
-            </section>
-
-            {/* Upcoming Collections */}
-            <section>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {upcomingCollections.length > 0 ? (
-                        upcomingCollections.map((collection) => (
-                            <>
-                                <h2>Upcoming Collections</h2>
-
-                                <CardComponent
-                                    key={collection._id}
-                                    title={collection.name}
-                                    subtitle={collection.category}
-                                    onClick={() => handleViewCollection(collection._id)}
-                                >
-                                    {/* <Button onClick={() => console.log(`Start ${collection.name}`)}>
-                                        Start Collection
-                                    </Button> */}
-                                </CardComponent>
-                            </>
-                        ))
-                    ) : (
-                        <p>No upcoming collections</p>
-                    )}
-                </div>
-            </section>
+        <div className="space-y-8 flex flex-col">
+            {Object.keys(collectionSections).map((sectionKey) => {
+                const section = collectionSections[sectionKey as keyof typeof collectionSections]
+                const collections = collectionsData[sectionKey as keyof typeof collectionsData]
+                return (
+                    <section key={sectionKey}>
+                        <h2>{section.title}</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {collections.length > 0 ? (
+                                collections.map((collection) => (
+                                    <>
+                                        <CardComponent
+                                            key={collection._id}
+                                            title={collection.name}
+                                            subtitle={collection.category}
+                                            onClick={() => handleViewCollection(collection._id)}
+                                        >
+                                            <Button
+                                                onClick={() =>
+                                                    console.log(`View ${collection.name}` && handleViewCollection(collection._id))
+                                                }
+                                            >
+                                                View Collection
+                                            </Button>
+                                        </CardComponent>
+                                    </>
+                                ))
+                            ) : (
+                                <p>No {section.title.toLowerCase()}</p>
+                            )}
+                        </div>
+                    </section>
+                )
+            })}
         </div>
     )
 }

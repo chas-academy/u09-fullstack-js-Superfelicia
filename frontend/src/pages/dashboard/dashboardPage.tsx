@@ -7,13 +7,12 @@ const DashboardPage = () => {
     if (!user) return null
 
     return (
-        <div>
+        <div className="flex flex-col justify-center space-y-5">
             <h2>User dashboard</h2>
-            <p>Welcome to your dashboard, {user.name}!</p>
-            <p>Your email: {user.email}</p>
-            <p>Your role: {user.roles.join(', ')}</p>
 
-            <Outlet />
+            <div className='w-full md:px-20 flex justify-center'>
+                <Outlet />
+            </div>
         </div>
     )
 }

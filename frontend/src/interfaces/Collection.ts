@@ -7,5 +7,6 @@ export interface Collection {
     flashcards: Flashcard[]
     progress: number
     status: 'not started' | 'in progress' | 'completed'
+    infoText?: string
     deadline: string
 }
