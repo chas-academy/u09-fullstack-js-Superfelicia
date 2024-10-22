@@ -23,14 +23,6 @@ const CollectionList: React.FC<CollectionListProps> = ({
 
     return (
         <>
-            <DialogComponent
-                title="Create new collection"
-                triggerText="Create new collection"
-                onConfirm={() => console.log('New collection created')}
-            >
-                <CollectionForm onSubmit={() => console.log('Collection submitted')} />
-            </DialogComponent>
-
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
                 {collections.map((collection) => (
                     <CardComponent
@@ -39,6 +31,7 @@ const CollectionList: React.FC<CollectionListProps> = ({
                         subtitle={collection.category}
                         onClick={() => onSelectCollection(collection)}
                     >
+                        <div className='flex justify-center space-x-2'>
                         <DialogComponent
                             title="Delete collection"
                             description={`Are your sure you want to delete ${collection.name}?`}
@@ -53,8 +46,9 @@ const CollectionList: React.FC<CollectionListProps> = ({
                             onConfirm={() => onEditCollection(collection)}
                             isDeleteConfirmation={false}
                         >
-                            <CollectionForm collection={collection} onSubmit={() => onEditCollection(collection)}/>
+                            <CollectionForm collection={collection} onSubmit={onEditCollection}/>
                         </DialogComponent>
+                        </div>
                     </CardComponent>
                 ))}
             </div>

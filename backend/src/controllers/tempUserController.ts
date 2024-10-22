@@ -26,13 +26,15 @@ export const updateUserController = async (req: Request, res: Response) => {
   const { id } = req.params;
   console.log(req.body);
 
-  const rolesArray = Array.isArray(roles) ? roles : [roles];
+  if (roles) {
+    const rolesArray = Array.isArray(roles) ? roles : [roles];
 
-  if (
-    rolesArray &&
-    !rolesArray.every((role: string) => validRoles.includes(role))
-  ) {
-    return res.status(400).json({ message: "Invalid role" });
+    if (
+      rolesArray &&
+      !rolesArray.every((role: string) => validRoles.includes(role))
+    ) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
   }
 
   try {

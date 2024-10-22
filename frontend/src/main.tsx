@@ -13,6 +13,8 @@ import UsersPage from './pages/admin/UsersPage.tsx'
 import CollectionsOverview from './pages/dashboard/collections/CollectionsOverview.tsx'
 import CollectionView from './pages/dashboard/collections/CollectionView.tsx'
 import StartPage from './pages/dashboard/collections/StartPage.tsx'
+import UserProfilePage from './pages/dashboard/UserProfilePage.tsx'
+import AdminProfilePage from './pages/admin/AdminProfilePage.tsx'
 
 const router = createBrowserRouter([
     {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
                     </ProtectedRoute>
                 ),
                 children: [
+                    {
+                        path: '/dashboard/profile',
+                        element: (
+                            <ProtectedRoute>
+                                <UserProfilePage />
+                            </ProtectedRoute>
+                        ),
+                    },
                     {
                         path: 'collections-overview',
                         element: (
@@ -68,6 +78,14 @@ const router = createBrowserRouter([
                     </ProtectedRoute>
                 ),
                 children: [
+                    {
+                        path: '/admin-dashboard/profile',
+                        element: (
+                            <ProtectedRoute>
+                                <AdminProfilePage />
+                            </ProtectedRoute>
+                        ),
+                    },
                     {
                         path: 'collections',
                         element: (
