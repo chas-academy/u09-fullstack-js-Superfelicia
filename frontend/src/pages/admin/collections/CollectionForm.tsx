@@ -4,9 +4,10 @@ import FormComponent from '../../../components/formComponent'
 interface CollectionFormProps {
     collection?: any
     onSubmit: (collection: any) => void
+    onCancel?: () => void
 }
 
-const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
+const CollectionForm = ({ collection, onSubmit, onCancel }: CollectionFormProps) => {
     const [formData, setFormData] = useState({
         name: '',
         category: '',
@@ -91,6 +92,7 @@ const CollectionForm = ({ collection, onSubmit }: CollectionFormProps) => {
             fields={fields}
             buttonText={collection ? 'Update collection' : 'Create collection'}
             onSubmit={handleSubmit}
+            onCancel={onCancel}
         />
     )
 }

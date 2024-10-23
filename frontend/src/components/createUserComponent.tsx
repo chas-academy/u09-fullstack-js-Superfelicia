@@ -6,9 +6,11 @@ import { Label } from './ui/label.tsx'
 
 interface CreateUserProps {
     buttonText: string
-    onSubmit?: (newUser: any) => void
+    onSubmit?: (newUser: any, formData: { email: string, password: string }) => void
     apiEndpoint: string
     closeDialog?: () => void
+    onCancel?: () => void
+    hideCancelButton?: boolean
 }
 
 const CreateUserComponent = ({
@@ -16,6 +18,8 @@ const CreateUserComponent = ({
     onSubmit,
     apiEndpoint,
     closeDialog,
+    onCancel,
+    hideCancelButton = false,
 }: CreateUserProps) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const user = useUserStore((state) => state.user)
@@ -67,7 +71,7 @@ const CreateUserComponent = ({
             const data = await response.json()
 
             if (response.ok) {
-                if (onSubmit) onSubmit(data)
+                if (onSubmit) onSubmit(data, { email, password })
                 if (closeDialog) closeDialog()
             } else {
                 console.log(data.message || 'Error registering user')
@@ -79,16 +83,22 @@ const CreateUserComponent = ({
 
     return (
         <div className="flex flex-col items-start space-y-2">
-            <FormComponent fields={registerFields} buttonText={buttonText} onSubmit={handleSubmit}>
+            <FormComponent
+                fields={registerFields}
+                buttonText={buttonText}
+                onSubmit={handleSubmit}
+                onCancel={onCancel || closeDialog}
+                hideCancelButton={hideCancelButton}
+            >
                 {user?.roles.includes('admin') && (
                     <>
-                        <Label className='flex items-center'>
+                        <Label className="flex items-center">
                             Admin
                             <Input
                                 type="checkbox"
                                 checked={isAdmin}
                                 onChange={() => setIsAdmin(!isAdmin)}
-                                className='ml-2'
+                                className="w-5 h-5 ml-2"
                             />
                         </Label>
                     </>
