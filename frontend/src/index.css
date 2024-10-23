@@ -82,7 +82,7 @@
 }*/
 
 
-@layer base {
+/* @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -137,7 +137,65 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+} */
+
+@layer base {
+  :root {
+    --background: 210 60% 98%; /* Ljusblå bakgrund */
+    --foreground: 240 10% 3.9%; /* Mörkblå text */
+    --card: 210 60% 98%; /* Kortbakgrund */
+    --card-foreground: 240 10% 3.9%; /* Korttext */
+    --popover: 210 60% 98%; /* Popoverbakgrund */
+    --popover-foreground: 240 10% 3.9%; /* Popovertext */
+    --primary: 210 50% 50%; /* Ljusblå primär */
+    --primary-foreground: 0 0% 98%; /* Vit text på primär */
+    --secondary: 150 36% 75%; /* Mintgrön sekundär */
+    --secondary-foreground: 240 10% 3.9%; /* Mörkblå text på sekundär */
+    --muted: 210 20% 94%; /* Ljusgrå muted */
+    --muted-foreground: 240 10% 45%; /* Dämpad mörkblå text */
+    --accent: 12 76% 61%; /* Korall accentfärg */
+    --accent-foreground: 0 0% 98%; /* Vit text på accent */
+    --destructive: 0 84.2% 60.2%; /* Röd för destruktiva åtgärder */
+    --destructive-foreground: 0 0% 98%; /* Vit text på destruktiva */
+    --border: 210 20% 88%; /* Ljusgrå border */
+    --input: 27 87% 67%; /* Orange input */
+    --ring: 240 10% 3.9%; /* Mörkblå ring */
+    --radius: 0.5rem;
+    --chart-1: 210 70% 45%; /* Blå för diagram */
+    --chart-2: 150 58% 39%; /* Grön för diagram */
+    --chart-3: 12 76% 61%; /* Korall för diagram */
+    --chart-4: 43 74% 66%; /* Gul för diagram */
+    --chart-5: 27 87% 67%; /* Orange för diagram */
+  }
+
+  .dark {
+    --background: 240 10% 15%; /* Mörkblå bakgrund */
+    --foreground: 0 0% 98%; /* Vit text */
+    --card: 240 10% 15%; /* Mörkblå kortbakgrund */
+    --card-foreground: 0 0% 98%; /* Vit korttext */
+    --popover: 240 10% 15%; /* Mörk popover */
+    --popover-foreground: 0 0% 98%; /* Vit popovertext */
+    --primary: 210 70% 61%; /* Ljusblå primär även i mörkerläge */
+    --primary-foreground: 0 0% 98%; /* Vit text på primär */
+    --secondary: 150 36% 45%; /* Dämpad mintgrön sekundär */
+    --secondary-foreground: 0 0% 98%; /* Vit text på sekundär */
+    --muted: 240 3.7% 25%; /* Mörkgrå muted */
+    --muted-foreground: 240 5% 64.9%; /* Ljusgrå text */
+    --accent: 12 76% 50%; /* Korall accentfärg, något mörkare */
+    --accent-foreground: 0 0% 98%; /* Vit text på accent */
+    --destructive: 0 62.8% 30.6%; /* Dämpad röd för destruktiva */
+    --destructive-foreground: 0 0% 98%; /* Vit text på destruktiva */
+    --border: 240 3.7% 15.9%; /* Mörkare border */
+    --input: 27 70% 50%; /* Mörkare orange input */
+    --ring: 210 36% 65%; /* Ljusblå ring i mörkerläge */
+    --chart-1: 210 70% 50%; /* Blå för diagram */
+    --chart-2: 150 60% 45%; /* Grön för diagram */
+    --chart-3: 12 76% 61%; /* Korall för diagram */
+    --chart-4: 43 74% 66%; /* Gul för diagram */
+    --chart-5: 27 87% 67%; /* Orange för diagram */
+  }
 }
+
 
 
 @layer base {
