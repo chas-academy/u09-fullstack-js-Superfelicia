@@ -1,0 +1,156 @@
+{
+  "info": {
+    "name": "Flash learn - auth",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "Login",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/auth/login",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@user.se\",\n  \"password\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Get dashboard",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/auth/dashboard",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Get admin-dashboard",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/auth/admin-dashboard",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Add collection to user",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/users/userId/collections/collectionId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Get all users collections",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/users/userId/collections",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Get users collection",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/users/userId/collections/collectionId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    }
+  ],
+  "variable": []
+}

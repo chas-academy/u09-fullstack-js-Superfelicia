@@ -21,7 +21,13 @@ const StartPage = () => {
     useEffect(() => {
         const fetchFlashcards = async () => {
             try {
-                const response = await fetch(`${API_URL}/collections/${collectionId}/flashcards`)
+                const response = await fetch(`${API_URL}/collections/${collectionId}/flashcards`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
                 if (!response.ok) {
                     throw new Error('Failed to fetch flashcards')
                 }
@@ -77,7 +83,7 @@ const StartPage = () => {
 
     if (isRoundComplete) {
         return (
-            <div className="h-[300px] flex flex-col justify-center space-y-2 border rounded-md shadow-md p-10">
+            <div className="h-[500px] flex flex-col justify-center items-center space-y-2 border rounded-md shadow-md p-10 mt-4">
                 <div>
                     <h2>Round Complete!</h2>
                     <p>
@@ -112,7 +118,7 @@ const StartPage = () => {
     if (flashcards.length === 0) return <p>Loading flashcards...</p>
 
     return (
-        <div className="relative w-full h-screen flex flex-col items-center justify-center">
+        <div className="relative w-full h-[500px] flex flex-col items-center justify-center">
             <div className="relative w-full h-full flex items-center justify-center">
                 {flashcards.slice(currentIndex, currentIndex + 2).map((flashcard, index) => (
                     <FlashcardCard

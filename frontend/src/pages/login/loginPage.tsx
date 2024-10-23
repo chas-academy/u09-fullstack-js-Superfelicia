@@ -7,6 +7,8 @@ import { API_URL } from '@/config'
 const LoginPage = () => {
     const [error, setError] = useState<string | null>(null)
     const setUser = useUserStore((state) => state.setUser)
+    const setUsers = useUserStore((state) => state.setUsers)
+    const setCollections = useUserStore((state) => state.setCollections)
     const navigate = useNavigate()
 
     const loginFields = [
@@ -45,13 +47,42 @@ const LoginPage = () => {
                 setUser(data.user)
 
                 if (data.user.roles.includes('admin')) {
+                    const userResponse = await fetch(`${API_URL}/users`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    })
+                    const usersData = await userResponse.json()
+
+                    if (userResponse.ok) {
+                        setUsers(usersData)
+                    } else {
+                        console.error('Error fetching users:', error)
+                    }
+
+                    const collectionResponse = await fetch(`${API_URL}/collections`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    })
+                    const collectionsData = await collectionResponse.json()
+
+                    if (collectionResponse.ok) {
+                        setCollections(collectionsData)
+                    } else {
+                        console.error('Error fetching collections:', error)
+                    }
+
                     navigate('/admin-dashboard')
                 } else {
                     navigate('/dashboard')
                 }
 
                 console.log('Logged in successfully:', data.user)
-                // Redirect eller uppdatera state för inloggning
             } else {
                 setError(data.message || 'Login failed')
                 console.error('Login failed:', data.message, error)
@@ -66,16 +97,21 @@ const LoginPage = () => {
         <div className="w-full flex items-center justify-evenly space-y-2 overflow-hidden">
             <div className="mx-8">
                 <h2>Login</h2>
-                <FormComponent fields={loginFields} buttonText="Login" onSubmit={handleLogin} hideCancelButton={true}>
-                    <div className='flex justify-end'>
+                <FormComponent
+                    fields={loginFields}
+                    buttonText="Login"
+                    onSubmit={handleLogin}
+                    hideCancelButton={true}
+                >
+                    <div className="flex justify-end">
                         <Link to="/register">
                             <p className="text-sm">Register here</p>
                         </Link>
                     </div>
                 </FormComponent>
             </div>
-            <div className="w-[600px] h-[550px] bg-gray-200 flex items-center justify-center z-10 rounded-lg">
-                <h2>Välkommen!!</h2>
+            <div className="w-[600px] h-[550px] dark:bg-foreground bg-secondary flex items-center justify-center z-10 rounded-lg">
+                <h2 className='dark:text-background'>Välkommen!!</h2>
             </div>
         </div>
     )

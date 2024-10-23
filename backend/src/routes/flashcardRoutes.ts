@@ -2,14 +2,16 @@ import { Router } from "express";
 import {
   addFlashcardController, deleteFlashcardController, updateFlashcardController, updateFlashcardStatusController,
 } from "../controllers/FlashcardController";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { roleMiddleware } from "../middleware/roleMiddleware";
 
 const router = Router();
 
 // flashcard routes
-router.post("/:collectionId/flashcards", addFlashcardController);
+router.post("/:collectionId/flashcards", authMiddleware, roleMiddleware('admin'), addFlashcardController);
 
 router.put(
-  "/:collectionId/flashcards/:flashcardId",
+  "/:collectionId/flashcards/:flashcardId", authMiddleware, roleMiddleware('admin'),
   updateFlashcardController
 );
 
@@ -19,7 +21,7 @@ router.put(
 // );
 
 router.delete(
-  "/:collectionId/flashcards/:flashcardId",
+  "/:collectionId/flashcards/:flashcardId", authMiddleware, roleMiddleware('admin'),
   deleteFlashcardController
 );
 

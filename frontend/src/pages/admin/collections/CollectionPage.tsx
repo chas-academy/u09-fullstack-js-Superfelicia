@@ -18,9 +18,20 @@ const CollectionPage = () => {
 
     const fetchCollections = async () => {
         try {
-            const response = await fetch(`${API_URL}/collections`)
+            const response = await fetch(`${API_URL}/collections`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+
             const data = await response.json()
-            setCollections(data)
+
+            if (response.ok) {
+                console.log('Fetched collections:', data)
+                setCollections(data)
+            }
         } catch (error) {
             console.error('Error fetching collections:', error)
         }
@@ -30,6 +41,10 @@ const CollectionPage = () => {
         try {
             const response = await fetch(`${API_URL}/collections/${collectionId}`, {
                 method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
             })
 
             if (!response.ok) {
@@ -61,12 +76,18 @@ const CollectionPage = () => {
             const response = collectionId
                 ? await fetch(`${API_URL}/collections/${collectionId}`, {
                       method: 'PUT',
-                      headers: { 'Content-Type': 'application/json' },
+                      headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                      },
                       body: JSON.stringify(newCollection),
                   })
                 : await fetch(`${API_URL}/collections`, {
                       method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
+                      headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                      },
                       body: JSON.stringify(newCollection),
                   })
 

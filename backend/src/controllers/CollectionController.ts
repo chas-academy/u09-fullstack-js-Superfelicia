@@ -123,10 +123,11 @@ export const addCollectionToUserController = async (
   req: Request,
   res: Response
 ) => {
-  const { userId, collectionId } = req.params;
+  const { userId } = req.params;
+  const { collectionIds } = req.body;
 
   try {
-    const updatedUser = await addCollectionToUser(userId, collectionId);
+    const updatedUser = await addCollectionToUser(userId, collectionIds);
     res.status(200).json(updatedUser);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

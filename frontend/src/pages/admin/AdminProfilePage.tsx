@@ -111,22 +111,28 @@ const AdminProfilePage = () => {
     }
 
     return (
-        <div className="flex flex-col">
-            <SettingsComponent
-                user={admin}
-                buttonText="Update profile"
-                handleSubmit={handleSubmit}
-                onCancel={handleCancelEdit}
-                isEditing={isEditing}
-            />
+        <div className="h-[500px] flex flex-col items-center justify-center border-4 border-accent p-6 rounded-md shadow-md">
+            <div className='flex justify-center'>
+                <SettingsComponent
+                    user={admin}
+                    buttonText="Update profile"
+                    handleSubmit={handleSubmit}
+                    onCancel={handleCancelEdit}
+                    isEditing={isEditing}
+                />
+            </div>
 
-            {!isEditing && (
-                <Button className="w-full border rounded-md p-6" onClick={() => setIsEditing(true)}>
-                    Edit
-                </Button>
-            )}
+            <div className="flex space-x-3 place-self-end mt-2">
+                {!isEditing && (
+                    <Button
+                        className="px-10"
+                        onClick={() => setIsEditing(true)}
+                    >
+                        Edit
+                    </Button>
+                )}
 
-            <div className="flex">
+                {!isEditing && (
                 <DialogComponent
                     title="Delete account"
                     description="Are you sure you want to delete you account?"
@@ -136,6 +142,7 @@ const AdminProfilePage = () => {
                     cancelText="Cancel"
                     isDeleteConfirmation={true}
                 />
+                )}
             </div>
         </div>
     )

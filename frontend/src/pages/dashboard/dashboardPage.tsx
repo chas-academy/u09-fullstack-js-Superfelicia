@@ -7,8 +7,7 @@ const DashboardPage = () => {
     if (!user) return null
 
     return (
-        <div className="flex flex-col justify-center space-y-5">
-            <h2>User dashboard</h2>
+        <div className="w-full flex flex-col justify-center items-center">
 
             <div className='w-full md:px-20 flex justify-center'>
                 <Outlet />
