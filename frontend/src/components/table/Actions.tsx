@@ -9,7 +9,6 @@ import {
     Select,
     SelectContent,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from '../ui/select'
