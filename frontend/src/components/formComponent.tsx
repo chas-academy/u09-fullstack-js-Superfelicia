@@ -21,6 +21,7 @@ interface FormComponentProps {
     isEditing?: boolean
     showActions?: boolean
     disableSubmit?: boolean
+    hideCancelButton?: boolean
 }
 
 const FormComponent: React.FC<FormComponentProps> = ({
@@ -32,6 +33,7 @@ const FormComponent: React.FC<FormComponentProps> = ({
     children,
     showActions = true,
     disableSubmit = false,
+    hideCancelButton = false,
 }) => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({})
 
@@ -69,10 +71,8 @@ const FormComponent: React.FC<FormComponentProps> = ({
     return (
         <form className="flex flex-col items-start space-y-3" onSubmit={handleSubmit}>
             {fields.map((field, index) => (
-                <>
-                    <Label key={index} className="flex flex-col items-start">
-                        {field.label}
-                    </Label>
+                <div key={field.name || index} className="flex flex-col space-y-2">
+                    <Label className="flex flex-col items-start">{field.label}</Label>
                     <Input
                         type={field.type}
                         placeholder={
@@ -82,27 +82,29 @@ const FormComponent: React.FC<FormComponentProps> = ({
                         value={formData[field.name] ?? ''}
                         onChange={field.onChange || handleChange}
                         readOnly={!isEditing}
-                        className={`${isEditing ? 'border-1' : 'border-hidden'} p-3 w-72 md:w-96 flex flex-1`}
+                        className={`${isEditing ? 'border' : 'border-transparent'} p-2 w-72 md:w-96 flex flex-1 dark:text-foreground`}
                     />
-                </>
+                </div>
             ))}
-            <div>{children}</div>
+            <div className="w-full">{children}</div>
             {showActions && isEditing && (
-                <div className='flex space-x-3 place-self-end'>
+                <div className="flex space-x-2 items-end place-self-end space-y-0">
                     <Button
                         type="submit"
                         disabled={disableSubmit}
-                        className="w-full border rounded-md p-6"
+                        className="w-full"
                     >
                         {buttonText}
                     </Button>
-                    <Button
-                        type="button"
-                        onClick={handleCancel}
-                        className="w-full border rounded-md p-6"
-                    >
-                        Cancel
-                    </Button>
+                    {!hideCancelButton && (
+                        <Button
+                            type="button"
+                            onClick={handleCancel}
+                            className="w-full"
+                        >
+                            Cancel
+                        </Button>
+                    )}
                 </div>
             )}
         </form>

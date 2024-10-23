@@ -18,11 +18,44 @@ const CollectionPage = () => {
 
     const fetchCollections = async () => {
         try {
-            const response = await fetch(`${API_URL}/collections`)
+            const response = await fetch(`${API_URL}/collections`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+
             const data = await response.json()
-            setCollections(data)
+
+            if (response.ok) {
+                console.log('Fetched collections:', data)
+                setCollections(data)
+            }
         } catch (error) {
             console.error('Error fetching collections:', error)
+        }
+    }
+
+    const handleDeleteCollection = async (collectionId: string) => {
+        try {
+            const response = await fetch(`${API_URL}/collections/${collectionId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to delete collection')
+            }
+
+            setCollections((prevCollections) =>
+                prevCollections.filter((collection) => collection._id !== collectionId)
+            )
+        } catch (error) {
+            console.error('Error deleting collection:', error)
         }
     }
 
@@ -43,12 +76,18 @@ const CollectionPage = () => {
             const response = collectionId
                 ? await fetch(`${API_URL}/collections/${collectionId}`, {
                       method: 'PUT',
-                      headers: { 'Content-Type': 'application/json' },
+                      headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                      },
                       body: JSON.stringify(newCollection),
                   })
                 : await fetch(`${API_URL}/collections`, {
                       method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
+                      headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                      },
                       body: JSON.stringify(newCollection),
                   })
 
@@ -84,36 +123,44 @@ const CollectionPage = () => {
     }
 
     return (
-        <div className="w-full flex flex-col space-y-10 items-center justify-center px-5">
+        <div className="w-full h-full flex flex-col items-center justify-center px-5 space-x-2 space-y-3">
             <DialogComponent
                 title="Create new collection"
                 triggerText="Create new collection"
                 onConfirm={() => handleCreateCollection}
-                confirmText={'Create collection'}
+                showActions={false}
+                className="place-self-end"
             >
-                <CollectionForm onSubmit={handleSubmitCollection} />
+                {({ closeDialog }) => (
+                    <CollectionForm onSubmit={handleSubmitCollection} onCancel={closeDialog} />
+                )}
             </DialogComponent>
             {!selectedCollection ? (
                 <CollectionList
                     collections={collections}
                     onSelectCollection={setSelectedCollection}
-                    onDeleteCollection={(collectionId) => {
-                        setCollections(collections.filter((col) => col._id !== collectionId))
-                    }}
+                    onDeleteCollection={handleDeleteCollection}
                     onEditCollection={handleEditCollection}
                 />
             ) : (
-                <>
-                    <FlashcardForm collection={selectedCollection} onSubmit={handleFormSubmit} />
-                    <Button
-                        type="button"
-                        onClick={() => setSelectedCollection(null)}
-                        className="gap-2"
-                    >
-                        <CircleArrowLeft size={16} />
-                        Back to collections
-                    </Button>
-                </>
+                <div className="w-full h-full flex flex-col sm:flex-row items-center justify-between">
+                    <div className="flex justify-end">
+                        <FlashcardForm
+                            collection={selectedCollection}
+                            onSubmit={handleFormSubmit}
+                        />
+                    </div>
+                    <div className="place-self-end">
+                        <Button
+                            type="button"
+                            onClick={() => setSelectedCollection(null)}
+                            className="w-56 gap-2"
+                        >
+                            <CircleArrowLeft size={16} />
+                            Back to collections
+                        </Button>
+                    </div>
+                </div>
             )}
         </div>
     )

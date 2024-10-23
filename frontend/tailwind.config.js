@@ -56,5 +56,22 @@ module.exports = {
             },
         },
     },
-    plugins: [require('tailwindcss-animate')],
+    plugins: [
+        require('tailwindcss-animate'),
+        function ({ addBase }) {
+            addBase({
+                input: {
+                    borderColor: 'hsl(var(--input))',
+                    padding: '0.5rem',
+                    borderRadius: '0.375rem',
+                    borderWidth: '1px',
+                    '&:focus': {
+                        outline: 'none',
+                        borderColor: 'hsl(var(--input))',
+                        boxShadow: '0 0 0 2px hsl(var(--input))',
+                    },
+                },
+            })
+        },
+    ],
 }

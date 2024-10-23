@@ -6,13 +6,14 @@ import { User } from '@/pages/admin/adminDashboardPage'
 
 interface TableComponentProps {
     data: User[]
-    onEdit: (user: User) => void
-    onDelete: (userId: string) => void
+    // onEdit: (user: User) => void
+    // onDelete: (userId: string) => void
+    renderActions: (user: User) => React.ReactNode
 }
 
-const TableComponent: React.FC<TableComponentProps> = ({ data, onEdit, onDelete }) => {
+const TableComponent: React.FC<TableComponentProps> = ({ data, renderActions }) => {
     return (
-        <div className="overflow-x-auto">
+        <div className="overflow-y-auto">
             <Table className="w-full border table-fixed">
                 <TableHeaderComponent columns={columns} />
                 <TableBody>
@@ -21,8 +22,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ data, onEdit, onDelete 
                             key={index}
                             rowData={rowData}
                             columns={columns}
-                            onEdit={onEdit}
-                            onDelete={onDelete}
+                            renderActions={() => renderActions(rowData)}
                         />
                     ))}
                 </TableBody>

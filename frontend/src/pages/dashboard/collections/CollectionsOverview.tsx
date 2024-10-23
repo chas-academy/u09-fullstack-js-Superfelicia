@@ -24,8 +24,10 @@ const CollectionsOverview = () => {
     const fetchUserCollections = async (userId: string) => {
         try {
             const response = await fetch(`${API_URL}/users/${userId}/collections`, {
+                method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
                 },
             })
 
@@ -87,7 +89,10 @@ const CollectionsOverview = () => {
                                         >
                                             <Button
                                                 onClick={() =>
-                                                    console.log(`View ${collection.name}` && handleViewCollection(collection._id))
+                                                    console.log(
+                                                        `View ${collection.name}` &&
+                                                            handleViewCollection(collection._id)
+                                                    )
                                                 }
                                             >
                                                 View Collection

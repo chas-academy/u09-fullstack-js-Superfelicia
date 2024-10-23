@@ -2,6 +2,7 @@ import FlashcardCard from '@/components/FlashcardCards'
 import { Button } from '@/components/ui/button'
 import { API_URL } from '@/config'
 import { Flashcard } from '@/interfaces/Flashcard'
+import { CircleArrowLeft, RotateCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -20,9 +21,13 @@ const StartPage = () => {
     useEffect(() => {
         const fetchFlashcards = async () => {
             try {
-                const response = await fetch(
-                    `${API_URL}/collections/${collectionId}/flashcards`
-                )
+                const response = await fetch(`${API_URL}/collections/${collectionId}/flashcards`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
                 if (!response.ok) {
                     throw new Error('Failed to fetch flashcards')
                 }
@@ -78,11 +83,34 @@ const StartPage = () => {
 
     if (isRoundComplete) {
         return (
-            <div>
-                <h2>Round Complete!</h2>
-                <p>You completed {completedCards.length} out of {flashcards.length} cards.</p>
-                <p>Failed cards: {notCompletedCards.length}</p>
-                <p>Succeeded cards: {completedCards.length}</p>
+            <div className="h-[500px] flex flex-col justify-center items-center space-y-2 border rounded-md shadow-md p-10 mt-4">
+                <div>
+                    <h2>Round Complete!</h2>
+                    <p>
+                        You completed {completedCards.length} out of {flashcards.length} cards.
+                    </p>
+                    <p>Failed cards: {notCompletedCards.length}</p>
+                    <p>Succeeded cards: {completedCards.length}</p>
+                </div>
+
+                <div className="flex gap-2 mt-5">
+                    <Button
+                        type="button"
+                        onClick={() => console.log('back to collections')}
+                        className="gap-2"
+                    >
+                        <CircleArrowLeft size={16} />
+                        Back to collections
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={() => console.log('back to collections')}
+                        className="gap-2"
+                    >
+                        <RotateCcw size={16} />
+                        Try again
+                    </Button>
+                </div>
             </div>
         )
     }
@@ -90,7 +118,7 @@ const StartPage = () => {
     if (flashcards.length === 0) return <p>Loading flashcards...</p>
 
     return (
-        <div className="relative w-full h-screen flex flex-col items-center justify-center">
+        <div className="relative w-full h-[500px] flex flex-col items-center justify-center">
             <div className="relative w-full h-full flex items-center justify-center">
                 {flashcards.slice(currentIndex, currentIndex + 2).map((flashcard, index) => (
                     <FlashcardCard

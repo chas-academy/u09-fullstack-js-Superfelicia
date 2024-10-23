@@ -5,6 +5,15 @@ import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu'
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { Button } from '../ui/button'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../ui/select'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 
 interface ActionsProps {
     rowData: User
@@ -20,6 +29,10 @@ const Actions: React.FC<ActionsProps> = ({ rowData, onEdit, onDelete }) => {
         field: string
     ) => {
         setUpdatedUserData({ ...updatedUserData, [field]: e.target.value })
+    }
+
+    const handleRoleChange = (value: string) => {
+        setUpdatedUserData({ ...updatedUserData, roles: [value] })
     }
 
     const handleSave = () => {
@@ -44,8 +57,8 @@ const Actions: React.FC<ActionsProps> = ({ rowData, onEdit, onDelete }) => {
                         <DropdownMenuItem onClick={handleSave}>
                             <Pencil size={14} className="mr-2" /> Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleDelete} className='text-destructive'>
-                            <Trash2 size={14} className='mr-2'/> Delete
+                        <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+                            <Trash2 size={14} className="mr-2" /> Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -58,25 +71,41 @@ const Actions: React.FC<ActionsProps> = ({ rowData, onEdit, onDelete }) => {
                     onConfirm={handleSave}
                     isDeleteConfirmation={false}
                 >
-                    <input
-                        type="text"
-                        value={updatedUserData.name}
-                        onChange={(e) => handleInputChange(e, 'name')}
-                        placeholder="Name"
-                    />
-                    <input
-                        type="email"
-                        value={updatedUserData.email}
-                        onChange={(e) => handleInputChange(e, 'email')}
-                        placeholder="Email"
-                    />
-                    <select
-                        value={updatedUserData.roles[0]}
-                        onChange={(e) => handleInputChange(e, 'roles')}
-                    >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                    <div className="w-3/4">
+                        <Label>
+                            Name:
+                            <Input
+                                type="text"
+                                value={updatedUserData.name}
+                                onChange={(e) => handleInputChange(e, 'name')}
+                                placeholder="Name"
+                            />
+                        </Label>
+                        <Label>
+                            Email:
+                            <Input
+                                type="email"
+                                value={updatedUserData.email}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                                placeholder="Email"
+                            />
+                        </Label>
+                        <Label className="min-w-48">
+                            Role:
+                            <Select
+                                value={updatedUserData.roles[0]}
+                                onValueChange={handleRoleChange}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select role" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="user">User</SelectItem>
+                                    <SelectItem value="admin">Admin</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </Label>
+                    </div>
                 </DialogComponent>
 
                 <DialogComponent

@@ -12,7 +12,13 @@ const CollectionView = () => {
 
     useEffect(() => {
         const fetchCollection = async () => {
-            const response = await fetch(`${API_URL}/collections/${collectionId}`)
+            const response = await fetch(`${API_URL}/collections/${collectionId}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                },
+            })
             const data: Collection = await response.json()
             if (!data.flashcards || data.flashcards.length === 0) {
                 console.error('No flashcards found')
@@ -31,21 +37,24 @@ const CollectionView = () => {
     if (!collection) return <p>Loading...</p>
 
     return (
-        <div>
-            <h1>{collection.name}</h1>
-            <p>Status: {collection.status}</p>
-            <p>Progress: {collection.progress}%</p>
-            <p>Deadline: {new Date(collection.deadline).toLocaleDateString()}</p>
-
-            <Button onClick={handleStartCollection}>Start collection</Button>
-            <Button
-                type="button"
-                onClick={() => navigate('/dashboard/collections-overview')}
-                className="gap-2"
-            >
-                <CircleArrowLeft size={16} />
-                Back to collections
-            </Button>
+        <div className="h-[300px] flex flex-col justify-center border rounded-md shadow-md p-8">
+            <div className='flex flex-col space-y-2 p-2'>
+                <h1>{collection.name}</h1>
+                <p>Status: {collection.status}</p>
+                <p>Progress: {collection.progress}%</p>
+                <p>Deadline: {new Date(collection.deadline).toLocaleDateString()}</p>
+            </div>
+            <div className="flex gap-2">
+                <Button onClick={handleStartCollection}>Start collection</Button>
+                <Button
+                    type="button"
+                    onClick={() => navigate('/dashboard/collections-overview')}
+                    className="gap-2"
+                >
+                    <CircleArrowLeft size={16} />
+                    Back to collections
+                </Button>
+            </div>
         </div>
     )
 }

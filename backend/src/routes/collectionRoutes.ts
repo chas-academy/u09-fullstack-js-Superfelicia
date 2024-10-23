@@ -13,11 +13,11 @@ import { authMiddleware } from "../middleware/authMiddleware";
 const router = Router();
 
 // Collection routes
-router.post("/", createNewCollectionController);
-router.get("/", getAllCollectionsController);
-router.get("/:id", getCollectionController);
-router.get("/:collectionId/flashcards", getFlashcardsByCollectionController)
-router.put("/:id", updateCollectionController);
-router.delete("/:id", deleteCollectionController);
+router.post("/", authMiddleware, roleMiddleware('admin'), createNewCollectionController);
+router.get("/", authMiddleware, getAllCollectionsController);
+router.get("/:id", authMiddleware, getCollectionController);
+router.get("/:collectionId/flashcards", authMiddleware, getFlashcardsByCollectionController)
+router.put("/:id", authMiddleware, roleMiddleware('admin'), updateCollectionController);
+router.delete("/:id", authMiddleware, roleMiddleware('admin'), deleteCollectionController);
 
 export default router;
