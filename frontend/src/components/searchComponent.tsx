@@ -45,7 +45,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
                 className="max-w-96 border rounded"
             />
             <Select value={selectedRole} onValueChange={handleRoleChange}>
-                <SelectTrigger>
+                <SelectTrigger className='w-40'>
                     <SelectValue placeholder="Role" />
                 </SelectTrigger>
                 <SelectContent>

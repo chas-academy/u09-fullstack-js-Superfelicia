@@ -1,5 +1,5 @@
 import FormComponent from '../../components/formComponent'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/useUserStore'
 import { useState } from 'react'
 import { API_URL } from '@/config'
@@ -63,9 +63,20 @@ const LoginPage = () => {
     }
 
     return (
-        <div className="w-full flex flex-col items-center justify-center space-y-2">
-            <h2>Login</h2>
-            <FormComponent fields={loginFields} buttonText="Login" onSubmit={handleLogin} />
+        <div className="w-full flex items-center justify-evenly space-y-2 overflow-hidden">
+            <div className="mx-8">
+                <h2>Login</h2>
+                <FormComponent fields={loginFields} buttonText="Login" onSubmit={handleLogin} hideCancelButton={true}>
+                    <div className='flex justify-end'>
+                        <Link to="/register">
+                            <p className="text-sm">Register here</p>
+                        </Link>
+                    </div>
+                </FormComponent>
+            </div>
+            <div className="w-[600px] h-[550px] bg-gray-200 flex items-center justify-center z-10 rounded-lg">
+                <h2>Välkommen!!</h2>
+            </div>
         </div>
     )
 }

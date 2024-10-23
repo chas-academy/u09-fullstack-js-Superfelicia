@@ -196,7 +196,7 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
     }
 
     return (
-        <div className="min-w-full">
+        <div className="w-full flex flex-col space-y-4 rounded-md border p-5">
             <h3>Flashcards in {collection.name}</h3>
             <div className="w-full flex justify-end">
                 <DialogComponent
@@ -248,7 +248,7 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
             {flashcards.map((flashcard, index) => (
                 <div
                     key={flashcard._id || index}
-                    className="w-96 flex flex-col items-start justify-center space-y-4"
+                    className="w-96 flex flex-col items-start justify-center space-y-4 border rounded-sm p-3 bg-primary-foreground"
                 >
                     {editMode[flashcard._id] ? (
                         <FormComponent
@@ -280,42 +280,36 @@ const FlashcardForm = ({ collection, onSubmit }: FlashcardFormProps) => {
                     ) : (
                         <div
                             key={flashcard._id || index}
-                            className="w-full flex items-center justify-between border space-x-2"
+                            className="w-full flex items-center justify-between space-x-2"
                         >
-                            <div className="w-full flex justify-center items-start">
-                                <Label>
-                                    Question:
-                                    <p>{flashcard.question}</p>
-                                </Label>
-                            </div>
-                            <div className="w-full flex justify-center items-start">
-                                <Label>
-                                    Answer:
-                                    <p>{flashcard.answer}</p>
-                                </Label>
+                            <div className="w-full flex flex-col justify-center items-start space-x-2">
+                                <>
+                                <Label>Question:</Label>
+                                <p className=''>{flashcard.question}</p>
+                                </>
+                                <>
+                                <Label>Answer:</Label>
+                                <p>{flashcard.answer}</p>
+                                </>
                             </div>
                             <div>
-                                <Button
-                                    type="button"
-                                    onClick={() => toggleEditFlashcard(flashcard._id)}
-                                >
-                                    <Edit2 size={16} />
-                                </Button>
-                                <DialogComponent
-                                    title="Delete flashcard"
-                                    description="Are you sure you want to delete this flashcard?"
-                                    triggerText={<Trash2 size={16} />}
-                                    onConfirm={() => removeFlashcard(flashcard._id)}
-                                    confirmText="Delete"
-                                    cancelText="Cancel"
-                                    isDeleteConfirmation
-                                />
-                                {/* <Button
-                                    type="button"
-                                    onClick={() => removeFlashcard((flashcard as Flashcard)._id)}
-                                >
-                                    <Trash2 size={16} />
-                                </Button> */}
+                                <div className="flex space-x-2">
+                                    <Button
+                                        type="button"
+                                        onClick={() => toggleEditFlashcard(flashcard._id)}
+                                    >
+                                        <Edit2 size={16} />
+                                    </Button>
+                                    <DialogComponent
+                                        title="Delete flashcard"
+                                        description="Are you sure you want to delete this flashcard?"
+                                        triggerText={<Trash2 size={16} />}
+                                        onConfirm={() => removeFlashcard(flashcard._id)}
+                                        confirmText="Delete"
+                                        cancelText="Cancel"
+                                        isDeleteConfirmation
+                                    />
+                                </div>
                             </div>
                         </div>
                     )}

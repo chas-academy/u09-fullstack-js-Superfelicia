@@ -2,6 +2,7 @@ import FlashcardCard from '@/components/FlashcardCards'
 import { Button } from '@/components/ui/button'
 import { API_URL } from '@/config'
 import { Flashcard } from '@/interfaces/Flashcard'
+import { CircleArrowLeft, RotateCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -20,9 +21,7 @@ const StartPage = () => {
     useEffect(() => {
         const fetchFlashcards = async () => {
             try {
-                const response = await fetch(
-                    `${API_URL}/collections/${collectionId}/flashcards`
-                )
+                const response = await fetch(`${API_URL}/collections/${collectionId}/flashcards`)
                 if (!response.ok) {
                     throw new Error('Failed to fetch flashcards')
                 }
@@ -78,11 +77,34 @@ const StartPage = () => {
 
     if (isRoundComplete) {
         return (
-            <div>
-                <h2>Round Complete!</h2>
-                <p>You completed {completedCards.length} out of {flashcards.length} cards.</p>
-                <p>Failed cards: {notCompletedCards.length}</p>
-                <p>Succeeded cards: {completedCards.length}</p>
+            <div className="h-[300px] flex flex-col justify-center space-y-2 border rounded-md shadow-md p-10">
+                <div>
+                    <h2>Round Complete!</h2>
+                    <p>
+                        You completed {completedCards.length} out of {flashcards.length} cards.
+                    </p>
+                    <p>Failed cards: {notCompletedCards.length}</p>
+                    <p>Succeeded cards: {completedCards.length}</p>
+                </div>
+
+                <div className="flex gap-2 mt-5">
+                    <Button
+                        type="button"
+                        onClick={() => console.log('back to collections')}
+                        className="gap-2"
+                    >
+                        <CircleArrowLeft size={16} />
+                        Back to collections
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={() => console.log('back to collections')}
+                        className="gap-2"
+                    >
+                        <RotateCcw size={16} />
+                        Try again
+                    </Button>
+                </div>
             </div>
         )
     }

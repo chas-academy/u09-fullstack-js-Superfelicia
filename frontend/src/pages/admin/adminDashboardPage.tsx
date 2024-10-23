@@ -16,7 +16,6 @@ const AdminDashboardPage = () => {
 
     return (
         <div className="flex flex-col justify-center space-y-5">
-            <h2>Admin Dashboard</h2>
             <div className='w-full md:px-20 flex justify-center'>
                 <Outlet />
             </div>

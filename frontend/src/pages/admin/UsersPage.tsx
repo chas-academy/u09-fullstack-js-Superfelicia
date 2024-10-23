@@ -131,12 +131,17 @@ const UsersPage = () => {
                         onConfirm={() => {}}
                         showActions={false}
                     >
-                        <CreateUserComponent
-                            buttonText="Create user"
-                            apiEndpoint={`${API_URL}/auth/user`}
-                            onSubmit={(newUser) => handleUserAdded(newUser)}
-                            closeDialog={() => console.log('closing dialog')}
-                        />
+                        {({ closeDialog }) => (
+                            <CreateUserComponent
+                                buttonText="Create user"
+                                apiEndpoint={`${API_URL}/auth/user`}
+                                onSubmit={(newUser) => {
+                                    handleUserAdded(newUser)
+                                    closeDialog()
+                                }}
+                                onCancel={closeDialog}
+                            />
+                        )}
                     </DialogComponent>
                 </div>
             </div>
