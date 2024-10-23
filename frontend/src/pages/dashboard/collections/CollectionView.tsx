@@ -12,7 +12,13 @@ const CollectionView = () => {
 
     useEffect(() => {
         const fetchCollection = async () => {
-            const response = await fetch(`${API_URL}/collections/${collectionId}`)
+            const response = await fetch(`${API_URL}/collections/${collectionId}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                },
+            })
             const data: Collection = await response.json()
             if (!data.flashcards || data.flashcards.length === 0) {
                 console.error('No flashcards found')

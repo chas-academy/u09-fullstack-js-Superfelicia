@@ -1,0 +1,206 @@
+{
+  "info": {
+    "name": "Flash learn",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create user",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/auth/user",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"User\",\n  \"email\": \"user@user.se\",\n  \"password\": \"\",\n  \"roles\": \"user\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Delete user",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/user/userId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Get users",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/users",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Update user password",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/user/userId/update-password",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentPassword\": \"\",\n  \"newPassword\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Update user",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/user/userId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"\",\n  \"name\": \"User\",\n  \"email\": \"user@user.se\",\n  \"roles\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "Request reset password",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/user/request-reset-password",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"your.email@email.se\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Reset password token url",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/user/reset-password/token",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"newPassword\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variable": []
+}

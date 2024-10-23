@@ -1,15 +1,13 @@
 import { User } from '@/pages/admin/adminDashboardPage'
-import Actions from './Actions'
 import { TableCell, TableRow } from '../ui/table'
 
 interface TableRowProps {
     rowData: User
     columns: string[]
-    onEdit: (user: User) => void
-    onDelete: (userId: string) => void
+    renderActions: (user: User) => React.ReactNode
 }
 
-const TableRowComponent: React.FC<TableRowProps> = ({ rowData, columns, onEdit, onDelete }) => {
+const TableRowComponent: React.FC<TableRowProps> = ({ rowData, columns, renderActions }) => {
 
     return (
         <TableRow className='border-b transition duration-300 ease-in-out text-start'>
@@ -17,7 +15,7 @@ const TableRowComponent: React.FC<TableRowProps> = ({ rowData, columns, onEdit, 
                 <TableCell className={`${index === 0 ? '' : 'hidden sm:table-cell'}`} key={index}>{rowData[column] || 'N/A'}</TableCell>
             ))}
             <TableCell>
-                <Actions rowData={rowData} onEdit={onEdit} onDelete={onDelete} />
+                {renderActions(rowData)}
             </TableCell>
         </TableRow>
     )

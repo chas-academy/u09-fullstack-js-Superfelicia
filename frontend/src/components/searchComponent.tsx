@@ -54,7 +54,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
                     <SelectItem value="user">User</SelectItem>
                 </SelectContent>
             </Select>
-            <Button onClick={handleSearchClick} className="rounded">
+            <Button onClick={handleSearchClick} className="rounded btn-primary">
                 <Search size={18} />
             </Button>
             <Button onClick={handleClearSearch} className="rounded">

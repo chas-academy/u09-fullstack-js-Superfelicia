@@ -28,21 +28,22 @@ router.get(
   roleMiddleware("admin"),
   getUsersController
 );
+
 router.put(
   "/user/:id",
   authMiddleware,
-  // roleMiddleware("admin"),
   updateUserController
 );
+
 router.delete(
   "/user/:id",
   authMiddleware,
-  // roleMiddleware("admin", ),
   deleteUserController
 );
 
+// Lägg till collections på user
 router.post(
-  "/users/:userId/collections/:collectionId",
+  "/users/:userId/collections",
   authMiddleware,
   roleMiddleware("admin"),
   addCollectionToUserController

@@ -48,7 +48,9 @@ const DialogComponent: React.FC<DialogComponentProps> = ({
         <div className={className}>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                    <Button onClick={() => setIsDialogOpen(true)}>{triggerText}</Button>
+                    <Button className="p-4" onClick={() => setIsDialogOpen(true)}>
+                        {triggerText}
+                    </Button>
                 </DialogTrigger>
                 <DialogContent className="flex flex-col items-center">
                     <DialogTitle className="p-2">{title}</DialogTitle>

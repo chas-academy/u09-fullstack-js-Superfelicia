@@ -14,7 +14,6 @@ const UserProfilePage = () => {
     const navigate = useNavigate()
     const [isEditing, setIsEditing] = useState(false)
 
-
     const handleSubmit = async (updatedData: { [key: string]: string }) => {
         console.log('Updated user data:', updatedData)
 
@@ -78,7 +77,7 @@ const UserProfilePage = () => {
     const handleCancelEdit = () => {
         setIsEditing(false)
     }
- 
+
     const handleDeleteAccount = async () => {
         if (user) {
             try {
@@ -112,32 +111,35 @@ const UserProfilePage = () => {
     }
 
     return (
-        <div className='flex flex-col'>
-            <h1>User profile</h1>
-            <SettingsComponent
-                user={user}
-                buttonText="Update profile"
-                handleSubmit={handleSubmit}
-                onCancel={handleCancelEdit}
-                isEditing={isEditing}
-            />
-
-            {!isEditing && (
-                <Button className='w-full border rounded-md p-6' onClick={() => setIsEditing(true)}>
-                    Edit
-                </Button>
-            )}
-
-            <div className="flex">
-                <DialogComponent
-                    title="Delete account"
-                    description="Are you sure you want to delete you account?"
-                    triggerText={<Trash2 size={16} />}
-                    onConfirm={handleDeleteAccount}
-                    confirmText="Yes, delete"
-                    cancelText="Cancel"
-                    isDeleteConfirmation={true}
+        <div className="h-[500px] flex flex-col items-center justify-center border-4 border-border p-6 rounded-md shadow-md">
+            <div className="flex justify-center">
+                <SettingsComponent
+                    user={user}
+                    buttonText="Update profile"
+                    handleSubmit={handleSubmit}
+                    onCancel={handleCancelEdit}
+                    isEditing={isEditing}
                 />
+            </div>
+
+            <div className="flex space-x-2 place-self-end mt-2">
+                {!isEditing && (
+                    <Button className="px-10" onClick={() => setIsEditing(true)}>
+                        Edit
+                    </Button>
+                )}
+
+                {!isEditing && (
+                    <DialogComponent
+                        title="Delete account"
+                        description="Are you sure you want to delete you account?"
+                        triggerText={<Trash2 size={16} />}
+                        onConfirm={handleDeleteAccount}
+                        confirmText="Yes, delete"
+                        cancelText="Cancel"
+                        isDeleteConfirmation={true}
+                    />
+                )}
             </div>
         </div>
     )

@@ -82,17 +82,17 @@ const FormComponent: React.FC<FormComponentProps> = ({
                         value={formData[field.name] ?? ''}
                         onChange={field.onChange || handleChange}
                         readOnly={!isEditing}
-                        className={`${isEditing ? 'border-1' : 'border-hidden'} p-3 w-72 md:w-96 flex flex-1`}
+                        className={`${isEditing ? 'border' : 'border-transparent'} p-2 w-72 md:w-96 flex flex-1 dark:text-foreground`}
                     />
                 </div>
             ))}
             <div className="w-full">{children}</div>
             {showActions && isEditing && (
-                <div className="flex space-x-3 place-self-end">
+                <div className="flex space-x-2 items-end place-self-end space-y-0">
                     <Button
                         type="submit"
                         disabled={disableSubmit}
-                        className="w-full border rounded-md p-5"
+                        className="w-full"
                     >
                         {buttonText}
                     </Button>
@@ -100,7 +100,7 @@ const FormComponent: React.FC<FormComponentProps> = ({
                         <Button
                             type="button"
                             onClick={handleCancel}
-                            className="w-full border rounded-md p-5"
+                            className="w-full"
                         >
                             Cancel
                         </Button>

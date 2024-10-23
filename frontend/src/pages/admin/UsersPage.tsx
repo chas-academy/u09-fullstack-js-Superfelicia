@@ -5,6 +5,8 @@ import DialogComponent from '@/components/DialogComponent'
 import CreateUserComponent from '@/components/createUserComponent'
 import { Plus } from 'lucide-react'
 import { API_URL } from '@/config'
+import { useUserStore } from '@/store/useUserStore'
+import Actions from '@/components/table/Actions'
 
 export interface User {
     _id: string
@@ -15,42 +17,50 @@ export interface User {
 }
 
 const UsersPage = () => {
-    const [users, setUsers] = useState<User[]>([])
-    const [filteredUsers, setFilteredUsers] = useState<User[]>([])
+    const users = useUserStore((state) => state.users)
+    const setUsers = useUserStore((state) => state.setUsers)
+    const [filteredUsers, setFilteredUsers] = useState<User[]>(users || [])
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch(`${API_URL}/users`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                })
+        if (users) {
+            setFilteredUsers(users)
+        } else {
+            const fetchUsers = async () => {
+                try {
+                    const response = await fetch(`${API_URL}/users`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    })
 
-                const data = await response.json()
-                if (response.ok) {
-                    setUsers(data)
-                    setFilteredUsers(data)
-                } else {
-                    console.error('Error fetching users:', data.message)
+                    const data = await response.json()
+                    if (response.ok) {
+                        setUsers(data)
+                        setFilteredUsers(data)
+                    } else {
+                        console.error('Error fetching users:', data.message)
+                    }
+                } catch (error) {
+                    console.error('Error fetching users:', error)
                 }
-            } catch (error) {
-                console.error('Error fetching users:', error)
             }
+            fetchUsers()
         }
-
-        fetchUsers()
-    }, [])
+    }, [users, setUsers])
 
     const handleUserAdded = (newUser: User) => {
-        setUsers((prevUsers) => [...prevUsers, newUser])
+        if (users) {
+            setUsers([...users, newUser])
+        } else {
+            setUsers([newUser])
+        }
         setFilteredUsers((prevUsers) => [...prevUsers, newUser])
     }
 
     const handleSearch = (searchTerm: string, role: string) => {
-        let filtered = users
+        let filtered = users || []
 
         if (searchTerm) {
             filtered = filtered.filter(
@@ -81,9 +91,12 @@ const UsersPage = () => {
             const data = await response.json()
 
             if (response.ok) {
-                setUsers((prevUsers) =>
-                    prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user))
-                )
+                if (users) {
+                    setUsers(
+                        users.map((user) => (user._id === updatedUser._id ? updatedUser : user))
+                    )
+                }
+
                 setFilteredUsers((prevUsers) =>
                     prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user))
                 )
@@ -108,7 +121,10 @@ const UsersPage = () => {
             const data = await response.json()
 
             if (response.ok) {
-                setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId))
+                if (users) {
+                    setUsers(users.filter((user) => user._id !== userId))
+                }
+
                 setFilteredUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId))
                 console.log('User deleted:', data)
             } else {
@@ -121,7 +137,6 @@ const UsersPage = () => {
 
     return (
         <div className="overflow-hidden flex flex-col items-center justify-center space-y-5 p-10">
-            <h2>User Management</h2>
             <div className="w-full sm:px-10 flex justify-between items-center">
                 <SearchComponent onSearch={handleSearch} placeholder="Search users..." />
                 <div className="pl-2">
@@ -146,11 +161,12 @@ const UsersPage = () => {
                 </div>
             </div>
 
-            <div className="w-full sm:px-10">
+            <div className="w-full max-h-full sm:px-10 overflow-auto">
                 <TableComponent
                     data={filteredUsers}
-                    onEdit={handleEditUser}
-                    onDelete={handleDeleteUser}
+                    renderActions={(user) => (
+                        <Actions rowData={user} onEdit={handleEditUser} onDelete={handleDeleteUser}/>
+                    )}
                 />
             </div>
         </div>

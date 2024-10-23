@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import FormComponent from './formComponent'
-import { Button } from './ui/button'
 
 interface SettingsComponentProps {
     buttonText: string
@@ -114,20 +113,15 @@ const SettingsComponent = ({
     }
 
     return (
-        <div className="flex flex-col items-start space-y-2">
+        <div className="flex flex-col items-start">
             <FormComponent
                 fields={registerFields}
                 buttonText={buttonText}
                 onSubmit={handleFormSubmit}
                 isEditing={isEditing}
+                onCancel={onCancel}
             />
-            {passwordError && <p className="text-red-500">{passwordError}</p>}
-
-            {isEditing && onCancel && (
-                <div>
-                    <Button onClick={onCancel}>Cancel</Button>
-                </div>
-            )}
+            {/* {passwordError && <p className="text-red-500">{passwordError}</p>} */}
         </div>
     )
 }

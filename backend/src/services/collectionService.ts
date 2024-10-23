@@ -53,7 +53,7 @@ export const getFlashcardsByCollection = async (collectionId: string) => {
       await FlashcardCollection.findById(collectionId).populate("flashcards");
 
     if (!collection) {
-      return undefined
+      return undefined;
     }
 
     const flashcards = Array.isArray(collection.flashcards)
@@ -112,7 +112,7 @@ export const deleteCollectionById = async (collectionId: string) => {
 // collections and users:
 export const addCollectionToUser = async (
   userId: string,
-  collectionId: string
+  collectionIds: string[]
 ) => {
   try {
     const user = await User.findById(userId);
@@ -120,18 +120,21 @@ export const addCollectionToUser = async (
       throw new Error("User not found");
     }
 
-    const collectionObjectId = new mongoose.Types.ObjectId(collectionId);
+    const collectionObjectIds = collectionIds.map(
+      collectionId => new mongoose.Types.ObjectId(collectionId)
+    );
 
-    const collection = await FlashcardCollection.findById(collectionObjectId);
-    if (!collection) {
-      throw new Error("Collection not found");
+    for (const collectionId of collectionObjectIds) {
+      const collection = await FlashcardCollection.findById(collectionId);
+      if (!collectionId) {
+        throw new Error(`Collection with ID ${collectionId} not found`);
+      }
+
+      if (!user.collections?.includes(collectionId)) {
+        user.collections?.push(collectionId);
+      }
     }
-
-    if (user.collections?.includes(collectionObjectId)) {
-      throw new Error("Collection already added to this user");
-    }
-
-    user.collections?.push(collectionObjectId);
+    
     await user.save();
 
     return user;

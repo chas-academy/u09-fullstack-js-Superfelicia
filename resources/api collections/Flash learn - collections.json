@@ -1,0 +1,233 @@
+{
+  "info": {
+    "name": "Flash learn - collections",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "Get Collections",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/collections",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Create collection",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/collections",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"category\": \"\",\n  \"flashcards\": []\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Create flashcard in collection",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/flashcards/collectionId/flashcards",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"question\": \"Kan en array innehålla flera olika datatyper, till exempel både strängar och siffror?\",\n  \"answer\": \"Ja\"\n}\n\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Update mastered flashcard in collection",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/flashcards/collectionId/flashcards/flashcardId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Delete flashcard in collection",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/flashcards/collectionId/flashcards/flashcardId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"mastered\": true\n}\n\n\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Get Collection",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/collections/collections/collectionId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Update flashcard in collection",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "https://u09-fullstack-js-superfelicia.onrender.com/api/flashcards/collectionId/flashcards/flashcardId",
+          "host": [
+            "u09-fullstack-js-superfelicia",
+            "onrender",
+            "com"
+          ],
+          "path": [],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"question\": \"\",\n  \"answer\": \"\",\n  \"mastered\": false,\n  \"failedAttempts\": 0\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variable": []
+}
