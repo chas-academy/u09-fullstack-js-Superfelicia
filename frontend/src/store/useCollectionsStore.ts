@@ -17,9 +17,10 @@ interface CollectionsStore {
     clearCollections: () => void
     fetchCollectionsForAdmin: () => Promise<void>
     fetchCollectionsForUser: (userId: string) => Promise<void>
+    getAllCollections: () => Collection[]
 }
 
-export const useCollectionsStore = create<CollectionsStore>((set) => ({
+export const useCollectionsStore = create<CollectionsStore>((set, get) => ({
     collections: {
         currentCollections: [],
         completedCollections: [],
@@ -107,5 +108,10 @@ export const useCollectionsStore = create<CollectionsStore>((set) => ({
         } catch (error) {
             console.error('Error fetching collections for user:', error)
         }
+    },
+
+    getAllCollections: () => {
+        const { currentCollections, completedCollections, upcomingCollections } = get().collections
+        return [...currentCollections, ...completedCollections, ...upcomingCollections]
     },
 }))

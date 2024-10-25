@@ -1,48 +1,37 @@
 import { API_URL } from '@/config'
 import { useUserStore } from '@/store/useUserStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import TableComponent from './table/TableComponent'
 import AddCollectionActions from './table/AddCollectionActions'
+import { useCollectionsStore } from '@/store/useCollectionsStore'
+import { Collection } from '@/interfaces/Collection'
 
 const UserCollectionTable = () => {
     const user = useUserStore((state) => state.user)
     const users = useUserStore((state) => state.users)
     const setUsers = useUserStore((state) => state.setUsers)
-    const collections = useUserStore((state) => state.collections)
-    const setCollections = useUserStore((state) => state.setCollections)
+    const fetchCollectionsForAdmin = useCollectionsStore((state) => state.fetchCollectionsForAdmin)
+    const hasFetchedCollections = useCollectionsStore((state) => state.hasFetchedCollections)
+    const getAllCollections = useCollectionsStore((state) => state.getAllCollections)
+
+    const [allCollections, setAllCollections] = useState<Collection[]>([])
+
 
     useEffect(() => {
-        const fetchCollections = async () => {
-            try {
-                const response = await fetch(`${API_URL}/collections`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                })
-
-                if (response.ok) {
-                    const collectionsData = await response.json()
-                    setCollections(collectionsData)
-                } else {
-                    console.error('Error fetching collections:', await response.json())
-                }
-            } catch (error) {
-                console.error('Error fetching collections:', error)
-            }
+        if (!hasFetchedCollections) {
+            fetchCollectionsForAdmin()
         }
-
-        fetchCollections()
-    }, [setCollections])
+    }, [hasFetchedCollections, fetchCollectionsForAdmin])
 
     useEffect(() => {
-        if (collections && collections.length === 0) {
+        const collections = getAllCollections()
+        if (collections.length === 0) {
             console.log('no collections available')
         } else {
             console.log('collections available:', collections)
         }
-    }, [collections])
+        setAllCollections(collections)
+    }, [getAllCollections])
 
     const handleAddCollection = async (userId: string, collectionIds: string[]) => {
         console.log(`adding collection to user with ID: ${userId}`)
@@ -87,6 +76,7 @@ const UserCollectionTable = () => {
                         renderActions={(user) => (
                             <AddCollectionActions
                                 user={user}
+                                allCollections={allCollections}
                                 onAddCollection={handleAddCollection}
                             />
                         )}
