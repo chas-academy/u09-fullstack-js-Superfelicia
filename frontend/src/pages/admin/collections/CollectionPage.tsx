@@ -7,35 +7,26 @@ import { CircleArrowLeft } from 'lucide-react'
 import { API_URL } from '@/config'
 import DialogComponent from '@/components/DialogComponent'
 import CollectionForm from './CollectionForm'
+import { useCollectionsStore } from '@/store/useCollectionsStore'
 
 const CollectionPage = () => {
     const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null)
-    const [collections, setCollections] = useState<Collection[]>([])
+    const fetchCollectionsForAdmin = useCollectionsStore((state) => state.fetchCollectionsForAdmin)
+    const collectionsStore = useCollectionsStore((state) => state.collections) || []
+    const hasFetchedCollections = useCollectionsStore((state) => state.hasFetchedCollections)
+    // const [collections, setCollections] = useState<Collection[]>([])
+
+    const allCollections = [
+        ...collectionsStore.currentCollections || [],
+        ...collectionsStore.completedCollections || [],
+        ...collectionsStore.upcomingCollections || [],
+    ]
 
     useEffect(() => {
-        fetchCollections()
-    }, [])
-
-    const fetchCollections = async () => {
-        try {
-            const response = await fetch(`${API_URL}/collections`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            })
-
-            const data = await response.json()
-
-            if (response.ok) {
-                console.log('Fetched collections:', data)
-                setCollections(data)
-            }
-        } catch (error) {
-            console.error('Error fetching collections:', error)
+        if (!hasFetchedCollections) {
+            fetchCollectionsForAdmin()
         }
-    }
+    }, [hasFetchedCollections, fetchCollectionsForAdmin])
 
     const handleDeleteCollection = async (collectionId: string) => {
         try {
@@ -51,9 +42,7 @@ const CollectionPage = () => {
                 throw new Error('Failed to delete collection')
             }
 
-            setCollections((prevCollections) =>
-                prevCollections.filter((collection) => collection._id !== collectionId)
-            )
+            fetchCollectionsForAdmin()
         } catch (error) {
             console.error('Error deleting collection:', error)
         }
@@ -97,11 +86,8 @@ const CollectionPage = () => {
                 throw new Error(savedCollection.message || 'Failed to save collection')
             }
 
-            fetchCollections()
-
-            if (!collectionId) {
-                setSelectedCollection(null)
-            }
+            fetchCollectionsForAdmin()
+            setSelectedCollection(null)
         } catch (error) {
             console.error('Error saving collection:', error)
         }
@@ -111,12 +97,12 @@ const CollectionPage = () => {
         setSelectedCollection(collection)
     }
 
-    const handleCreateCollection = (newCollection: Collection) => {
-        setCollections((prevCollections) => [...prevCollections, newCollection])
+    const handleCreateCollection = async () => {
+        await fetchCollectionsForAdmin()
     }
 
-    const handleFormSubmit = (stayOnCollection = false) => {
-        fetchCollections()
+    const handleFormSubmit = async (stayOnCollection = false) => {
+        await fetchCollectionsForAdmin()
         if (!stayOnCollection) {
             setSelectedCollection(null)
         }
@@ -137,7 +123,7 @@ const CollectionPage = () => {
             </DialogComponent>
             {!selectedCollection ? (
                 <CollectionList
-                    collections={collections}
+                    collections={allCollections}
                     onSelectCollection={setSelectedCollection}
                     onDeleteCollection={handleDeleteCollection}
                     onEditCollection={handleEditCollection}

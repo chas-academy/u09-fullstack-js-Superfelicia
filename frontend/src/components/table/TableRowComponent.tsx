@@ -1,4 +1,4 @@
-import { User } from '@/pages/admin/adminDashboardPage'
+import { User } from '@/interfaces/User'
 import { TableCell, TableRow } from '../ui/table'
 
 interface TableRowProps {

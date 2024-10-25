@@ -2,7 +2,7 @@ import columns from './Columns'
 import { Table, TableBody } from '../ui/table'
 import TableRowComponent from './TableRowComponent'
 import TableHeaderComponent from './TableHeaderComponent'
-import { User } from '@/pages/admin/adminDashboardPage'
+import { User } from '@/interfaces/User'
 
 interface TableComponentProps {
     data: User[]

@@ -47,13 +47,24 @@ export const useCollectionsStore = create<CollectionsStore>((set) => ({
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             })
-            const data = await response.json()
+            const data: Collection[] = await response.json()
 
-            if (response.ok) {
+            if (response.ok && Array.isArray(data)) {
                 console.log('Fetched collections for admin:', data)
-                set({ collections: data })
+                const categorizedCollections = {
+                    currentCollections: data.filter(
+                        (collection) => collection.status === 'in progress'
+                    ),
+                    completedCollections: data.filter(
+                        (collection) => collection.status === 'completed'
+                    ),
+                    upcomingCollections: data.filter(
+                        (collection) => collection.status === 'not started'
+                    ),
+                }
+                set({ collections: categorizedCollections, hasFetchedCollections: true })
             } else {
-                console.error('Error fetching collections for admin:', data.message)
+                console.error('Error fetching collections for admin:', data)
             }
         } catch (error) {
             console.error('Error fetching collection for admin:', error)
