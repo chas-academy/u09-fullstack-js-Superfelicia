@@ -4,15 +4,6 @@ import { useEffect } from 'react'
 import TableComponent from './table/TableComponent'
 import AddCollectionActions from './table/AddCollectionActions'
 
-export interface User {
-    _id: string
-    name: string
-    email: string
-    roles: string[]
-    collections?: string[]
-    [key: string]: any
-}
-
 const UserCollectionTable = () => {
     const user = useUserStore((state) => state.user)
     const users = useUserStore((state) => state.users)
@@ -88,7 +79,7 @@ const UserCollectionTable = () => {
     if (!user) return null
 
     return (
-        <div className="w-fit flex items-center justify-end">
+        <div className="w-fit flex items-center justify-center">
             {users && (
                 <div className='w-3/4'>
                     <TableComponent

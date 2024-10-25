@@ -7,14 +7,7 @@ import { Plus } from 'lucide-react'
 import { API_URL } from '@/config'
 import { useUserStore } from '@/store/useUserStore'
 import Actions from '@/components/table/Actions'
-
-export interface User {
-    _id: string
-    name: string
-    email: string
-    roles: string[]
-    [key: string]: any
-}
+import { User } from '@/interfaces/User'
 
 const UsersPage = () => {
     const users = useUserStore((state) => state.users)

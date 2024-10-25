@@ -1,4 +1,3 @@
-import { User } from '@/pages/admin/adminDashboardPage'
 import DialogComponent from '../DialogComponent'
 import { useState } from 'react'
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
@@ -14,6 +13,7 @@ import {
 } from '../ui/select'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
+import { User } from '@/interfaces/User'
 
 interface ActionsProps {
     rowData: User

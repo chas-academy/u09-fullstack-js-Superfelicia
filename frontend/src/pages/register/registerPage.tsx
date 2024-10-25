@@ -45,7 +45,7 @@ const RegisterPage = () => {
     }
 
     return (
-        <div className="w-full flex flex-col items-center justify-center space-y-3">
+        <div className="w-full h-full flex flex-col items-center justify-center space-y-3">
             <h2>Register</h2>
 
             {!isLoggingIn && (

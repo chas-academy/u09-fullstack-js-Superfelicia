@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/useUserStore'
 import { useState } from 'react'
 import { API_URL } from '@/config'
+import { useCollectionsStore } from '@/store/useCollectionsStore'
 
 const LoginPage = () => {
     const [error, setError] = useState<string | null>(null)
     const setUser = useUserStore((state) => state.setUser)
     const setUsers = useUserStore((state) => state.setUsers)
-    const setCollections = useUserStore((state) => state.setCollections)
+    const fetchCollectionsForAdmin = useCollectionsStore((state) => state.fetchCollectionsForAdmin)
+    const fetchCollectionsForUser = useCollectionsStore((state) => state.fetchCollectionsForUser)
     const navigate = useNavigate()
 
     const loginFields = [
@@ -47,6 +49,9 @@ const LoginPage = () => {
                 setUser(data.user)
 
                 if (data.user.roles.includes('admin')) {
+                    await fetchCollectionsForAdmin()
+                    console.log('Admin collections fetched and set in store')
+
                     const userResponse = await fetch(`${API_URL}/users`, {
                         method: 'GET',
                         headers: {
@@ -62,25 +67,12 @@ const LoginPage = () => {
                         console.error('Error fetching users:', error)
                     }
 
-                    const collectionResponse = await fetch(`${API_URL}/collections`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${localStorage.getItem('token')}`,
-                        },
-                    })
-                    const collectionsData = await collectionResponse.json()
-
-                    if (collectionResponse.ok) {
-                        setCollections(collectionsData)
-                    } else {
-                        console.error('Error fetching collections:', error)
-                    }
-
                     navigate('/admin-dashboard')
                 } else {
-                    navigate('/dashboard')
+                    await fetchCollectionsForUser(data.user._id)
+                    console.log('User collections fetched and set in store')
                 }
+                navigate('/dashboard')
 
                 console.log('Logged in successfully:', data.user)
             } else {
@@ -94,7 +86,7 @@ const LoginPage = () => {
     }
 
     return (
-        <div className="w-full flex items-center justify-evenly space-y-2 overflow-hidden">
+        <div className="w-full h-full flex items-center justify-center space-y-2 overflow-hidden">
             <div className="mx-8">
                 <h2>Login</h2>
                 <FormComponent
@@ -110,9 +102,9 @@ const LoginPage = () => {
                     </div>
                 </FormComponent>
             </div>
-            <div className="w-[600px] h-[550px] dark:bg-foreground bg-secondary flex items-center justify-center z-10 rounded-lg">
+            {/* <div className="w-[600px] h-[550px] dark:bg-foreground bg-secondary flex items-center justify-center z-10 rounded-lg">
                 <h2 className='dark:text-background'>Välkommen!!</h2>
-            </div>
+            </div> */}
         </div>
     )
 }

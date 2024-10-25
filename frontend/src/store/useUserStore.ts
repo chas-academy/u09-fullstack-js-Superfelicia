@@ -1,5 +1,5 @@
 import { Collection } from '@/interfaces/Collection'
-import { User } from '@/pages/admin/UsersPage'
+import { User } from '@/interfaces/User'
 import { create } from 'zustand'
 
 interface UserStore {

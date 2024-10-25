@@ -4,7 +4,7 @@ import { API_URL } from '@/config'
 import { Flashcard } from '@/interfaces/Flashcard'
 import { CircleArrowLeft, RotateCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const StartPage = () => {
     const { collectionId } = useParams<{ collectionId: string }>()
@@ -17,6 +17,7 @@ const StartPage = () => {
     const [completedCards, setCompletedCards] = useState<Flashcard[]>([])
     const [notCompletedCards, setNotCompletedCards] = useState<Flashcard[]>([])
     const [isRoundComplete, setIsRoundComplete] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchFlashcards = async () => {
@@ -81,6 +82,17 @@ const StartPage = () => {
         }
     }
 
+    const resetRound = () => {
+        setCurrentIndex(0)
+        setIsFlipped(false)
+        setTransitioning(false)
+        setSwipeDirection(null)
+        setHasFlipped(false)
+        setCompletedCards([])
+        setNotCompletedCards([])
+        setIsRoundComplete(false)
+    }
+
     if (isRoundComplete) {
         return (
             <div className="h-[500px] flex flex-col justify-center items-center space-y-2 border rounded-md shadow-md p-10 mt-4">
@@ -96,7 +108,7 @@ const StartPage = () => {
                 <div className="flex gap-2 mt-5">
                     <Button
                         type="button"
-                        onClick={() => console.log('back to collections')}
+                        onClick={() => navigate('/dashboard/collections-overview')}
                         className="gap-2"
                     >
                         <CircleArrowLeft size={16} />
@@ -104,7 +116,7 @@ const StartPage = () => {
                     </Button>
                     <Button
                         type="button"
-                        onClick={() => console.log('back to collections')}
+                        onClick={resetRound}
                         className="gap-2"
                     >
                         <RotateCcw size={16} />
